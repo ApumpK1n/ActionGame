@@ -12,8 +12,9 @@ public class Game : MonoBehaviour
     private void Awake()
     {
         gameSystemStack.RegisterGameSystem(new LogicSystem());
+        gameSystemStack.RegisterGameSystem(new AnimationSystem());
 
-        dirtySystem |= (int)SystemType.Logic;
+        dirtySystem |= (int)SystemType.Logic | (int)SystemType.Animation;
     }
     void Start()
     {

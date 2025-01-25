@@ -781,6 +781,9 @@ GameObject:
   - component: {fileID: 2463023272710742937}
   - component: {fileID: 8715480446478204128}
   - component: {fileID: 538553672340666266}
+  - component: {fileID: 3530687579454734189}
+  - component: {fileID: 8458308644198724034}
+  - component: {fileID: 3003405743029673}
   m_Layer: 0
   m_Name: ClazyRunner
   m_TagString: Untagged
@@ -840,6 +843,45 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Animator: {fileID: 8715480446478204128}
   _ActionOnDisable: 0
+--- !u!114 &3530687579454734189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4104323566969289406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f44c2486b9f495640bd6e99fb6fd417e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animations:
+  - Name: RightHandAttack
+    Clip: {fileID: 7400000, guid: c2976fa7ea9c6844ca1d7042aef0a731, type: 3}
+--- !u!114 &8458308644198724034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4104323566969289406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4542ae9c21e2a40419a2c21f4a369fb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3003405743029673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4104323566969289406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4a193bc180e2e842953956c51eec445, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4331405214245749292
 GameObject:
   m_ObjectHideFlags: 0

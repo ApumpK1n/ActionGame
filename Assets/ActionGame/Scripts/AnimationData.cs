@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class AnimationData : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public List<SingleAnimationData> Animations = new List<SingleAnimationData>();
 
-    // Update is called once per frame
-    void Update()
+    public AnimationClip GetAnimationClip(string name)
     {
-        
+        foreach (var animation in Animations)
+        {
+            if (animation.Name == name)
+                return animation.Clip;
+        }
+        return null;
     }
+}
+
+
+[Serializable]
+public class SingleAnimationData
+{
+    public string Name;
+    public AnimationClip Clip;
 }
