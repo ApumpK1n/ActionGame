@@ -857,7 +857,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Animations:
   - Name: RightHandAttack
+    AnimationType: 0
     Clip: {fileID: 7400000, guid: c2976fa7ea9c6844ca1d7042aef0a731, type: 3}
+  - Name: JumpBaseLong
+    AnimationType: 2
+    Clip: {fileID: 7400000, guid: 71a4dd5632c200f4a83c67d9154fc031, type: 3}
 --- !u!114 &8458308644198724034
 MonoBehaviour:
   m_ObjectHideFlags: 0
