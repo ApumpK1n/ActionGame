@@ -42,4 +42,16 @@ public class GameSystemStack
         }
         return false;
     }
+
+    public T GetGameSystem<T>() where T : IGameSystem
+    {
+        foreach(var system in stack)
+        {
+            if (system.GetType() == typeof(T))
+            {
+                return (T)system;
+            }
+        }
+        return default(T);
+    }
 }

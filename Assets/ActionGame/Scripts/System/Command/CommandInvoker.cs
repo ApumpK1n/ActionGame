@@ -2,43 +2,82 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CommandInvoker : MonoBehaviour
+public class CommandInvoker : IGameSystem
 {
+    private Queue<ICommand> PrepareQueue = new Queue<ICommand>();
+
     // Stack of command objects to undo
-    private static Stack<ICommand> s_UndoStack = new Stack<ICommand>();
+    private Stack<ICommand> UndoStack = new Stack<ICommand>();
 
     // Second stack of redoable commands
-    private static Stack<ICommand> s_RedoStack = new Stack<ICommand>();
+    private Stack<ICommand> RedoStack = new Stack<ICommand>();
 
-    // Execute a command object directly and save to the undo stack
-    public static void ExecuteCommand(ICommand command)
+    private bool initiated;
+    public SystemType TypeEnum
     {
-        command.Execute();
-        s_UndoStack.Push(command);
-
-        // Clear out the redo stack if we make a new move
-        s_RedoStack.Clear();
+        get
+        {
+            return SystemType.Command;
+        }
     }
 
-    public static void UndoCommand()
+
+    public void AddCommand(ICommand command)
+    {
+        PrepareQueue.Enqueue(command);
+    }
+
+    // Execute a command object directly and save to the undo stack
+    public void ExecuteCommand(ICommand command)
+    {
+        command.Execute();
+        UndoStack.Push(command);
+
+        // Clear out the redo stack if we make a new move
+        RedoStack.Clear();
+    }
+
+    public void UndoCommand()
     {
         // If we have commands to undo
-        if (s_UndoStack.Count > 0)
+        if (UndoStack.Count > 0)
         {
-            ICommand activeCommand = s_UndoStack.Pop();
-            s_RedoStack.Push(activeCommand);
+            ICommand activeCommand = UndoStack.Pop();
+            RedoStack.Push(activeCommand);
             activeCommand.Undo();
         }
     }
 
-    public static void RedoCommand()
+    public void RedoCommand()
     {
         // If we have commands to redo
-        if (s_RedoStack.Count > 0)
+        if (RedoStack.Count > 0)
         {
-            ICommand activeCommand = s_RedoStack.Pop();
-            s_UndoStack.Push(activeCommand);
+            ICommand activeCommand = RedoStack.Pop();
+            UndoStack.Push(activeCommand);
             activeCommand.Execute();
         }
+    }
+
+    public void Setup()
+    {
+        initiated = true;
+    }
+
+    public void Tick(float deltaTime)
+    {
+        if (!initiated) return;
+
+        while (PrepareQueue.Count > 0)
+        {
+            ExecuteCommand(PrepareQueue.Dequeue());
+        }
+
+
+    }
+
+    public void Dispose()
+    {
+        initiated = false;
     }
 }

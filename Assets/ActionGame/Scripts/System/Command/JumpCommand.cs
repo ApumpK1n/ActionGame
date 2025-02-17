@@ -1,6 +1,6 @@
 
 
-public class MoveCommand : ICommand
+public class JumpCommand : ICommand
 {
     public void Execute()
     {

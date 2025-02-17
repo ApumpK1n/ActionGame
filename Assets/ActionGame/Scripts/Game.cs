@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Game : MonoBehaviour
+public class Game : DestroyableSingleton<Game>
 {
     GameSystemStack gameSystemStack = new GameSystemStack(3);
 
@@ -13,8 +13,9 @@ public class Game : MonoBehaviour
     {
         gameSystemStack.RegisterGameSystem(new LogicSystem());
         gameSystemStack.RegisterGameSystem(new AnimationSystem());
+        gameSystemStack.RegisterGameSystem(new CommandInvoker());
 
-        dirtySystem |= (int)SystemType.Logic | (int)SystemType.Animation;
+        dirtySystem |= (int)SystemType.Logic | (int)SystemType.Animation | (int)SystemType.Command;
     }
     void Start()
     {
@@ -36,5 +37,10 @@ public class Game : MonoBehaviour
             dirtySystem = 0;
         }
 
+    }
+
+    public T GetGameSystem<T>() where T : IGameSystem
+    {
+        return gameSystemStack.GetGameSystem<T>();
     }
 }

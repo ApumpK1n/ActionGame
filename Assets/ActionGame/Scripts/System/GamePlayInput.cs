@@ -8,14 +8,16 @@ using UniRx;
 public class GamePlayInput : MonoBehaviour
 {
     PlayerInput playerInput;
+    CommandInvoker commandInvoker;
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
+        commandInvoker = Game.Instance.GetGameSystem<CommandInvoker>();
     }
 
     public void OnJumpEvent(InputAction.CallbackContext context)
     {
-        MessageBroker.Default.Publish(new GamePlayJumpLongEvent());
+        commandInvoker.AddCommand(new JumpCommand());
     }
 
     public void OnMoveEvent(InputAction.CallbackContext context)
