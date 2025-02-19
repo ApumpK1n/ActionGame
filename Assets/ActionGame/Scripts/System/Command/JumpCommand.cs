@@ -1,10 +1,12 @@
 
 
+using UniRx;
+
 public class JumpCommand : ICommand
 {
     public void Execute()
     {
-        throw new System.NotImplementedException();
+        MessageBroker.Default.Publish(new GamePlayJumpLongEvent());
     }
 
     public void Undo()
