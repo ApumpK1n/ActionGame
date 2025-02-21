@@ -1,10 +1,12 @@
-
+using UnityEngine;
 
 public class MoveCommand : ICommand
 {
+    public Vector2 MoveDir;
+
     public void Execute()
     {
-        throw new System.NotImplementedException();
+        Game.Instance.GetGameSystem<LogicSystem>().PlayerMove(MoveDir);
     }
 
     public void Undo()

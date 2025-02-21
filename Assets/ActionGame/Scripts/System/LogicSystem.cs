@@ -14,16 +14,21 @@ public class LogicSystem : IGameSystem
 
     public void Dispose()
     {
-        //throw new System.NotImplementedException();
+
     }
 
     public void Setup()
     {
-        //throw new System.NotImplementedException();
+        
     }
 
     public void Tick(float deltaTime)
     {
-        //throw new System.NotImplementedException();
+
+    }
+
+    public void PlayerMove(Vector2 dir)
+    {
+        Game.Instance.Player.Move(dir);
     }
 }

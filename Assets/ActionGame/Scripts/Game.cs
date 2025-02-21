@@ -9,6 +9,10 @@ public class Game : DestroyableSingleton<Game>
 
     [HideInInspector][NonSerialized] public int dirtySystem = 0;
 
+    [SerializeField] public Actor PlayerPrefab;
+    [SerializeField] public Transform PlayerReborn;
+
+    public Actor Player;
     private void Awake()
     {
         gameSystemStack.RegisterGameSystem(new LogicSystem());
@@ -20,6 +24,8 @@ public class Game : DestroyableSingleton<Game>
     void Start()
     {
         SetupSystems(dirtySystem);
+
+        Player = Instantiate(PlayerPrefab, PlayerReborn, false);
     }
 
 

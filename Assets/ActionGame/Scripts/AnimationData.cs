@@ -17,6 +17,11 @@ public class AnimationData : MonoBehaviour
         }
         return null;
     }
+
+    public AnimationClip GetAnimationClip(AnimationType type)
+    {
+        return GetAnimationClip(type.ToString());
+    }
 }
 
 
@@ -33,4 +38,5 @@ public enum AnimationType
     Attack,
     Defence,
     Jump,
+    BaseMove,
 }

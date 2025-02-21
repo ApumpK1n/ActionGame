@@ -11,6 +11,7 @@ public class AnimationComponent : MonoBehaviour
     private AnimancerComponent animancer;
     private AnimationData animationData;
 
+    public AnimancerComponent Animancer => animancer;
     private void Awake()
     {
         animancer = GetComponent<AnimancerComponent>();
@@ -25,5 +26,10 @@ public class AnimationComponent : MonoBehaviour
     public void Play(string animationName)
     {
          animancer.Play(animationData.GetAnimationClip(animationName));
+    }
+
+    public void Play(AnimationType animationType)
+    {
+        animancer.Play(animationData.GetAnimationClip(animationType));
     }
 }

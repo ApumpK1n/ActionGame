@@ -2,11 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class Actor : MonoBehaviour
 {
     private AnimationComponent animationComponent;
 
+    public enum MoveMode
+    {
+        Base = 0,
+        Lock = 1,
+    }
+
+    private MoveMode moveMode = MoveMode.Base;
     private void Awake()
     {
         animationComponent = GetComponent<AnimationComponent>();
@@ -23,5 +31,89 @@ public class Actor : MonoBehaviour
     private void OnJumpLongInput(GamePlayJumpLongEvent @event)
     {
         animationComponent.Play("JumpBaseLong");
+    }
+
+    public void Move(Vector2 dir)
+    {
+        Debug.Log("Move:" + dir);
+        switch (moveMode)
+        {
+            case MoveMode.Base:
+                BaseMove(dir);
+                break;
+        }
+    }
+
+    private void BaseMove(Vector2 dir)
+    {
+        if (dir.x != 0 && dir.y != 0)
+        {
+            if (dir.y > 0 && dir.x < 0)
+            {
+                //anim.SetTrigger("move_up_left");
+                transform.eulerAngles = new Vector3(0, -45, 0);
+                animationComponent.Play(AnimationType.BaseMove);
+            }
+
+            if (dir.y > 0 && dir.x > 0)
+            {
+                //anim.SetTrigger("move_up_right");
+                transform.eulerAngles = new Vector3(0, 45, 0);
+                animationComponent.Play(AnimationType.BaseMove);
+            }
+
+            if (dir.y < 0 && dir.x < 0)
+            {
+                //anim.SetTrigger("move_down_left");
+                transform.eulerAngles = new Vector3(0, -135, 0);
+                animationComponent.Play(AnimationType.BaseMove);
+            }
+
+            if (dir.y < 0 && dir.x > 0)
+            {
+                //anim.SetTrigger("move_down_right");
+                transform.eulerAngles = new Vector3(0, 135, 0);
+                animationComponent.Play(AnimationType.BaseMove);
+            }
+        }
+
+        else
+        {
+
+            //left/right/up/down
+            if (dir.x < 0)
+            {
+                transform.eulerAngles = new Vector3(0, -90, 0);
+                animationComponent.Play(AnimationType.BaseMove);
+                //anim.SetTrigger("move_left");
+            }
+
+            if (dir.x > 0)
+            {
+                transform.eulerAngles = new Vector3(0, 90, 0);
+                animationComponent.Play(AnimationType.BaseMove);
+                //anim.SetTrigger("move_right");
+            }
+
+
+            if (dir.y > 0)
+            {
+                transform.eulerAngles = new Vector3(0, 0, 0);
+                animationComponent.Play(AnimationType.BaseMove);
+                //anim.SetTrigger("move_up");
+            }
+
+
+            if (dir.y < 0)
+            {
+                transform.eulerAngles = new Vector3(0, -180, 0);
+                animationComponent.Play(AnimationType.BaseMove);
+                //anim.SetTrigger("move_down");
+            }
+        }
+    }
+    private void OnAnimatorMove()
+    {
+        animationComponent.Animancer.Animator.ApplyBuiltinRootMotion();
     }
 }
