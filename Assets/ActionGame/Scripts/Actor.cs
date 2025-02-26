@@ -35,7 +35,6 @@ public class Actor : MonoBehaviour
 
     public void Move(Vector2 dir)
     {
-        Debug.Log("Move:" + dir);
         switch (moveMode)
         {
             case MoveMode.Base:
@@ -109,6 +108,11 @@ public class Actor : MonoBehaviour
                 transform.eulerAngles = new Vector3(0, -180, 0);
                 animationComponent.Play(AnimationType.BaseMove);
                 //anim.SetTrigger("move_down");
+            }
+
+            if (dir.x == 0 && dir.y == 0)
+            {
+                animationComponent.Stop();
             }
         }
     }

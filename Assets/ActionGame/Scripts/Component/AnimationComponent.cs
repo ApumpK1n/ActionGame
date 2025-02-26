@@ -32,4 +32,9 @@ public class AnimationComponent : MonoBehaviour
     {
         animancer.Play(animationData.GetAnimationClip(animationType));
     }
+
+    public void Stop()
+    {
+        animancer.Stop();
+    }
 }
