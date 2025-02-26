@@ -11,3 +11,5 @@ An action game made with the Unity engine
 
 # 武器
 搓招： 输入系统->当前状态->最终招式
+
+IK
