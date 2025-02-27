@@ -865,6 +865,9 @@ MonoBehaviour:
   - Name: BaseMove
     AnimationType: 2
     Clip: {fileID: 7400000, guid: 91cd408b447dd6c47ac75d9e56819403, type: 3}
+  - Name: Idle
+    AnimationType: 5
+    Clip: {fileID: 7400000, guid: 4f9b2cc802bffcd468bf59be5599a8d1, type: 3}
 --- !u!114 &8458308644198724034
 MonoBehaviour:
   m_ObjectHideFlags: 0

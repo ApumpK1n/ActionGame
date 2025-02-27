@@ -14,6 +14,12 @@ public class Actor : MonoBehaviour
         Lock = 1,
     }
 
+    public enum PlayerState
+    {
+        Idle,
+        
+    }
+
     private MoveMode moveMode = MoveMode.Base;
     private void Awake()
     {
@@ -30,7 +36,7 @@ public class Actor : MonoBehaviour
 
     private void OnJumpLongInput(GamePlayJumpLongEvent @event)
     {
-        animationComponent.Play("JumpBaseLong");
+        animationComponent.Play(AnimationType.Jump);
     }
 
     public void Move(Vector2 dir)
@@ -112,7 +118,7 @@ public class Actor : MonoBehaviour
 
             if (dir.x == 0 && dir.y == 0)
             {
-                animationComponent.Stop();
+                animationComponent.Play(AnimationType.Idle);
             }
         }
     }

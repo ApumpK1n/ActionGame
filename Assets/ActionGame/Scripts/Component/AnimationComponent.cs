@@ -30,7 +30,7 @@ public class AnimationComponent : MonoBehaviour
 
     public void Play(AnimationType animationType)
     {
-        animancer.Play(animationData.GetAnimationClip(animationType));
+        animancer.Play(animationData.GetAnimationClip(animationType), fadeDuration:0.25f);
     }
 
     public void Stop()

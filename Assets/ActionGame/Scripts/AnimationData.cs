@@ -35,8 +35,9 @@ public class SingleAnimationData
 
 public enum AnimationType
 {
-    Attack,
-    Defence,
-    Jump,
-    BaseMove,
+    Attack = 1,
+    Defence = 2,
+    Jump = 3,
+    BaseMove = 4,
+    Idle = 5,
 }
