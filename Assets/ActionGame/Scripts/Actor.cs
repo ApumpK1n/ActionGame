@@ -14,11 +14,16 @@ public class Actor : MonoBehaviour
         Lock = 1,
     }
 
+    // TODO:先用有限状态机 后续考虑抽象
     public enum PlayerState
     {
         Idle,
-        
+        Move,
+        Jump,
+
     }
+
+    public PlayerState state = PlayerState.Idle;
 
     private MoveMode moveMode = MoveMode.Base;
     private void Awake()
@@ -31,7 +36,21 @@ public class Actor : MonoBehaviour
 
     private void Start()
     {
-        //animationComponent.Play("RightHandAttack");
+        SwitchState(PlayerState.Idle);
+    }
+
+    private void SwitchState(PlayerState state)
+    {
+        switch (state)
+        {
+            case PlayerState.Idle:
+                animationComponent.Play(AnimationType.Idle);
+                break;
+            case PlayerState.Move:
+
+                break;
+        }
+        this.state = state;
     }
 
     private void OnJumpLongInput(GamePlayJumpLongEvent @event)
