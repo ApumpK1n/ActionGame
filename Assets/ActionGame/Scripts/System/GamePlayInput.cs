@@ -11,6 +11,7 @@ public class GamePlayInput : MonoBehaviour
     CommandInvoker commandInvoker;
     private void Start()
     {
+        //InputSystem.settings.SetInternalFeatureFlag("DISABLE_SHORTCUT_SUPPORT", true);
         playerInput = GetComponent<PlayerInput>();
         commandInvoker = Game.Instance.GetGameSystem<CommandInvoker>();
     }
@@ -22,7 +23,8 @@ public class GamePlayInput : MonoBehaviour
 
     public void OnMoveEvent(InputAction.CallbackContext context)
     {
-        Vector2 dir = context.ReadValue<Vector2>().normalized;
+        Vector2 dir = context.ReadValue<Vector2>();
+        Debug.Log("dir:" + dir);
         MoveCommand moveCommand = new MoveCommand();
         moveCommand.MoveDir = dir;
         commandInvoker.AddCommand(moveCommand);
