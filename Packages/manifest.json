@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.crashkonijn.goap": "https://github.com/crashkonijn/GOAP.git?path=/Package#3.0.29",
     "com.unity.cinemachine": "2.10.0",
     "com.unity.collab-proxy": "2.6.0",
     "com.unity.formats.fbx": "4.2.1",
