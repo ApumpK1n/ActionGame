@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Windows;
-
 public class Actor : MonoBehaviour
 {
     private AnimationComponent animationComponent;
 
+    public Transform Head;
     public enum MoveMode
     {
         Base = 0,

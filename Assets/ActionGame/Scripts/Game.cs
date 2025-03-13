@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class Game : DestroyableSingleton<Game>
@@ -13,6 +14,9 @@ public class Game : DestroyableSingleton<Game>
     [SerializeField] public Transform PlayerReborn;
 
     public Actor Player;
+
+    [SerializeField] private CinemachineBrain cinemachineBrain;
+    [SerializeField] private CinemachineFreeLook playerFollowCamera;
     private void Awake()
     {
         gameSystemStack.RegisterGameSystem(new LogicSystem());
@@ -26,6 +30,9 @@ public class Game : DestroyableSingleton<Game>
         SetupSystems(dirtySystem);
 
         Player = Instantiate(PlayerPrefab, PlayerReborn, false);
+
+        playerFollowCamera.Follow = Player.transform;
+        playerFollowCamera.LookAt = Player.Head;
     }
 
 
