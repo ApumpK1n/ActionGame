@@ -5,6 +5,7 @@ using UnityEngine;
 public class Actor : MonoBehaviour
 {
     private AnimationComponent animationComponent;
+    public Rigidbody Rigidbody;
 
     public Transform Head;
     public enum MoveMode
@@ -28,6 +29,7 @@ public class Actor : MonoBehaviour
     private void Awake()
     {
         animationComponent = GetComponent<AnimationComponent>();
+        Rigidbody = GetComponent<Rigidbody>();
 
         // 后续用事件队列处理并触发Actor行为
         MessageBroker.Default.Receive<GamePlayJumpLongEvent>().Subscribe(OnJumpLongInput);
@@ -142,6 +144,9 @@ public class Actor : MonoBehaviour
     }
     private void OnAnimatorMove()
     {
-        animationComponent.Animancer.Animator.ApplyBuiltinRootMotion();
+        //animationComponent.Animancer.Animator.ApplyBuiltinRootMotion();
+        // Rigidbody
+        Rigidbody.MovePosition(Rigidbody.position + animationComponent.Animancer.Animator.deltaPosition);
+        Rigidbody.MoveRotation(Rigidbody.rotation * animationComponent.Animancer.Animator.deltaRotation);
     }
 }

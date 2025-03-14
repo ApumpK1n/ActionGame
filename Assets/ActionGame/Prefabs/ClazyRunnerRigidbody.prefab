@@ -785,8 +785,9 @@ GameObject:
   - component: {fileID: 8458308644198724034}
   - component: {fileID: 3003405743029673}
   - component: {fileID: 7102570957812199574}
+  - component: {fileID: 3810070293668141292}
   m_Layer: 0
-  m_Name: ClazyRunner
+  m_Name: ClazyRunnerRigidbody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -857,14 +858,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animations:
-  - Name: RightHandAttack
-    AnimationType: 0
+  - Name: Attack
+    AnimationType: 1
     Clip: {fileID: 7400000, guid: c2976fa7ea9c6844ca1d7042aef0a731, type: 3}
-  - Name: JumpBaseLong
-    AnimationType: 2
+  - Name: Jump
+    AnimationType: 3
     Clip: {fileID: 7400000, guid: 71a4dd5632c200f4a83c67d9154fc031, type: 3}
   - Name: BaseMove
-    AnimationType: 2
+    AnimationType: 4
     Clip: {fileID: 7400000, guid: 91cd408b447dd6c47ac75d9e56819403, type: 3}
   - Name: Idle
     AnimationType: 5
@@ -893,6 +894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4a193bc180e2e842953956c51eec445, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Rigidbody: {fileID: 0}
   Head: {fileID: 4658720062209416080}
   state: 0
 --- !u!54 &7102570957812199574
@@ -918,10 +920,33 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Constraints: 16
+  m_CollisionDetection: 2
+--- !u!136 &3810070293668141292
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4104323566969289406}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!1 &4331405214245749292
 GameObject:
   m_ObjectHideFlags: 0

@@ -23,11 +23,6 @@ public class AnimationComponent : MonoBehaviour
         animancer.Play(animationClip);
     }
 
-    public void Play(string animationName)
-    {
-         animancer.Play(animationData.GetAnimationClip(animationName));
-    }
-
     public void Play(AnimationType animationType)
     {
         animancer.Play(animationData.GetAnimationClip(animationType), fadeDuration:0.25f);

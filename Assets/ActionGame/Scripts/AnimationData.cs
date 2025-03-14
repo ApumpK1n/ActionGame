@@ -8,19 +8,15 @@ public class AnimationData : MonoBehaviour
 {
     public List<SingleAnimationData> Animations = new List<SingleAnimationData>();
 
-    public AnimationClip GetAnimationClip(string name)
+    public AnimationClip GetAnimationClip(AnimationType type)
     {
         foreach (var animation in Animations)
         {
-            if (animation.Name == name)
+            if (animation.AnimationType == type)
                 return animation.Clip;
         }
+        Debug.LogWarning("GetAnimationClip null:" + type);
         return null;
-    }
-
-    public AnimationClip GetAnimationClip(AnimationType type)
-    {
-        return GetAnimationClip(type.ToString());
     }
 }
 
@@ -28,7 +24,6 @@ public class AnimationData : MonoBehaviour
 [Serializable]
 public class SingleAnimationData
 {
-    public string Name;
     public AnimationType AnimationType;
     public AnimationClip Clip;
 }
