@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 public class Actor : MonoBehaviour
 {
     private AnimationComponent animationComponent;
@@ -26,6 +28,9 @@ public class Actor : MonoBehaviour
     public PlayerState state = PlayerState.Idle;
 
     private MoveMode moveMode = MoveMode.Base;
+
+    public Vector3 targetForward;
+
     private void Awake()
     {
         animationComponent = GetComponent<AnimationComponent>();
@@ -73,31 +78,35 @@ public class Actor : MonoBehaviour
     {
         if (dir.x != 0 && dir.y != 0)
         {
-            if (dir.y > 0 && dir.x < 0)
+            if (dir.y > 0 && dir.x < 0) // leftForward
             {
                 //anim.SetTrigger("move_up_left");
-                transform.eulerAngles = new Vector3(0, -45, 0);
+                //targetEulerAngles = new Vector3(0, -45, 0);
+                targetForward = GetTargetForward(-45);
                 animationComponent.Play(AnimationType.BaseMove);
             }
 
-            if (dir.y > 0 && dir.x > 0)
+            if (dir.y > 0 && dir.x > 0) // rightForward
             {
                 //anim.SetTrigger("move_up_right");
-                transform.eulerAngles = new Vector3(0, 45, 0);
+                //targetEulerAngles = new Vector3(0, 45, 0);
+                targetForward = GetTargetForward(45);
                 animationComponent.Play(AnimationType.BaseMove);
             }
 
-            if (dir.y < 0 && dir.x < 0)
+            if (dir.y < 0 && dir.x < 0) // backleft
             {
                 //anim.SetTrigger("move_down_left");
-                transform.eulerAngles = new Vector3(0, -135, 0);
+                //targetEulerAngles = new Vector3(0, -135, 0);
+                targetForward = GetTargetForward(-135);
                 animationComponent.Play(AnimationType.BaseMove);
             }
 
-            if (dir.y < 0 && dir.x > 0)
+            if (dir.y < 0 && dir.x > 0) // backright
             {
                 //anim.SetTrigger("move_down_right");
-                transform.eulerAngles = new Vector3(0, 135, 0);
+                //targetEulerAngles = new Vector3(0, 135, 0);
+                targetForward = GetTargetForward(135);
                 animationComponent.Play(AnimationType.BaseMove);
             }
         }
@@ -108,14 +117,15 @@ public class Actor : MonoBehaviour
             //left/right/up/down
             if (dir.x < 0)
             {
-                transform.eulerAngles = new Vector3(0, -90, 0);
+                //targetForward = Vector3.left;
+                targetForward = GetTargetForward(-90);
                 animationComponent.Play(AnimationType.BaseMove);
                 //anim.SetTrigger("move_left");
             }
 
             if (dir.x > 0)
             {
-                transform.eulerAngles = new Vector3(0, 90, 0);
+                targetForward = GetTargetForward(90);
                 animationComponent.Play(AnimationType.BaseMove);
                 //anim.SetTrigger("move_right");
             }
@@ -123,7 +133,7 @@ public class Actor : MonoBehaviour
 
             if (dir.y > 0)
             {
-                transform.eulerAngles = new Vector3(0, 0, 0);
+                targetForward = GetTargetForward(0);
                 animationComponent.Play(AnimationType.BaseMove);
                 //anim.SetTrigger("move_up");
             }
@@ -131,7 +141,7 @@ public class Actor : MonoBehaviour
 
             if (dir.y < 0)
             {
-                transform.eulerAngles = new Vector3(0, -180, 0);
+                targetForward = GetTargetForward(180);
                 animationComponent.Play(AnimationType.BaseMove);
                 //anim.SetTrigger("move_down");
             }
@@ -141,12 +151,35 @@ public class Actor : MonoBehaviour
                 animationComponent.Play(AnimationType.Idle);
             }
         }
+
+        transform.forward = targetForward;
     }
+
+    /// <summary>
+    /// get current Camera forward * rotate angle
+    /// </summary>
+    /// <param name="angle"></param>
+    /// <returns></returns>
+    private Vector3 GetTargetForward(float angle)
+    {
+        Quaternion quaternion = Quaternion.AngleAxis(angle, Vector3.up);
+        Vector3 rotation = quaternion* Game.Instance.GetPlayerCamera().forward;
+        return new Vector3(rotation.x, 0, rotation.z);
+    }
+
     private void OnAnimatorMove()
     {
         //animationComponent.Animancer.Animator.ApplyBuiltinRootMotion();
         // Rigidbody
         Rigidbody.MovePosition(Rigidbody.position + animationComponent.Animancer.Animator.deltaPosition);
-        Rigidbody.MoveRotation(Rigidbody.rotation * animationComponent.Animancer.Animator.deltaRotation);
+        //Rigidbody.MoveRotation(Rigidbody.rotation * animationComponent.Animancer.Animator.deltaRotation);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward * 10);
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + targetForward * 10);
     }
 }

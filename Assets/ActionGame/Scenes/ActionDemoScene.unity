@@ -2590,7 +2590,7 @@ Transform:
   m_GameObject: {fileID: 2124172079}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -54.40039, z: 231.97754}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2611,6 +2611,7 @@ MonoBehaviour:
   PlayerPrefab: {fileID: 3003405743029673, guid: 3c62710372c70b04d838471b3164ea88, type: 3}
   PlayerReborn: {fileID: 3121689}
   Player: {fileID: 0}
+  playerCamera: {fileID: 646344183}
   cinemachineBrain: {fileID: 646344186}
   playerFollowCamera: {fileID: 1682339523}
 --- !u!1660057539 &9223372036854775807

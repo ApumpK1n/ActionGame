@@ -24,7 +24,6 @@ public class GamePlayInput : MonoBehaviour
     public void OnMoveEvent(InputAction.CallbackContext context)
     {
         Vector2 dir = context.ReadValue<Vector2>();
-        Debug.Log("dir:" + dir);
         MoveCommand moveCommand = new MoveCommand();
         moveCommand.MoveDir = dir;
         commandInvoker.AddCommand(moveCommand);

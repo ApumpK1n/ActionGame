@@ -15,8 +15,10 @@ public class Game : DestroyableSingleton<Game>
 
     public Actor Player;
 
+    [SerializeField] private Camera playerCamera;
     [SerializeField] private CinemachineBrain cinemachineBrain;
     [SerializeField] private CinemachineFreeLook playerFollowCamera;
+
     private void Awake()
     {
         gameSystemStack.RegisterGameSystem(new LogicSystem());
@@ -55,5 +57,17 @@ public class Game : DestroyableSingleton<Game>
     public T GetGameSystem<T>() where T : IGameSystem
     {
         return gameSystemStack.GetGameSystem<T>();
+    }
+
+    public Transform GetPlayerCamera()
+    {
+        return playerCamera.transform;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(playerCamera.transform.position, playerCamera.transform.position + playerCamera.transform.forward);
+
     }
 }
