@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Animancer;
+using Animancer.Units;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -31,6 +33,18 @@ public class Actor : MonoBehaviour
 
     public Vector3 targetForward;
 
+    private Transform leftFoot;
+    private Transform rightFoot;
+    private AnimatedFloat footWeights;
+    [SerializeField, Meters] private float _RaycastOriginY = 0.5f;
+    [SerializeField, Meters] private float _RaycastEndY = -0.2f;
+
+    public bool ApplyAnimatorIK
+    {
+        get => animationComponent.Animancer.Layers[0].ApplyAnimatorIK;
+        set => animationComponent.Animancer.Layers[0].ApplyAnimatorIK = value;
+    }
+
     private void Awake()
     {
         animationComponent = GetComponent<AnimationComponent>();
@@ -38,6 +52,11 @@ public class Actor : MonoBehaviour
 
         // 后续用事件队列处理并触发Actor行为
         MessageBroker.Default.Receive<GamePlayJumpLongEvent>().Subscribe(OnJumpLongInput);
+
+        leftFoot = animationComponent.Animancer.Animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+        rightFoot = animationComponent.Animancer.Animator.GetBoneTransform(HumanBodyBones.RightFoot);
+        footWeights = new AnimatedFloat(animationComponent.Animancer, "LeftFootIKCurve", "RightFootIKCurve");
+        ApplyAnimatorIK = true;
     }
 
     private void Start()
@@ -63,7 +82,7 @@ public class Actor : MonoBehaviour
     {
         animationComponent.Play(AnimationType.Jump);
     }
-
+    #region Move
     public void Move(Vector2 dir)
     {
         switch (moveMode)
@@ -175,6 +194,8 @@ public class Actor : MonoBehaviour
         //Rigidbody.MoveRotation(Rigidbody.rotation * animationComponent.Animancer.Animator.deltaRotation);
     }
 
+    #endregion
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
@@ -182,4 +203,57 @@ public class Actor : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + targetForward * 10);
     }
+
+    #region IK
+    // Note that due to limitations in the Playables API, Unity will always call this method with layerIndex = 0.
+    private void OnAnimatorIK(int layerIndex)
+    {
+        // _FootWeights[0] is the first property we specified in Awake: "LeftFootIK".
+        // _FootWeights[1] is the second property we specified in Awake: "RightFootIK".
+        UpdateFootIK(leftFoot, AvatarIKGoal.LeftFoot, footWeights[0], animationComponent.Animancer.Animator.leftFeetBottomHeight);
+        UpdateFootIK(rightFoot, AvatarIKGoal.RightFoot, footWeights[1], animationComponent.Animancer.Animator.rightFeetBottomHeight);
+    }
+
+    /************************************************************************************************************************/
+
+    private void UpdateFootIK(Transform footTransform, AvatarIKGoal goal, float weight, float footBottomHeight)
+    {
+        Debug.Log("UpdateFootIK:" + weight);
+        var animator = animationComponent.Animancer.Animator;
+        animator.SetIKPositionWeight(goal, weight);
+        animator.SetIKRotationWeight(goal, weight);
+
+        if (weight == 0)
+            return;
+
+        // Get the local up direction of the foot.
+        var rotation = animator.GetIKRotation(goal);
+        var localUp = rotation * Vector3.up;
+
+        var position = footTransform.position;
+        position += localUp * _RaycastOriginY;
+
+        var distance = _RaycastOriginY - _RaycastEndY;
+
+        if (Physics.Raycast(position, -localUp, out var hit, distance))
+        {
+            // Use the hit point as the desired position.
+            position = hit.point;
+            position += localUp * footBottomHeight;
+            animator.SetIKPosition(goal, position);
+
+            // Use the hit normal to calculate the desired rotation.
+            var rotAxis = Vector3.Cross(localUp, hit.normal);
+            var angle = Vector3.Angle(localUp, hit.normal);
+            rotation = Quaternion.AngleAxis(angle, rotAxis) * rotation;
+
+            animator.SetIKRotation(goal, rotation);
+        }
+        else// Otherwise simply stretch the leg out to the end of the ray.
+        {
+            position += localUp * (footBottomHeight - distance);
+            animator.SetIKPosition(goal, position);
+        }
+    }
+    #endregion
 }
