@@ -18,7 +18,7 @@ public class Actor : MonoBehaviour
         Lock = 1,
     }
 
-    // TODO:先用有限状态机 后续考虑抽象
+    // TODO:先用有限状态机 后续需要抽象分层状态机 并剥离代码
     public enum PlayerState
     {
         Idle,
