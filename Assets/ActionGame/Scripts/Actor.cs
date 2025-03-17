@@ -4,8 +4,6 @@ using Animancer;
 using Animancer.Units;
 using UniRx;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 public class Actor : MonoBehaviour
 {
     private AnimationComponent animationComponent;
@@ -218,7 +216,6 @@ public class Actor : MonoBehaviour
 
     private void UpdateFootIK(Transform footTransform, AvatarIKGoal goal, float weight, float footBottomHeight)
     {
-        Debug.Log("UpdateFootIK:" + weight);
         var animator = animationComponent.Animancer.Animator;
         animator.SetIKPositionWeight(goal, weight);
         animator.SetIKRotationWeight(goal, weight);

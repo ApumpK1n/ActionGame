@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-// 考虑使用序列化资源替代类
+// TODO: 使用序列化资源替代Mono
 public class AnimationData : MonoBehaviour
 {
     public List<SingleAnimationData> Animations = new List<SingleAnimationData>();
