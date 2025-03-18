@@ -216,9 +216,9 @@ public class Actor : MonoBehaviour
 
     private void UpdateFootIK(Transform footTransform, AvatarIKGoal goal, float weight, float footBottomHeight)
     {
-        Debug.Log("footWeights:" + weight);
         var animator = animationComponent.Animancer.Animator;
 
+        if (weight == 0) return;
 
         // Get the local up direction of the foot.
         var rotation = animator.GetIKRotation(goal);
@@ -229,7 +229,8 @@ public class Actor : MonoBehaviour
 
         var distance = _RaycastOriginY - _RaycastEndY;
 
-        if (Physics.Raycast(position, -localUp, out var hit, distance))
+        LayerMask mask = 1 << LayerMask.NameToLayer("Occluder");
+        if (Physics.Raycast(position, -localUp, out var hit, distance, mask))
         {
             animator.SetIKPositionWeight(goal, weight);
             // Use the hit point as the desired position.
