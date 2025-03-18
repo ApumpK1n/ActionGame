@@ -53,7 +53,7 @@ public class Actor : MonoBehaviour
 
         leftFoot = animationComponent.Animancer.Animator.GetBoneTransform(HumanBodyBones.LeftFoot);
         rightFoot = animationComponent.Animancer.Animator.GetBoneTransform(HumanBodyBones.RightFoot);
-        footWeights = new AnimatedFloat(animationComponent.Animancer, "LeftFootIKCurve", "RightFootIKCurve");
+        footWeights = new AnimatedFloat(animationComponent.Animancer, "LeftFootWeightCurve", "RightFootWeightCurve");
         ApplyAnimatorIK = true;
     }
 
@@ -216,12 +216,9 @@ public class Actor : MonoBehaviour
 
     private void UpdateFootIK(Transform footTransform, AvatarIKGoal goal, float weight, float footBottomHeight)
     {
+        Debug.Log("footWeights:" + weight);
         var animator = animationComponent.Animancer.Animator;
-        animator.SetIKPositionWeight(goal, weight);
-        animator.SetIKRotationWeight(goal, weight);
 
-        if (weight == 0)
-            return;
 
         // Get the local up direction of the foot.
         var rotation = animator.GetIKRotation(goal);
@@ -234,6 +231,7 @@ public class Actor : MonoBehaviour
 
         if (Physics.Raycast(position, -localUp, out var hit, distance))
         {
+            animator.SetIKPositionWeight(goal, weight);
             // Use the hit point as the desired position.
             position = hit.point;
             position += localUp * footBottomHeight;
@@ -245,11 +243,13 @@ public class Actor : MonoBehaviour
             rotation = Quaternion.AngleAxis(angle, rotAxis) * rotation;
 
             animator.SetIKRotation(goal, rotation);
+
         }
         else// Otherwise simply stretch the leg out to the end of the ray.
         {
             position += localUp * (footBottomHeight - distance);
             animator.SetIKPosition(goal, position);
+            animator.SetIKPositionWeight(goal, 0);
         }
     }
     #endregion
