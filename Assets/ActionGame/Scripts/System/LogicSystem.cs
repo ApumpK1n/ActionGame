@@ -31,4 +31,10 @@ public class LogicSystem : IGameSystem
     {
         Game.Instance.Player.Move(dir);
     }
+
+    // TODO:抽象出属性
+    public void PlayerAccelerate(bool isAccelerate)
+    {
+        Game.Instance.Player.SetAccelerate(isAccelerate);
+    }
 }

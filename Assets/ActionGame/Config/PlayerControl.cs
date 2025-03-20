@@ -62,6 +62,15 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Accelerate"",
+                    ""type"": ""Button"",
+                    ""id"": ""5a47376d-81ab-42b5-a2b4-c2ba7ab8c5f4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -152,6 +161,17 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""action"": ""RightClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a7c796dd-6f39-4801-a5ef-9bd856e5d7a3"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Accelerate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -164,6 +184,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
         m_GamePlay_Jump = m_GamePlay.FindAction("Jump", throwIfNotFound: true);
         m_GamePlay_LeftClick = m_GamePlay.FindAction("LeftClick", throwIfNotFound: true);
         m_GamePlay_RightClick = m_GamePlay.FindAction("RightClick", throwIfNotFound: true);
+        m_GamePlay_Accelerate = m_GamePlay.FindAction("Accelerate", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -229,6 +250,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
     private readonly InputAction m_GamePlay_Jump;
     private readonly InputAction m_GamePlay_LeftClick;
     private readonly InputAction m_GamePlay_RightClick;
+    private readonly InputAction m_GamePlay_Accelerate;
     public struct GamePlayActions
     {
         private @PlayerControl m_Wrapper;
@@ -237,6 +259,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_GamePlay_Jump;
         public InputAction @LeftClick => m_Wrapper.m_GamePlay_LeftClick;
         public InputAction @RightClick => m_Wrapper.m_GamePlay_RightClick;
+        public InputAction @Accelerate => m_Wrapper.m_GamePlay_Accelerate;
         public InputActionMap Get() { return m_Wrapper.m_GamePlay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -258,6 +281,9 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
             @RightClick.started += instance.OnRightClick;
             @RightClick.performed += instance.OnRightClick;
             @RightClick.canceled += instance.OnRightClick;
+            @Accelerate.started += instance.OnAccelerate;
+            @Accelerate.performed += instance.OnAccelerate;
+            @Accelerate.canceled += instance.OnAccelerate;
         }
 
         private void UnregisterCallbacks(IGamePlayActions instance)
@@ -274,6 +300,9 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
             @RightClick.started -= instance.OnRightClick;
             @RightClick.performed -= instance.OnRightClick;
             @RightClick.canceled -= instance.OnRightClick;
+            @Accelerate.started -= instance.OnAccelerate;
+            @Accelerate.performed -= instance.OnAccelerate;
+            @Accelerate.canceled -= instance.OnAccelerate;
         }
 
         public void RemoveCallbacks(IGamePlayActions instance)
@@ -297,5 +326,6 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnLeftClick(InputAction.CallbackContext context);
         void OnRightClick(InputAction.CallbackContext context);
+        void OnAccelerate(InputAction.CallbackContext context);
     }
 }

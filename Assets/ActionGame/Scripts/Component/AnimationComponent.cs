@@ -23,9 +23,22 @@ public class AnimationComponent : MonoBehaviour
         animancer.Play(animationClip);
     }
 
-    public void Play(AnimationType animationType)
+    public void Play(AnimationType animationType, float speed=1.0f)
     {
-        animancer.Play(animationData.GetAnimationClip(animationType), fadeDuration:0.25f);
+        AnimationClip clip = animationData.GetAnimationClip(animationType);
+        if (clip == null) return;
+        AnimancerState animancerState;
+
+        if (animancer.IsPlaying(clip))
+        {
+            animancerState = animancer.States.Current;
+        }
+        else
+        {
+            animancerState = animancer.Play(clip, fadeDuration: 0.25f);
+        }
+        animancerState.Speed = speed;
+        Debug.Log("animancerState:" + animancerState + "," +speed);
     }
 
     public void Stop()

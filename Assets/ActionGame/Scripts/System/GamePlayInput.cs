@@ -28,4 +28,20 @@ public class GamePlayInput : MonoBehaviour
         moveCommand.MoveDir = dir;
         commandInvoker.AddCommand(moveCommand);
     }
+
+    public void OnAccelerateEvent(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            AccelerateCommand accelerateCommand = new AccelerateCommand();
+            accelerateCommand.Value = true;
+            commandInvoker.AddCommand(accelerateCommand);
+        }
+        else if (context.canceled)
+        {
+            AccelerateCommand accelerateCommand = new AccelerateCommand();
+            accelerateCommand.Value = false;
+            commandInvoker.AddCommand(accelerateCommand);
+        }
+    }
 }

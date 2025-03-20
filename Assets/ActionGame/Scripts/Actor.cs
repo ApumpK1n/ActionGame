@@ -64,21 +64,24 @@ public class Actor : MonoBehaviour
 
     private void SwitchState(PlayerState state)
     {
+        this.state = state;
         switch (state)
         {
             case PlayerState.Idle:
                 animationComponent.Play(AnimationType.Idle);
                 break;
             case PlayerState.Move:
-
+                animationComponent.Play(AnimationType.BaseMove, GetSpeed());
+                break;
+            case PlayerState.Jump:
+                animationComponent.Play(AnimationType.Jump);
                 break;
         }
-        this.state = state;
     }
 
     private void OnJumpLongInput(GamePlayJumpLongEvent @event)
     {
-        animationComponent.Play(AnimationType.Jump);
+        SwitchState(PlayerState.Jump);
     }
     #region Move
     public void Move(Vector2 dir)
@@ -93,6 +96,7 @@ public class Actor : MonoBehaviour
 
     private void BaseMove(Vector2 dir)
     {
+        bool isMove = false;
         if (dir.x != 0 && dir.y != 0)
         {
             if (dir.y > 0 && dir.x < 0) // leftForward
@@ -100,7 +104,7 @@ public class Actor : MonoBehaviour
                 //anim.SetTrigger("move_up_left");
                 //targetEulerAngles = new Vector3(0, -45, 0);
                 targetForward = GetTargetForward(-45);
-                animationComponent.Play(AnimationType.BaseMove);
+                isMove = true;
             }
 
             if (dir.y > 0 && dir.x > 0) // rightForward
@@ -108,7 +112,7 @@ public class Actor : MonoBehaviour
                 //anim.SetTrigger("move_up_right");
                 //targetEulerAngles = new Vector3(0, 45, 0);
                 targetForward = GetTargetForward(45);
-                animationComponent.Play(AnimationType.BaseMove);
+                isMove = true;
             }
 
             if (dir.y < 0 && dir.x < 0) // backleft
@@ -116,7 +120,7 @@ public class Actor : MonoBehaviour
                 //anim.SetTrigger("move_down_left");
                 //targetEulerAngles = new Vector3(0, -135, 0);
                 targetForward = GetTargetForward(-135);
-                animationComponent.Play(AnimationType.BaseMove);
+                isMove = true;
             }
 
             if (dir.y < 0 && dir.x > 0) // backright
@@ -124,7 +128,7 @@ public class Actor : MonoBehaviour
                 //anim.SetTrigger("move_down_right");
                 //targetEulerAngles = new Vector3(0, 135, 0);
                 targetForward = GetTargetForward(135);
-                animationComponent.Play(AnimationType.BaseMove);
+                isMove = true;
             }
         }
 
@@ -136,14 +140,14 @@ public class Actor : MonoBehaviour
             {
                 //targetForward = Vector3.left;
                 targetForward = GetTargetForward(-90);
-                animationComponent.Play(AnimationType.BaseMove);
+                isMove = true;
                 //anim.SetTrigger("move_left");
             }
 
             if (dir.x > 0)
             {
                 targetForward = GetTargetForward(90);
-                animationComponent.Play(AnimationType.BaseMove);
+                isMove = true;
                 //anim.SetTrigger("move_right");
             }
 
@@ -151,7 +155,7 @@ public class Actor : MonoBehaviour
             if (dir.y > 0)
             {
                 targetForward = GetTargetForward(0);
-                animationComponent.Play(AnimationType.BaseMove);
+                isMove = true;
                 //anim.SetTrigger("move_up");
             }
 
@@ -159,7 +163,7 @@ public class Actor : MonoBehaviour
             if (dir.y < 0)
             {
                 targetForward = GetTargetForward(180);
-                animationComponent.Play(AnimationType.BaseMove);
+                isMove = true;
                 //anim.SetTrigger("move_down");
             }
 
@@ -170,6 +174,10 @@ public class Actor : MonoBehaviour
         }
 
         transform.forward = targetForward;
+        if (isMove)
+        {
+            SwitchState(PlayerState.Move);
+        }
     }
 
     /// <summary>
@@ -252,6 +260,22 @@ public class Actor : MonoBehaviour
             //animator.SetIKPosition(goal, position);
             animator.SetIKPositionWeight(goal, 0);
         }
+    }
+    #endregion
+
+    #region Accelerate
+
+    private float AccelerateSpeed = 2f;
+    private bool isAccelerate = false;
+    public void SetAccelerate(bool isAccelerate)
+    {
+        this.isAccelerate = isAccelerate;
+    }
+
+    private float GetSpeed()
+    {
+        if (isAccelerate) return AccelerateSpeed;
+        return 1f;
     }
     #endregion
 }
