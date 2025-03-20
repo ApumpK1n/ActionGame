@@ -248,8 +248,8 @@ public class Actor : MonoBehaviour
         }
         else// Otherwise simply stretch the leg out to the end of the ray.
         {
-            position += localUp * (footBottomHeight - distance);
-            animator.SetIKPosition(goal, position);
+            //position += localUp * (footBottomHeight - distance);
+            //animator.SetIKPosition(goal, position);
             animator.SetIKPositionWeight(goal, 0);
         }
     }
