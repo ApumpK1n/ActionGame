@@ -2,32 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using Animancer;
 using Animancer.Units;
+using CrashKonijn.Goap.Runtime;
 using UniRx;
 using UnityEngine;
-public class Actor : MonoBehaviour
+using UnityHFSM;
+
+public class Player : MonoBehaviour
 {
     private AnimationComponent animationComponent;
     public Rigidbody Rigidbody;
 
     public Transform Head;
+
+    private StateMachine<PlayerStates, Events> fsmRoot;
+
     public enum MoveMode
     {
         Base = 0,
         Lock = 1,
     }
 
-    // TODO:先用有限状态机 后续需要抽象分层状态机 并剥离代码
-    public enum PlayerState
-    {
-        Idle,
-        Move,
-        Jump,
 
-    }
-
-    public PlayerState state = PlayerState.Idle;
+    public PlayerStates state = PlayerStates.Idle;
 
     private MoveMode moveMode = MoveMode.Base;
+    private PlayerStatesBlackboard blackboard;
 
     public Vector3 targetForward;
 
@@ -42,46 +41,113 @@ public class Actor : MonoBehaviour
         get => animationComponent.Animancer.Layers[0].ApplyAnimatorIK;
         set => animationComponent.Animancer.Layers[0].ApplyAnimatorIK = value;
     }
-
+    #region Unity
     private void Awake()
     {
         animationComponent = GetComponent<AnimationComponent>();
         Rigidbody = GetComponent<Rigidbody>();
 
         // 后续用事件队列处理并触发Actor行为
-        MessageBroker.Default.Receive<GamePlayJumpLongEvent>().Subscribe(OnJumpLongInput);
+        //MessageBroker.Default.Receive<GamePlayJumpLongEvent>().Subscribe(OnJumpLongInput);
 
         leftFoot = animationComponent.Animancer.Animator.GetBoneTransform(HumanBodyBones.LeftFoot);
         rightFoot = animationComponent.Animancer.Animator.GetBoneTransform(HumanBodyBones.RightFoot);
         footWeights = new AnimatedFloat(animationComponent.Animancer, "LeftFootWeightCurve", "RightFootWeightCurve");
         ApplyAnimatorIK = true;
+
+        blackboard = new PlayerStatesBlackboard();
+        blackboard.Player = this;
     }
 
     private void Start()
     {
-        SwitchState(PlayerState.Idle);
+        CreateHFSM();
     }
 
-    private void SwitchState(PlayerState state)
+    private void Update()
     {
-        this.state = state;
-        switch (state)
-        {
-            case PlayerState.Idle:
-                animationComponent.Play(AnimationType.Idle);
-                break;
-            case PlayerState.Move:
-                animationComponent.Play(AnimationType.BaseMove, GetSpeed());
-                break;
-            case PlayerState.Jump:
-                animationComponent.Play(AnimationType.Jump);
-                break;
-        }
+        fsmRoot.OnLogic();
+    }
+    #endregion
+
+    private void CreateHFSM()
+    {
+        fsmRoot = new StateMachine<PlayerStates, Events>();
+
+        var moveFsm = new StateMachine<PlayerStates, MoveStates, Events>();
+        var idleFsm = new StateMachine<PlayerStates, IdleStates, Events>();
+
+        fsmRoot.AddState(PlayerStates.Idle, idleFsm);
+        fsmRoot.AddState(PlayerStates.Move, moveFsm);
+        fsmRoot.AddState(PlayerStates.Jump, new State<PlayerStates, Events>());
+
+        // IDLE
+        idleFsm.AddState(IdleStates.BASE, new State<IdleStates, Events>(onEnter: OnEnterBaseIdle));
+        idleFsm.SetStartState(IdleStates.BASE);
+
+        // MOVE
+        moveFsm.AddState(MoveStates.WALK, new PlayerWalkState(blackboard, false, false));
+        moveFsm.AddState(MoveStates.DASH, new PlayerDashState(blackboard, false, false));
+
+        // Transition
+        moveFsm.AddTransition(new Transition<MoveStates>(MoveStates.WALK, MoveStates.DASH, condition: WalkToDashCondition));
+        moveFsm.AddTransition(new Transition<MoveStates>(MoveStates.DASH, MoveStates.WALK, condition: DashToWalkCondition));
+
+        // IDLE ->MOVE
+        fsmRoot.AddTransition(new Transition<PlayerStates>(PlayerStates.Move, PlayerStates.Idle, condition: MoveToIdleCondition));
+        // MOVE ->IDLE
+        fsmRoot.AddTransition(new Transition<PlayerStates>(PlayerStates.Idle, PlayerStates.Move, condition: IdleToMoveCondition));
+
+        fsmRoot.SetStartState(PlayerStates.Idle);
+        fsmRoot.Init();
+    }
+
+    private void OnEnterBaseIdle(State<IdleStates, Events> state)
+    {
+        Debug.Log("OnEnterBaseIdle");
+        blackboard.Player.PlayAnimation(AnimationType.Idle);
+    }
+
+    #region FsmCondition
+    private bool MoveToIdleCondition(Transition<PlayerStates> playerStateTransition)
+    {
+        return fsmRoot.ActiveState.name == PlayerStates.Move && blackboard.MoveInput.magnitude == 0;
+    }
+
+    private bool IdleToMoveCondition(Transition<PlayerStates> playerStateTransition)
+    {
+        return fsmRoot.ActiveState.name == PlayerStates.Idle && blackboard.MoveInput.magnitude > 0;
+    }
+
+    private bool WalkToDashCondition(Transition<MoveStates> moveStateTransition)
+    {
+        return fsmRoot.ActiveState.name == PlayerStates.Move && blackboard.IsAccelerate;
+    }
+
+    private bool DashToWalkCondition(Transition<MoveStates> moveStateTransition)
+    {
+        return fsmRoot.ActiveState.name == PlayerStates.Move && !blackboard.IsAccelerate;
+    }
+    #endregion
+
+    private void PlayAnimation(AnimationType animationType)
+    {
+        animationComponent.Play(animationType);
+    }
+
+    public void PlayAnimation(AnimationType animationType, float speed)
+    {
+        animationComponent.Play(animationType, speed);
     }
 
     private void OnJumpLongInput(GamePlayJumpLongEvent @event)
     {
-        SwitchState(PlayerState.Jump);
+        //SwitchState(PlayerState.Jump);
+    }
+
+    private void SwitchState(PlayerStates playerState)
+    {
+        fsmRoot.RequestStateChange(playerState);
     }
     #region Move
     public void Move(Vector2 dir)
@@ -106,7 +172,6 @@ public class Actor : MonoBehaviour
                 targetForward = GetTargetForward(-45);
                 isMove = true;
             }
-
             if (dir.y > 0 && dir.x > 0) // rightForward
             {
                 //anim.SetTrigger("move_up_right");
@@ -114,7 +179,6 @@ public class Actor : MonoBehaviour
                 targetForward = GetTargetForward(45);
                 isMove = true;
             }
-
             if (dir.y < 0 && dir.x < 0) // backleft
             {
                 //anim.SetTrigger("move_down_left");
@@ -122,7 +186,6 @@ public class Actor : MonoBehaviour
                 targetForward = GetTargetForward(-135);
                 isMove = true;
             }
-
             if (dir.y < 0 && dir.x > 0) // backright
             {
                 //anim.SetTrigger("move_down_right");
@@ -134,7 +197,6 @@ public class Actor : MonoBehaviour
 
         else
         {
-
             //left/right/up/down
             if (dir.x < 0)
             {
@@ -143,41 +205,27 @@ public class Actor : MonoBehaviour
                 isMove = true;
                 //anim.SetTrigger("move_left");
             }
-
             if (dir.x > 0)
             {
                 targetForward = GetTargetForward(90);
                 isMove = true;
                 //anim.SetTrigger("move_right");
             }
-
-
             if (dir.y > 0)
             {
                 targetForward = GetTargetForward(0);
                 isMove = true;
                 //anim.SetTrigger("move_up");
             }
-
-
             if (dir.y < 0)
             {
                 targetForward = GetTargetForward(180);
                 isMove = true;
                 //anim.SetTrigger("move_down");
             }
-
-            if (dir.x == 0 && dir.y == 0)
-            {
-                animationComponent.Play(AnimationType.Idle);
-            }
         }
-
         transform.forward = targetForward;
-        if (isMove)
-        {
-            SwitchState(PlayerState.Move);
-        }
+        blackboard.MoveInput = dir;
     }
 
     /// <summary>
@@ -264,18 +312,41 @@ public class Actor : MonoBehaviour
     #endregion
 
     #region Accelerate
-
-    private float AccelerateSpeed = 2f;
-    private bool isAccelerate = false;
     public void SetAccelerate(bool isAccelerate)
     {
-        this.isAccelerate = isAccelerate;
+        blackboard.IsAccelerate = isAccelerate;
     }
 
-    private float GetSpeed()
-    {
-        if (isAccelerate) return AccelerateSpeed;
-        return 1f;
-    }
     #endregion
+}
+
+
+public enum PlayerStates
+{
+    Idle,
+    Move,
+    Jump,
+
+}
+
+enum MoveStates
+{
+    WALK, DASH
+}
+
+enum IdleStates
+{
+    BASE,
+}
+
+enum Events
+{
+    ON_DAMAGE, ON_WIN
+}
+
+public class PlayerStatesBlackboard
+{
+    public Player Player { get; set; }
+    public bool IsAccelerate { get; set; }
+    public Vector2 MoveInput { get; set; }
 }

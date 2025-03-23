@@ -10,10 +10,10 @@ public class Game : DestroyableSingleton<Game>
 
     [HideInInspector][NonSerialized] public int dirtySystem = 0;
 
-    [SerializeField] public Actor PlayerPrefab;
+    [SerializeField] public Player PlayerPrefab;
     [SerializeField] public Transform PlayerReborn;
 
-    public Actor Player;
+    public Player Player;
 
     [SerializeField] private Camera playerCamera;
     [SerializeField] private CinemachineBrain cinemachineBrain;

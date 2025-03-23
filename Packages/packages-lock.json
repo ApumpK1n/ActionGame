@@ -16,6 +16,13 @@
       },
       "hash": "5b40b90b462aff59eb0bcf7f4effc6d1347c0635"
     },
+    "com.inspiaaa.unityhfsm": {
+      "version": "https://github.com/Inspiaaa/UnityHFSM.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "beb58daf989ec3b095a4c6ff627a58da736f8b81"
+    },
     "com.unity.burst": {
       "version": "1.8.16",
       "depth": 1,

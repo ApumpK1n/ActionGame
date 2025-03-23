@@ -29,7 +29,8 @@ public class AnimationComponent : MonoBehaviour
         if (clip == null) return;
         AnimancerState animancerState;
 
-        if (animancer.IsPlaying(clip))
+        if (animancer.States.Current != null && animancer.States.Current.IsValid()
+            && animancer.States.Current.IsActive && animancer.States.Current.Clip.name == clip.name)
         {
             animancerState = animancer.States.Current;
         }
@@ -38,8 +39,17 @@ public class AnimationComponent : MonoBehaviour
             animancerState = animancer.Play(clip, fadeDuration: 0.25f);
         }
         animancerState.Speed = speed;
-        Debug.Log("animancerState:" + animancerState + "," +speed);
     }
+
+    public void SetCurrentAnimationSpeed(float speed)
+    {
+        var animancerState = animancer.States.Current;
+        if (animancerState != null)
+        {
+            animancerState.Speed = speed;
+        }
+
+    } 
 
     public void Stop()
     {
