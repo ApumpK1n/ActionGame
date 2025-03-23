@@ -861,7 +861,7 @@ MonoBehaviour:
   - AnimationType: 1
     Clip: {fileID: 7400000, guid: c2976fa7ea9c6844ca1d7042aef0a731, type: 3}
   - AnimationType: 3
-    Clip: {fileID: 7400000, guid: 71a4dd5632c200f4a83c67d9154fc031, type: 3}
+    Clip: {fileID: 7400000, guid: 25866a782fed0d645b75b3dbbe5463ef, type: 3}
   - AnimationType: 4
     Clip: {fileID: 7400000, guid: 91cd408b447dd6c47ac75d9e56819403, type: 3}
   - AnimationType: 5
@@ -896,6 +896,8 @@ MonoBehaviour:
   targetForward: {x: 0, y: 0, z: 0}
   _RaycastOriginY: 0.5
   _RaycastEndY: -0.2
+  footAvatarMask: {fileID: 31900000, guid: fb8c4f3519850aa4fbe8cee7af831701, type: 2}
+  totalAvatarMask: {fileID: 0}
 --- !u!54 &7102570957812199574
 Rigidbody:
   m_ObjectHideFlags: 0

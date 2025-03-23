@@ -6,7 +6,7 @@ public class JumpCommand : ICommand
 {
     public void Execute()
     {
-        MessageBroker.Default.Publish(new GamePlayJumpLongEvent());
+        Game.Instance.GetGameSystem<LogicSystem>().PlayerJump();
     }
 
     public void Undo()

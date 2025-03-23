@@ -37,4 +37,9 @@ public class LogicSystem : IGameSystem
     {
         Game.Instance.Player.SetAccelerate(isAccelerate);
     }
+
+    public void PlayerJump()
+    {
+        Game.Instance.Player.TryEnterJumpState();
+    }
 }

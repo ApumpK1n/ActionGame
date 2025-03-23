@@ -11,7 +11,7 @@ internal class PlayerDashState : PlayerMoveState
 
     public override void OnEnter()
     {
-        blackboard.Player.PlayAnimation(AnimationType.BaseMove, AccelerateSpeed);
+        blackboard.Player.PlayAnimation(PlayerAnimationLayer.Base, AnimationType.BaseMove, AccelerateSpeed);
     }
 
 }

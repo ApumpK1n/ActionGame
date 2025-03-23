@@ -10,7 +10,7 @@ internal class PlayerWalkState : PlayerMoveState
 
     public override void OnEnter()
     {
-        blackboard.Player.PlayAnimation(AnimationType.BaseMove, 1f);
+        blackboard.Player.PlayAnimation(PlayerAnimationLayer.Base, AnimationType.BaseMove, 1f);
     }
     //public override void OnLogic() { }
     //public override void OnExit() { }

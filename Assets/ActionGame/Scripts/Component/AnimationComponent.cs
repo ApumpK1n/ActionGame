@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Animancer;
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(AnimancerComponent))]
 [RequireComponent(typeof(AnimationData))]
@@ -18,12 +19,12 @@ public class AnimationComponent : MonoBehaviour
         animationData = GetComponent<AnimationData>();
     }
 
-    public void Play(AnimationClip animationClip)
+    public void Play(int layer, AnimationClip animationClip)
     {
         animancer.Play(animationClip);
     }
 
-    public void Play(AnimationType animationType, float speed=1.0f)
+    public void Play(int layer, AnimationType animationType, float speed=1.0f, FadeMode fadeMode=default, Action<AnimancerState> onEnd=null)
     {
         AnimationClip clip = animationData.GetAnimationClip(animationType);
         if (clip == null) return;
@@ -36,10 +37,15 @@ public class AnimationComponent : MonoBehaviour
         }
         else
         {
-            animancerState = animancer.Play(clip, fadeDuration: 0.25f);
+            animancerState = animancer.Layers[layer].Play(clip, fadeDuration: 0.25f, mode:fadeMode);
         }
         animancerState.Speed = speed;
-    }
+        animancerState.LayerIndex = layer;
+        if (onEnd != null)
+        {
+            animancerState.Events.OnEnd = ()=> onEnd?.Invoke(animancerState);
+        }
+    }   
 
     public void SetCurrentAnimationSpeed(float speed)
     {

@@ -18,7 +18,11 @@ public class GamePlayInput : MonoBehaviour
 
     public void OnJumpEvent(InputAction.CallbackContext context)
     {
-        commandInvoker.AddCommand(new JumpCommand());
+        if (context.started)
+        {
+            commandInvoker.AddCommand(new JumpCommand());
+        }
+
     }
 
     public void OnMoveEvent(InputAction.CallbackContext context)
