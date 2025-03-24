@@ -23,6 +23,13 @@
       "dependencies": {},
       "hash": "beb58daf989ec3b095a4c6ff627a58da736f8b81"
     },
+    "com.smkplus.custom-toolbar": {
+      "version": "https://github.com/smkplus/CustomToolbar.git#master",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "c42b0f4497a2b463490b59be9026cb63b1b884f9"
+    },
     "com.unity.burst": {
       "version": "1.8.16",
       "depth": 1,

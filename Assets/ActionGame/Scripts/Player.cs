@@ -271,7 +271,7 @@ public class Player : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, transform.position + transform.forward * 10);
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + targetForward * 10);
+        Gizmos.DrawLine(transform.position, transform.position + targetForward * blackboard.MoveInput.magnitude);
     }
 
     #region IK
