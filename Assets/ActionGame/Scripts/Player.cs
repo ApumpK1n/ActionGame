@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
     [SerializeField] private AvatarMask footAvatarMask;
     [SerializeField] private AvatarMask totalAvatarMask;
 
+    private bool isReady = false;
     public bool ApplyAnimatorIK
     {
         get => animationComponent.Animancer.Layers[PlayerAnimationLayer.Base].ApplyAnimatorIK;
@@ -68,11 +69,16 @@ public class Player : MonoBehaviour
     private void Start()
     {
         CreateHFSM();
+        isReady = true;
     }
 
     private void Update()
     {
-        fsmRoot.OnLogic();
+        if (isReady)
+        {
+            fsmRoot.OnLogic();
+        }
+
     }
     #endregion
 
@@ -116,12 +122,13 @@ public class Player : MonoBehaviour
 
     private void OnEnterJumpState(State<PlayerStates, string> state)
     {
-        PlayAnimation(PlayerAnimationLayer.Action, AnimationType.Jump, 1f, FadeMode.FromStart, OnJumpEnd);
+        var animancerState = PlayAnimation(PlayerAnimationLayer.Action, AnimationType.Jump, 1f, FadeMode.FromStart, OnJumpEnd);
+        //animancerState.SetWeight(0.5f);
     }
 
     private void OnJumpEnd(AnimancerState animancerState)
     {
-        animancerState.Layer.StartFade(0, 0);
+        animancerState.Layer.StartFade(0);
         SwitchState(PlayerStates.Idle);
     }
 
@@ -147,9 +154,9 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    public void PlayAnimation(int layer, AnimationType animationType, float speed, FadeMode fadeMode=default, Action<AnimancerState> onEnd=null)
+    public AnimancerState PlayAnimation(int layer, AnimationType animationType, float speed, FadeMode fadeMode=default, Action<AnimancerState> onEnd=null)
     {
-        animationComponent.Play(layer, animationType, speed, fadeMode, onEnd);
+         return animationComponent.Play(layer, animationType, speed, fadeMode, onEnd);
     }
 
     private void SwitchState(PlayerStates playerState)
@@ -240,9 +247,20 @@ public class Player : MonoBehaviour
 
     private void OnAnimatorMove()
     {
+        //Debug.Log("OnAnimatorMove:" + isReady);
+        if (!isReady) return;
         //animationComponent.Animancer.Animator.ApplyBuiltinRootMotion();
         // Rigidbody
-        Rigidbody.MovePosition(Rigidbody.position + animationComponent.Animancer.Animator.deltaPosition);
+        switch (fsmRoot.ActiveStateName)
+        {
+            case PlayerStates.Move:
+                Rigidbody.MovePosition(Rigidbody.position + animationComponent.Animancer.Animator.deltaPosition);
+                break;
+            case PlayerStates.Jump:
+                Rigidbody.MovePosition(Rigidbody.position + transform.forward * Time.deltaTime * 5f);
+                break;
+        }
+
         //Rigidbody.MoveRotation(Rigidbody.rotation * animationComponent.Animancer.Animator.deltaRotation);
     }
 

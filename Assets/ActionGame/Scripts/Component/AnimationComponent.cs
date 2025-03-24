@@ -24,10 +24,10 @@ public class AnimationComponent : MonoBehaviour
         animancer.Play(animationClip);
     }
 
-    public void Play(int layer, AnimationType animationType, float speed=1.0f, FadeMode fadeMode=default, Action<AnimancerState> onEnd=null)
+    public AnimancerState Play(int layer, AnimationType animationType, float speed=1.0f, FadeMode fadeMode=default, Action<AnimancerState> onEnd=null)
     {
         AnimationClip clip = animationData.GetAnimationClip(animationType);
-        if (clip == null) return;
+        if (clip == null) return null;
         AnimancerState animancerState;
 
         if (animancer.States.Current != null && animancer.States.Current.IsValid()
@@ -45,6 +45,7 @@ public class AnimationComponent : MonoBehaviour
         {
             animancerState.Events.OnEnd = ()=> onEnd?.Invoke(animancerState);
         }
+        return animancerState;
     }   
 
     public void SetCurrentAnimationSpeed(float speed)

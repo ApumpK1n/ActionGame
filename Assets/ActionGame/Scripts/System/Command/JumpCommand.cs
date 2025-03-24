@@ -1,7 +1,5 @@
 
 
-using UniRx;
-
 public class JumpCommand : ICommand
 {
     public void Execute()
