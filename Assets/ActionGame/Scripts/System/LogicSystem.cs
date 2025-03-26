@@ -42,4 +42,14 @@ public class LogicSystem : IGameSystem
     {
         Game.Instance.Player.TryEnterJumpState();
     }
+
+    public void LeftClick()
+    {
+
+    }
+
+    public void ExecuteCommand(CommandType commandType)
+    {
+        Game.Instance.Player.ExecuteCommand(commandType);
+    }
 }

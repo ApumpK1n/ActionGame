@@ -48,4 +48,15 @@ public class GamePlayInput : MonoBehaviour
             commandInvoker.AddCommand(accelerateCommand);
         }
     }
+
+    public void OnLeftClickEvent(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            AttackCommand command = new AttackCommand();
+            command.LeftClick = true;
+            command.RightClick = false;
+            commandInvoker.AddCommand(command);
+        }
+    }
 }

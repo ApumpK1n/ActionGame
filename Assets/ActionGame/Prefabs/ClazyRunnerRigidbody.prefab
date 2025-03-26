@@ -892,6 +892,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Rigidbody: {fileID: 0}
   Head: {fileID: 4658720062209416080}
+  RightHand: {fileID: 2311688130153410872}
+  LeftHand: {fileID: 5690057012406586666}
   state: 0
   targetForward: {x: 0, y: 0, z: 0}
   _RaycastOriginY: 0.5

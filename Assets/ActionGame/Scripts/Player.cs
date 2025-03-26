@@ -8,16 +8,27 @@ using UnityEngine;
 using UnityHFSM;
 using System;
 
+/*
+ HFSM
+Alive: Can Execute Command
+    
+
+Death: Can not Execute Command
+ 
+ */
 public class Player : MonoBehaviour
 {
     private AnimationComponent animationComponent;
     public Rigidbody Rigidbody;
 
     public Transform Head;
+    public Transform RightHand;
+    public Transform LeftHand;
 
     public PlayerStatesBlackboard Blackboard => blackboard;
 
     private StateMachine<PlayerStates, Events> fsmRoot;
+    private Weapon currentWeapon;
 
     public enum MoveMode
     {
@@ -109,6 +120,8 @@ public class Player : MonoBehaviour
         fsmRoot.AddTransition(new Transition<PlayerStates>(PlayerStates.Move, PlayerStates.Idle, condition: MoveToIdleCondition));
         // MOVE ->IDLE
         fsmRoot.AddTransition(new Transition<PlayerStates>(PlayerStates.Idle, PlayerStates.Move, condition: IdleToMoveCondition));
+        // Any -> Death
+        //fsmRoot.AddTriggerTransition(Events., transition);
 
         fsmRoot.SetStartState(PlayerStates.Idle);
         fsmRoot.Init();
@@ -128,7 +141,7 @@ public class Player : MonoBehaviour
 
     private void OnJumpEnd(AnimancerState animancerState)
     {
-        animancerState.Layer.StartFade(0);
+        animancerState.Layer.StartFade(0, 0);
         SwitchState(PlayerStates.Idle);
     }
 
@@ -152,6 +165,7 @@ public class Player : MonoBehaviour
     {
         return fsmRoot.ActiveState.name == PlayerStates.Move && !blackboard.IsAccelerate;
     }
+
     #endregion
 
     public AnimancerState PlayAnimation(int layer, AnimationType animationType, float speed, FadeMode fadeMode=default, Action<AnimancerState> onEnd=null)
@@ -161,7 +175,7 @@ public class Player : MonoBehaviour
 
     private void SwitchState(PlayerStates playerState)
     {
-        fsmRoot.RequestStateChange(playerState);
+        fsmRoot.RequestStateChange(playerState, true);
     }
     #region Move
     public void Move(Vector2 dir)
@@ -229,7 +243,7 @@ public class Player : MonoBehaviour
                 //anim.SetTrigger("move_down");
             }
         }
-        transform.forward = targetForward;
+        blackboard.TargetForward = targetForward;
         blackboard.MoveInput = dir;
     }
 
@@ -254,10 +268,12 @@ public class Player : MonoBehaviour
         switch (fsmRoot.ActiveStateName)
         {
             case PlayerStates.Move:
+                transform.forward = blackboard.TargetForward;
                 Rigidbody.MovePosition(Rigidbody.position + animationComponent.Animancer.Animator.deltaPosition);
                 break;
             case PlayerStates.Jump:
-                Rigidbody.MovePosition(Rigidbody.position + transform.forward * Time.deltaTime * 5f);
+                transform.forward = Vector3.RotateTowards(transform.forward, blackboard.TargetForward, 2f*Time.deltaTime, 0.0f);
+                Rigidbody.MovePosition(Rigidbody.position + blackboard.TargetForward * Time.deltaTime * 5f * Blackboard.MoveInput.magnitude);
                 break;
         }
 
@@ -270,8 +286,13 @@ public class Player : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, transform.position + transform.forward * 10);
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + targetForward * blackboard.MoveInput.magnitude);
+
+        if (Application.isPlaying)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, transform.position + targetForward * blackboard.MoveInput.magnitude);
+        }
+ 
     }
 
     #region IK
@@ -346,6 +367,33 @@ public class Player : MonoBehaviour
         return false;
     }
     #endregion
+
+    #region Weapon
+    public void AddWeapon(Weapon weaponPrefab)
+    {
+        currentWeapon = Instantiate(weaponPrefab, RightHand, false);
+        currentWeapon.transform.localEulerAngles = new Vector3(80, 0, 0);
+        currentWeapon.transform.localPosition = new Vector3(0.085f, 0.016f, 0.503f);
+    }
+    #endregion
+
+    public void ExecuteCommand(CommandType commandType)
+    {
+        switch (commandType)
+        {
+            case CommandType.LeftAttack:
+                OnLeftClickEvent();
+                break;
+        }
+    }
+
+    private void OnLeftClickEvent()
+    {
+        if (fsmRoot.ActiveStateName != PlayerStates.Attack)
+        {
+            SwitchState(PlayerStates.Attack);
+        }
+    }
 }
 
 
@@ -354,22 +402,31 @@ public enum PlayerStates
     Idle,
     Move,
     Jump,
-
+    Attack,
+    Death,
 }
 
-enum MoveStates
+public enum MoveStates
 {
     WALK, DASH
 }
 
-enum IdleStates
+public enum IdleStates
 {
     BASE,
 }
 
+public enum AttackStates
+{
+    L1,
+    R1,
+    L1R1,
+}
+
 enum Events
 {
-    ON_DAMAGE, ON_WIN
+    ON_DAMAGE,
+    ON_WIN,
 }
 
 public static class PlayerAnimationLayer
@@ -383,4 +440,7 @@ public class PlayerStatesBlackboard
     public Player Player { get; set; }
     public bool IsAccelerate { get; set; }
     public Vector2 MoveInput { get; set; }
+    public Vector3 TargetForward { get; set; }
+    public bool IsLeftClick { get; set; }
+    public bool IsRightClick { get; set; }
 }

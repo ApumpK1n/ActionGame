@@ -12,6 +12,7 @@ public class Game : DestroyableSingleton<Game>
 
     [SerializeField] public Player PlayerPrefab;
     [SerializeField] public Transform PlayerReborn;
+    [SerializeField] public Weapon StickWeaponPrefab;
 
     public Player Player;
 
@@ -35,6 +36,8 @@ public class Game : DestroyableSingleton<Game>
 
         playerFollowCamera.Follow = Player.transform;
         playerFollowCamera.LookAt = Player.Head;
+
+        Player.AddWeapon(StickWeaponPrefab);
     }
 
 

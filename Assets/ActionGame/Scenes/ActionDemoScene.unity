@@ -3434,6 +3434,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerPrefab: {fileID: 3003405743029673, guid: 3c62710372c70b04d838471b3164ea88, type: 3}
   PlayerReborn: {fileID: 3121689}
+  StickWeaponPrefab: {fileID: -6699697419266694064, guid: 380e44a83b473444aa47b8412d79a21b, type: 3}
   Player: {fileID: 0}
   playerCamera: {fileID: 646344183}
   cinemachineBrain: {fileID: 646344186}
