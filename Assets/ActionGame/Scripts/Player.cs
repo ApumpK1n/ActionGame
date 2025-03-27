@@ -2,18 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using Animancer;
 using Animancer.Units;
-using CrashKonijn.Goap.Runtime;
 using UniRx;
 using UnityEngine;
 using UnityHFSM;
 using System;
 
 /*
- HFSM
-Alive: Can Execute Command
-    
-
-Death: Can not Execute Command
+  HFSM
+- Root (根状态) 移动和战斗并行
+  - Movement (移动层)
+    - 地上移动 （子状态互斥）
+        - Idle (待机)
+        - Walk (走）
+        - Dash (跑)
+    - 空中移动 （子状态互斥）
+        - 跳
+        - 坠落
+  - Combat (战斗层)
+    - NormalAttack (普通攻击)
+    - SkillAttack (技能攻击)
+  - 其他全局状态（如受伤、死亡）
  
  */
 public class Player : MonoBehaviour
@@ -28,6 +36,8 @@ public class Player : MonoBehaviour
     public PlayerStatesBlackboard Blackboard => blackboard;
 
     private StateMachine<PlayerStates, Events> fsmRoot;
+    private StateMachine<PlayerStates, MovementStates, Events> fsmMovement;
+    private StateMachine<PlayerStates, CombatStates, Events> fsmCombat;
     private Weapon currentWeapon;
 
     public enum MoveMode
@@ -97,11 +107,18 @@ public class Player : MonoBehaviour
     {
         fsmRoot = new StateMachine<PlayerStates, Events>();
 
-        var moveFsm = new StateMachine<PlayerStates, MoveStates, Events>();
-        var idleFsm = new StateMachine<PlayerStates, IdleStates, Events>();
+        fsmMovement = new StateMachine<PlayerStates, MovementStates, Events>();
+        var moveFsm = new StateMachine<MovementStates, MoveStates, Events>();
+        var idleFsm = new StateMachine<MovementStates, IdleStates, Events>();
+        fsmMovement.AddState(MovementStates.Idle, idleFsm);
+        fsmMovement.AddState(PlayerStates.Move, moveFsm);
 
-        fsmRoot.AddState(PlayerStates.Idle, idleFsm);
-        fsmRoot.AddState(PlayerStates.Move, moveFsm);
+        fsmCombat = new StateMachine<PlayerStates, CombatStates, Events>();
+
+        fsmRoot.AddState(PlayerStates.Movement, fsmMovement);
+        fsmRoot.AddState(PlayerStates.Combat, fsmCombat);
+
+
         fsmRoot.AddState(PlayerStates.Jump, new State<PlayerStates>(onEnter: OnEnterJumpState));
 
         // IDLE
@@ -403,6 +420,9 @@ public enum PlayerStates
     Move,
     Jump,
     Attack,
+
+    Movement,
+    Combat,
     Death,
 }
 
@@ -410,6 +430,19 @@ public enum MoveStates
 {
     WALK, DASH
 }
+
+public enum MovementStates
+{
+    InGround,
+    InSky,
+}
+
+public enum CombatStates
+{
+    L1,
+    L1R1,
+}
+
 
 public enum IdleStates
 {
