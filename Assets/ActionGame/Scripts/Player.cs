@@ -108,26 +108,40 @@ public class Player : MonoBehaviour
         fsmRoot = new StateMachine<PlayerStates, Events>();
 
         fsmMovement = new StateMachine<PlayerStates, MovementStates, Events>();
-        var moveFsm = new StateMachine<MovementStates, MoveStates, Events>();
-        var idleFsm = new StateMachine<MovementStates, IdleStates, Events>();
-        fsmMovement.AddState(MovementStates.Idle, idleFsm);
-        fsmMovement.AddState(PlayerStates.Move, moveFsm);
+
+        /* -----------------------------InGround-------------------------*/
+        var fsmInGround = new StateMachine<MovementStates, InGroundStates, Events>();
+        fsmInGround.AddState(InGroundStates.Idle, new PlayerIdleState(blackboard, false, false));
+        fsmInGround.AddState(InGroundStates.Walk, new PlayerWalkState(blackboard, false, false));
+        fsmInGround.AddState(InGroundStates.Dash, new PlayerDashState(blackboard, false, false));
+        fsmInGround.SetStartState(InGroundStates.Idle);
+
+        fsmInGround.AddTransition(new Transition<InGroundStates>(InGroundStates.Walk, InGroundStates.Dash, condition: GroundWalkToDashCondition));
+        fsmInGround.AddTransition(new Transition<InGroundStates>(InGroundStates.Dash, InGroundStates.Walk, condition: GroundDashToWalkCondition));
+
+        /* -----------------------------InSky-------------------------*/
+        var fsmInSky = new StateMachine<MovementStates, InSkyStates, Events>();
+        fsmInSky.AddState(InSkyStates.Jump, new PlayerJumpState(blackboard, false, false));
+
+        fsmMovement.AddState(MovementStates.InGround, fsmInGround);
+        fsmMovement.AddState(MovementStates.InSky, fsmInSky);
+        fsmMovement.SetStartState(MovementStates.InGround);
 
         fsmCombat = new StateMachine<PlayerStates, CombatStates, Events>();
 
         fsmRoot.AddState(PlayerStates.Movement, fsmMovement);
         fsmRoot.AddState(PlayerStates.Combat, fsmCombat);
+        //fsmRoot.AddState(PlayerStates.Jump, new State<PlayerStates>(onEnter: OnEnterJumpState));
 
-
-        fsmRoot.AddState(PlayerStates.Jump, new State<PlayerStates>(onEnter: OnEnterJumpState));
-
+        var moveFsm = new StateMachine<MovementStates, MoveStates, Events>();
+        var idleFsm = new StateMachine<MovementStates, IdleStates, Events>();
         // IDLE
         idleFsm.AddState(IdleStates.BASE, new State<IdleStates, Events>(onEnter: OnEnterBaseIdle));
         idleFsm.SetStartState(IdleStates.BASE);
 
         // MOVE
-        moveFsm.AddState(MoveStates.WALK, new PlayerWalkState(blackboard, false, false));
-        moveFsm.AddState(MoveStates.DASH, new PlayerDashState(blackboard, false, false));
+        //moveFsm.AddState(MoveStates.WALK, new PlayerWalkState(blackboard, false, false));
+        //moveFsm.AddState(MoveStates.DASH, new PlayerDashState(blackboard, false, false));
 
         // Transition
         moveFsm.AddTransition(new Transition<MoveStates>(MoveStates.WALK, MoveStates.DASH, condition: WalkToDashCondition));
@@ -163,6 +177,16 @@ public class Player : MonoBehaviour
     }
 
     #region FsmCondition
+    private bool GroundWalkToDashCondition(Transition<InGroundStates> groundStateTransition)
+    {
+        return blackboard.MoveSpeed > 1f;
+    }
+
+    private bool GroundDashToWalkCondition(Transition<InGroundStates> groundStateTransition)
+    {
+        return blackboard.MoveSpeed <= 1f;
+    }
+
     private bool MoveToIdleCondition(Transition<PlayerStates> playerStateTransition)
     {
         return fsmRoot.ActiveState.name == PlayerStates.Move && blackboard.MoveInput.magnitude == 0;
@@ -369,6 +393,14 @@ public class Player : MonoBehaviour
     public void SetAccelerate(bool isAccelerate)
     {
         blackboard.IsAccelerate = isAccelerate;
+        if (isAccelerate)
+        {
+            blackboard.MoveSpeed = 2f;
+        }
+        else
+        {
+            blackboard.MoveSpeed = 1f;
+        }
     }
 
     #endregion
@@ -437,6 +469,19 @@ public enum MovementStates
     InSky,
 }
 
+public enum InGroundStates
+{
+    Idle,
+    Walk,
+    Dash,
+}
+
+public enum InSkyStates
+{
+    Jump,
+    Down,
+}
+
 public enum CombatStates
 {
     L1,
@@ -476,4 +521,5 @@ public class PlayerStatesBlackboard
     public Vector3 TargetForward { get; set; }
     public bool IsLeftClick { get; set; }
     public bool IsRightClick { get; set; }
+    public float MoveSpeed = 1f;
 }

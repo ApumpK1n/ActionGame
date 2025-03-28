@@ -1,7 +1,7 @@
 
 using UnityHFSM;
 
-internal class PlayerWalkState : PlayerMoveState
+internal class PlayerWalkState : PlayerInGroundState
 {
     public PlayerWalkState(PlayerStatesBlackboard blackboard, bool needsExitTime, bool isGhostState)
         : base(blackboard, needsExitTime, isGhostState) { }

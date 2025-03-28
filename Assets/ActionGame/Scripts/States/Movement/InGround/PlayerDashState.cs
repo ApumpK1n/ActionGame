@@ -1,7 +1,7 @@
 
 using UnityHFSM;
 
-internal class PlayerDashState : PlayerMoveState
+internal class PlayerDashState : PlayerInGroundState
 {
     float AccelerateSpeed = 2f;
 
