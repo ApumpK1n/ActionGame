@@ -46,7 +46,12 @@ public class AnimationComponent : MonoBehaviour
             animancerState.Events.OnEnd = ()=> onEnd?.Invoke(animancerState);
         }
         return animancerState;
-    }   
+    }
+
+    public void Stop(int layer)
+    {
+        animancer.Layers[layer].Stop();
+    }
 
     public void SetCurrentAnimationSpeed(float speed)
     {

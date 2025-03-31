@@ -59,4 +59,15 @@ public class GamePlayInput : MonoBehaviour
             commandInvoker.AddCommand(command);
         }
     }
+
+    public void OnRightClickEvent(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            AttackCommand command = new AttackCommand();
+            command.LeftClick = false;
+            command.RightClick = true;
+            commandInvoker.AddCommand(command);
+        }
+    }
 }

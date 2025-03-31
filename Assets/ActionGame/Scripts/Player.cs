@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
     private StateMachine<PlayerStates, Events> fsmRoot;
     private StateMachine<PlayerStates, MovementStates, Events> fsmMovement;
     private StateMachine<PlayerStates, CombatStates, Events> fsmCombat;
+    private StateMachine<CombatStates, WeaponStates, WeaponEvents> fsmWeaponed;
     private Weapon currentWeapon;
 
     public enum MoveMode
@@ -60,7 +61,13 @@ public class Player : MonoBehaviour
     [SerializeField, Meters] private float _RaycastOriginY = 0.5f;
     [SerializeField, Meters] private float _RaycastEndY = -0.2f;
     [SerializeField] private AvatarMask footAvatarMask;
+    [SerializeField] private AvatarMask handAttackAvatarMask;
     [SerializeField] private AvatarMask totalAvatarMask;
+
+    private float idleSpeed = 0f;
+    private float walkSpeed = 1f;
+    private float extraSpeed = 0f;
+    private float baseSpeed = 0f;
 
     private bool isReady = false;
     public bool ApplyAnimatorIK
@@ -85,6 +92,9 @@ public class Player : MonoBehaviour
         animationComponent.Animancer.Layers[PlayerAnimationLayer.Action].SetDebugName("Action Layer");
         animationComponent.Animancer.Layers[PlayerAnimationLayer.Action].SetMask(totalAvatarMask);
         animationComponent.Animancer.Layers[PlayerAnimationLayer.Base].SetMask(totalAvatarMask);
+
+        animationComponent.Animancer.Layers[PlayerAnimationLayer.HandAttack].SetDebugName("HandAttack Layer");
+        animationComponent.Animancer.Layers[PlayerAnimationLayer.HandAttack].SetMask(handAttackAvatarMask);
     }
 
     private void Start()
@@ -97,7 +107,8 @@ public class Player : MonoBehaviour
     {
         if (isReady)
         {
-            fsmRoot.OnLogic();
+            fsmMovement.OnLogic();
+            fsmCombat.OnLogic();
         }
 
     }
@@ -116,8 +127,9 @@ public class Player : MonoBehaviour
         fsmInGround.AddState(InGroundStates.Dash, new PlayerDashState(blackboard, false, false));
         fsmInGround.SetStartState(InGroundStates.Idle);
 
-        fsmInGround.AddTransition(new Transition<InGroundStates>(InGroundStates.Walk, InGroundStates.Dash, condition: GroundWalkToDashCondition));
-        fsmInGround.AddTransition(new Transition<InGroundStates>(InGroundStates.Dash, InGroundStates.Walk, condition: GroundDashToWalkCondition));
+        fsmInGround.AddTwoWayTransition(new Transition<InGroundStates>(InGroundStates.Walk, InGroundStates.Dash, condition: GroundWalkToDashCondition));
+        fsmInGround.AddTwoWayTransition(new Transition<InGroundStates>(InGroundStates.Idle, InGroundStates.Walk, condition: GroundIdleToWalkCondition));
+        fsmInGround.AddTwoWayTransition(new Transition<InGroundStates>(InGroundStates.Idle, InGroundStates.Dash, condition: GroundIdleToDashCondition));
 
         /* -----------------------------InSky-------------------------*/
         var fsmInSky = new StateMachine<MovementStates, InSkyStates, Events>();
@@ -126,36 +138,53 @@ public class Player : MonoBehaviour
         fsmMovement.AddState(MovementStates.InGround, fsmInGround);
         fsmMovement.AddState(MovementStates.InSky, fsmInSky);
         fsmMovement.SetStartState(MovementStates.InGround);
-
+        /*----------------------------Combat-------------------------*/
         fsmCombat = new StateMachine<PlayerStates, CombatStates, Events>();
 
-        fsmRoot.AddState(PlayerStates.Movement, fsmMovement);
-        fsmRoot.AddState(PlayerStates.Combat, fsmCombat);
+        /*---------------------------Weaponed-------------------------*/
+        fsmWeaponed = new StateMachine<CombatStates, WeaponStates, WeaponEvents>();
+        fsmWeaponed.AddState(WeaponStates.Idle, new PlayerAttackIdleState(blackboard, false, false));
+        fsmWeaponed.AddState(WeaponStates.L1, new PlayerAttackL1State(blackboard, false, false));
+        fsmWeaponed.AddState(WeaponStates.R1, new PlayerAttackR1State(blackboard, false, false));
+        fsmWeaponed.AddState(WeaponStates.L1R1, new PlayerAttackL1R1State(blackboard, false, false));
+        fsmWeaponed.SetStartState(WeaponStates.Idle);
+
+        //fsmWeaponed.AddTriggerTransition(WeaponEvents.L1, new Transition<WeaponStates>(WeaponStates.Idle, WeaponStates.L1, condition: FromIdleAttackCondition));
+        //fsmWeaponed.AddTriggerTransition(WeaponEvents.R1, new Transition<WeaponStates>(WeaponStates.Idle, WeaponStates.R1, condition: FromIdleAttackCondition));
+        //fsmWeaponed.AddTriggerTransition(WeaponEvents.L1R1, new Transition<WeaponStates>(WeaponStates.L1, WeaponStates.L1R1, condition: FromL1AttackCondition));
+        fsmCombat.AddState(CombatStates.Weaponed, fsmWeaponed);
+
+        fsmCombat.SetStartState(CombatStates.Weaponed);
+
+        //fsmRoot.AddState(PlayerStates.Movement, fsmMovement);
+        //fsmRoot.AddState(PlayerStates.Combat, fsmCombat);
         //fsmRoot.AddState(PlayerStates.Jump, new State<PlayerStates>(onEnter: OnEnterJumpState));
 
-        var moveFsm = new StateMachine<MovementStates, MoveStates, Events>();
-        var idleFsm = new StateMachine<MovementStates, IdleStates, Events>();
+        //var moveFsm = new StateMachine<MovementStates, MoveStates, Events>();
+        //var idleFsm = new StateMachine<MovementStates, IdleStates, Events>();
         // IDLE
-        idleFsm.AddState(IdleStates.BASE, new State<IdleStates, Events>(onEnter: OnEnterBaseIdle));
-        idleFsm.SetStartState(IdleStates.BASE);
+        //idleFsm.AddState(IdleStates.BASE, new State<IdleStates, Events>(onEnter: OnEnterBaseIdle));
+        //idleFsm.SetStartState(IdleStates.BASE);
 
         // MOVE
         //moveFsm.AddState(MoveStates.WALK, new PlayerWalkState(blackboard, false, false));
         //moveFsm.AddState(MoveStates.DASH, new PlayerDashState(blackboard, false, false));
 
         // Transition
-        moveFsm.AddTransition(new Transition<MoveStates>(MoveStates.WALK, MoveStates.DASH, condition: WalkToDashCondition));
-        moveFsm.AddTransition(new Transition<MoveStates>(MoveStates.DASH, MoveStates.WALK, condition: DashToWalkCondition));
+        //moveFsm.AddTransition(new Transition<MoveStates>(MoveStates.WALK, MoveStates.DASH, condition: WalkToDashCondition));
+        //moveFsm.AddTransition(new Transition<MoveStates>(MoveStates.DASH, MoveStates.WALK, condition: DashToWalkCondition));
 
         // IDLE ->MOVE
-        fsmRoot.AddTransition(new Transition<PlayerStates>(PlayerStates.Move, PlayerStates.Idle, condition: MoveToIdleCondition));
+        //fsmRoot.AddTransition(new Transition<PlayerStates>(PlayerStates.Move, PlayerStates.Idle, condition: MoveToIdleCondition));
         // MOVE ->IDLE
-        fsmRoot.AddTransition(new Transition<PlayerStates>(PlayerStates.Idle, PlayerStates.Move, condition: IdleToMoveCondition));
+        //fsmRoot.AddTransition(new Transition<PlayerStates>(PlayerStates.Idle, PlayerStates.Move, condition: IdleToMoveCondition));
         // Any -> Death
         //fsmRoot.AddTriggerTransition(Events., transition);
 
-        fsmRoot.SetStartState(PlayerStates.Idle);
-        fsmRoot.Init();
+        //fsmRoot.SetStartState(PlayerStates.Idle);
+        //fsmRoot.Init()
+        fsmMovement.Init();
+        fsmCombat.Init();
     }
 
     private void OnEnterBaseIdle(State<IdleStates, Events> state)
@@ -179,12 +208,17 @@ public class Player : MonoBehaviour
     #region FsmCondition
     private bool GroundWalkToDashCondition(Transition<InGroundStates> groundStateTransition)
     {
-        return blackboard.MoveSpeed > 1f;
+        return blackboard.MoveSpeed > walkSpeed;
     }
 
-    private bool GroundDashToWalkCondition(Transition<InGroundStates> groundStateTransition)
+    private bool GroundIdleToWalkCondition(Transition<InGroundStates> groundStateTransition)
     {
-        return blackboard.MoveSpeed <= 1f;
+        return blackboard.MoveSpeed > idleSpeed && blackboard.MoveSpeed <= walkSpeed;
+    }
+
+    private bool GroundIdleToDashCondition(Transition<InGroundStates> groundStateTransition)
+    {
+        return blackboard.MoveSpeed > idleSpeed && blackboard.MoveSpeed > walkSpeed;
     }
 
     private bool MoveToIdleCondition(Transition<PlayerStates> playerStateTransition)
@@ -207,11 +241,25 @@ public class Player : MonoBehaviour
         return fsmRoot.ActiveState.name == PlayerStates.Move && !blackboard.IsAccelerate;
     }
 
+    private bool FromIdleAttackCondition(Transition<WeaponStates> transition)
+    {
+        return fsmWeaponed.ActiveStateName == WeaponStates.Idle;
+    }
+
+    private bool FromL1AttackCondition(Transition<WeaponStates> transition)
+    {
+        return fsmWeaponed.ActiveStateName == WeaponStates.L1;
+    }
     #endregion
 
     public AnimancerState PlayAnimation(int layer, AnimationType animationType, float speed, FadeMode fadeMode=default, Action<AnimancerState> onEnd=null)
     {
          return animationComponent.Play(layer, animationType, speed, fadeMode, onEnd);
+    }
+
+    public void StopAnimation(int layer)
+    {
+        animationComponent.Stop(layer);
     }
 
     private void SwitchState(PlayerStates playerState)
@@ -286,6 +334,15 @@ public class Player : MonoBehaviour
         }
         blackboard.TargetForward = targetForward;
         blackboard.MoveInput = dir;
+        if (dir.magnitude > 0)
+        {
+            blackboard.BaseSpeed = walkSpeed;
+        }
+        else
+        {
+            blackboard.BaseSpeed = idleSpeed;
+        }
+
     }
 
     /// <summary>
@@ -306,17 +363,25 @@ public class Player : MonoBehaviour
         if (!isReady) return;
         //animationComponent.Animancer.Animator.ApplyBuiltinRootMotion();
         // Rigidbody
-        switch (fsmRoot.ActiveStateName)
+        if (fsmMovement.ActiveState != null)
         {
-            case PlayerStates.Move:
-                transform.forward = blackboard.TargetForward;
-                Rigidbody.MovePosition(Rigidbody.position + animationComponent.Animancer.Animator.deltaPosition);
-                break;
-            case PlayerStates.Jump:
-                transform.forward = Vector3.RotateTowards(transform.forward, blackboard.TargetForward, 2f*Time.deltaTime, 0.0f);
-                Rigidbody.MovePosition(Rigidbody.position + blackboard.TargetForward * Time.deltaTime * 5f * Blackboard.MoveInput.magnitude);
-                break;
+            switch (fsmMovement.ActiveStateName)
+            {
+                case MovementStates.InGround:
+                    if (blackboard.TargetForward != Vector3.zero)
+                    {
+                        transform.forward = blackboard.TargetForward;
+                    }
+ 
+                    Rigidbody.MovePosition(Rigidbody.position + animationComponent.Animancer.Animator.deltaPosition);
+                    break;
+                case MovementStates.InSky:
+                    transform.forward = Vector3.RotateTowards(transform.forward, blackboard.TargetForward, 2f * Time.deltaTime, 0.0f);
+                    Rigidbody.MovePosition(Rigidbody.position + blackboard.TargetForward * Time.deltaTime * 5f * Blackboard.MoveInput.magnitude);
+                    break;
+            }
         }
+        
 
         //Rigidbody.MoveRotation(Rigidbody.rotation * animationComponent.Animancer.Animator.deltaRotation);
     }
@@ -395,11 +460,11 @@ public class Player : MonoBehaviour
         blackboard.IsAccelerate = isAccelerate;
         if (isAccelerate)
         {
-            blackboard.MoveSpeed = 2f;
+            blackboard.ExtralSpeed = walkSpeed;
         }
         else
         {
-            blackboard.MoveSpeed = 1f;
+            blackboard.ExtralSpeed -= walkSpeed;
         }
     }
 
@@ -431,16 +496,32 @@ public class Player : MonoBehaviour
         switch (commandType)
         {
             case CommandType.LeftAttack:
-                OnLeftClickEvent();
+            case CommandType.RightAttack:
+                OnMouseClickEvent(commandType);
                 break;
         }
     }
 
-    private void OnLeftClickEvent()
+    private void OnMouseClickEvent(CommandType commandType)
     {
-        if (fsmRoot.ActiveStateName != PlayerStates.Attack)
+        switch (fsmWeaponed.ActiveStateName)
         {
-            SwitchState(PlayerStates.Attack);
+            case WeaponStates.Idle:
+                if (commandType == CommandType.LeftAttack)
+                {
+                    fsmWeaponed.RequestStateChange(WeaponStates.L1);
+                }
+                else if (commandType == CommandType.RightAttack)
+                {
+                    fsmWeaponed.RequestStateChange(WeaponStates.R1);
+                }
+                break;
+            case WeaponStates.L1:
+                if (commandType == CommandType.RightAttack)
+                {
+                    fsmWeaponed.RequestStateChange(WeaponStates.L1R1);
+                }
+                break;
         }
     }
 }
@@ -484,7 +565,15 @@ public enum InSkyStates
 
 public enum CombatStates
 {
+    Unarmed,    //徒手
+    Weaponed,   //装备
+}
+
+public enum WeaponStates
+{
+    Idle,
     L1,
+    R1,
     L1R1,
 }
 
@@ -494,23 +583,24 @@ public enum IdleStates
     BASE,
 }
 
-public enum AttackStates
-{
-    L1,
-    R1,
-    L1R1,
-}
-
 enum Events
 {
     ON_DAMAGE,
     ON_WIN,
 }
 
+public enum WeaponEvents
+{
+    L1,
+    R1,
+    L1R1,
+}
+
 public static class PlayerAnimationLayer
 {
     public static int Base = 0;
     public static int Action = 1;
+    public static int HandAttack = 2;
 }
 
 public class PlayerStatesBlackboard
@@ -521,5 +611,7 @@ public class PlayerStatesBlackboard
     public Vector3 TargetForward { get; set; }
     public bool IsLeftClick { get; set; }
     public bool IsRightClick { get; set; }
-    public float MoveSpeed = 1f;
+    public float BaseSpeed = 0f;
+    public float ExtralSpeed = 0f;
+    public float MoveSpeed => BaseSpeed + ExtralSpeed;
 }

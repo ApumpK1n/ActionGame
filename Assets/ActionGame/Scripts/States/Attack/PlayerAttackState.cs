@@ -1,6 +1,6 @@
 using UnityHFSM;
 
-internal class PlayerAttackState : StateBase<AttackStates>
+internal class PlayerAttackState : StateBase<WeaponStates>
 {
     protected PlayerStatesBlackboard blackboard;
 
