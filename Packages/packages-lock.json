@@ -21,7 +21,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "beb58daf989ec3b095a4c6ff627a58da736f8b81"
+      "hash": "270e954ed07b882b5feb154110492789829e8c31"
     },
     "com.smkplus.custom-toolbar": {
       "version": "https://github.com/smkplus/CustomToolbar.git#master",

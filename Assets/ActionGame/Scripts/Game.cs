@@ -20,6 +20,8 @@ public class Game : DestroyableSingleton<Game>
     [SerializeField] private CinemachineBrain cinemachineBrain;
     [SerializeField] private CinemachineFreeLook playerFollowCamera;
 
+    [SerializeField] private Animator debugPlayerCombatAnimator;
+    [SerializeField] private Animator debugPlayerMovementAnimator;
     private void Awake()
     {
         gameSystemStack.RegisterGameSystem(new LogicSystem());
@@ -38,6 +40,9 @@ public class Game : DestroyableSingleton<Game>
         playerFollowCamera.LookAt = Player.Head;
 
         Player.AddWeapon(StickWeaponPrefab);
+
+        Player.DebugCombatAnimator = debugPlayerCombatAnimator;
+        Player.DebugMovementAnimator = debugPlayerMovementAnimator;
     }
 
 

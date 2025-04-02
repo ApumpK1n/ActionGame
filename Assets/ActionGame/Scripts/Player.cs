@@ -6,6 +6,7 @@ using UniRx;
 using UnityEngine;
 using UnityHFSM;
 using System;
+using UnityHFSM.Visualization;
 
 /*
   HFSM
@@ -50,6 +51,9 @@ public class Player : MonoBehaviour
 
     public PlayerStates state = PlayerStates.Idle;
 
+    public Animator DebugCombatAnimator;
+    public Animator DebugMovementAnimator;
+
     private MoveMode moveMode = MoveMode.Base;
     private PlayerStatesBlackboard blackboard;
 
@@ -66,7 +70,6 @@ public class Player : MonoBehaviour
 
     private float idleSpeed = 0f;
     private float walkSpeed = 1f;
-    private float extraSpeed = 0f;
     private float baseSpeed = 0f;
 
     private bool isReady = false;
@@ -109,6 +112,11 @@ public class Player : MonoBehaviour
         {
             fsmMovement.OnLogic();
             fsmCombat.OnLogic();
+
+#if UNITY_EDITOR
+            HfsmAnimatorGraph.PreviewStateMachineInAnimator(fsmMovement, DebugMovementAnimator);
+            HfsmAnimatorGraph.PreviewStateMachineInAnimator(fsmCombat, DebugCombatAnimator);
+#endif
         }
 
     }
@@ -147,6 +155,7 @@ public class Player : MonoBehaviour
         fsmWeaponed.AddState(WeaponStates.L1, new PlayerAttackL1State(blackboard, false, false));
         fsmWeaponed.AddState(WeaponStates.R1, new PlayerAttackR1State(blackboard, false, false));
         fsmWeaponed.AddState(WeaponStates.L1R1, new PlayerAttackL1R1State(blackboard, false, false));
+        fsmWeaponed.AddTransitionFromAny(WeaponStates.Idle, condition: AnyWeaponStateToIdle);
         fsmWeaponed.SetStartState(WeaponStates.Idle);
 
         //fsmWeaponed.AddTriggerTransition(WeaponEvents.L1, new Transition<WeaponStates>(WeaponStates.Idle, WeaponStates.L1, condition: FromIdleAttackCondition));
@@ -185,11 +194,23 @@ public class Player : MonoBehaviour
         //fsmRoot.Init()
         fsmMovement.Init();
         fsmCombat.Init();
+
+#if UNITY_EDITOR
+        HfsmAnimatorGraph.CreateAnimatorFromStateMachine(
+            fsmMovement,
+            outputFolderPath: "Assets/DebugAnimators",
+            animatorName: "PlayerMovementStateMachineAnimatorGraph.controller"
+        );
+        HfsmAnimatorGraph.CreateAnimatorFromStateMachine(
+            fsmCombat,
+            outputFolderPath: "Assets/DebugAnimators",
+            animatorName: "PlayerCombatStateMachineAnimatorGraph.controller"
+        );
+#endif
     }
 
     private void OnEnterBaseIdle(State<IdleStates, Events> state)
     {
-        Debug.Log("OnEnterBaseIdle");
         PlayAnimation(PlayerAnimationLayer.Base, AnimationType.Idle, 1f, FadeMode.FromStart);
     }
 
@@ -219,6 +240,11 @@ public class Player : MonoBehaviour
     private bool GroundIdleToDashCondition(Transition<InGroundStates> groundStateTransition)
     {
         return blackboard.MoveSpeed > idleSpeed && blackboard.MoveSpeed > walkSpeed;
+    }
+
+    private bool AnyWeaponStateToIdle(Transition<WeaponStates> transition)
+    {
+        return blackboard.IsPlayingWeaponAnimation == false;
     }
 
     private bool MoveToIdleCondition(Transition<PlayerStates> playerStateTransition)
@@ -614,4 +640,5 @@ public class PlayerStatesBlackboard
     public float BaseSpeed = 0f;
     public float ExtralSpeed = 0f;
     public float MoveSpeed => BaseSpeed + ExtralSpeed;
+    public bool IsPlayingWeaponAnimation = false;
 }
