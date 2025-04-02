@@ -247,26 +247,6 @@ public class Player : MonoBehaviour
         return blackboard.IsPlayingWeaponAnimation == false;
     }
 
-    private bool MoveToIdleCondition(Transition<PlayerStates> playerStateTransition)
-    {
-        return fsmRoot.ActiveState.name == PlayerStates.Move && blackboard.MoveInput.magnitude == 0;
-    }
-
-    private bool IdleToMoveCondition(Transition<PlayerStates> playerStateTransition)
-    {
-        return fsmRoot.ActiveState.name == PlayerStates.Idle && blackboard.MoveInput.magnitude > 0;
-    }
-
-    private bool WalkToDashCondition(Transition<MoveStates> moveStateTransition)
-    {
-        return fsmRoot.ActiveState.name == PlayerStates.Move && blackboard.IsAccelerate;
-    }
-
-    private bool DashToWalkCondition(Transition<MoveStates> moveStateTransition)
-    {
-        return fsmRoot.ActiveState.name == PlayerStates.Move && !blackboard.IsAccelerate;
-    }
-
     private bool FromIdleAttackCondition(Transition<WeaponStates> transition)
     {
         return fsmWeaponed.ActiveStateName == WeaponStates.Idle;
@@ -555,19 +535,9 @@ public class Player : MonoBehaviour
 
 public enum PlayerStates
 {
-    Idle,
-    Move,
-    Jump,
-    Attack,
-
     Movement,
     Combat,
     Death,
-}
-
-public enum MoveStates
-{
-    WALK, DASH
 }
 
 public enum MovementStates

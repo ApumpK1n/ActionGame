@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UniRx;
+
+// TODO: 指令需要改成结构体或者复用 目前堆上创建对象太频繁
 
 [RequireComponent(typeof(PlayerInput))]
 public class GamePlayInput : MonoBehaviour
