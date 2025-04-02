@@ -40,7 +40,7 @@ public class LogicSystem : IGameSystem
 
     public void PlayerJump()
     {
-        Game.Instance.Player.TryEnterJumpState();
+        //Game.Instance.Player.TryEnterJumpState();
     }
 
     public void LeftClick()
@@ -48,6 +48,7 @@ public class LogicSystem : IGameSystem
 
     }
 
+    // TODO: 统一执行Command接口
     public void ExecuteCommand(CommandType commandType)
     {
         Game.Instance.Player.ExecuteCommand(commandType);

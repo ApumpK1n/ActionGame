@@ -37,7 +37,7 @@ public class Game : DestroyableSingleton<Game>
         Player = Instantiate(PlayerPrefab, PlayerReborn, false);
 
         playerFollowCamera.Follow = Player.transform;
-        playerFollowCamera.LookAt = Player.Head;
+        playerFollowCamera.LookAt = Player.Neck;
 
         Player.AddWeapon(StickWeaponPrefab);
 

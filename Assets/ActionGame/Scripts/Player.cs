@@ -30,6 +30,7 @@ public class Player : MonoBehaviour
     private AnimationComponent animationComponent;
     public Rigidbody Rigidbody;
 
+    public Transform Neck;
     public Transform Head;
     public Transform RightHand;
     public Transform LeftHand;
@@ -41,6 +42,8 @@ public class Player : MonoBehaviour
     private StateMachine<PlayerStates, CombatStates, Events> fsmCombat;
     private StateMachine<CombatStates, WeaponStates, WeaponEvents> fsmWeaponed;
     private Weapon currentWeapon;
+    private float groundCheckRadius = 0.1f;
+    private bool isGround;
 
     public enum MoveMode
     {
@@ -48,8 +51,6 @@ public class Player : MonoBehaviour
         Lock = 1,
     }
 
-
-    public PlayerStates state = PlayerStates.Idle;
 
     public Animator DebugCombatAnimator;
     public Animator DebugMovementAnimator;
@@ -64,7 +65,7 @@ public class Player : MonoBehaviour
     private AnimatedFloat footWeights;
     [SerializeField, Meters] private float _RaycastOriginY = 0.5f;
     [SerializeField, Meters] private float _RaycastEndY = -0.2f;
-    [SerializeField] private AvatarMask footAvatarMask;
+    [SerializeField] private AvatarMask lowerBodyAvatarMask;
     [SerializeField] private AvatarMask handAttackAvatarMask;
     [SerializeField] private AvatarMask totalAvatarMask;
 
@@ -92,9 +93,10 @@ public class Player : MonoBehaviour
         blackboard = new PlayerStatesBlackboard();
         blackboard.Player = this;
 
-        animationComponent.Animancer.Layers[PlayerAnimationLayer.Action].SetDebugName("Action Layer");
-        animationComponent.Animancer.Layers[PlayerAnimationLayer.Action].SetMask(totalAvatarMask);
         animationComponent.Animancer.Layers[PlayerAnimationLayer.Base].SetMask(totalAvatarMask);
+
+        animationComponent.Animancer.Layers[PlayerAnimationLayer.LowerBody].SetDebugName("LowerBody Layer");
+        animationComponent.Animancer.Layers[PlayerAnimationLayer.LowerBody].SetMask(lowerBodyAvatarMask);
 
         animationComponent.Animancer.Layers[PlayerAnimationLayer.HandAttack].SetDebugName("HandAttack Layer");
         animationComponent.Animancer.Layers[PlayerAnimationLayer.HandAttack].SetMask(handAttackAvatarMask);
@@ -110,6 +112,8 @@ public class Player : MonoBehaviour
     {
         if (isReady)
         {
+            isGround = IsInGround();
+
             fsmMovement.OnLogic();
             fsmCombat.OnLogic();
 
@@ -145,6 +149,7 @@ public class Player : MonoBehaviour
 
         fsmMovement.AddState(MovementStates.InGround, fsmInGround);
         fsmMovement.AddState(MovementStates.InSky, fsmInSky);
+        //fsmMovement.AddTransition(new Transition<MovementStates>(MovementStates.InSky, MovementStates.InGround, condition: InSkyToGroundCondition));
         fsmMovement.SetStartState(MovementStates.InGround);
         /*----------------------------Combat-------------------------*/
         fsmCombat = new StateMachine<PlayerStates, CombatStates, Events>();
@@ -158,40 +163,10 @@ public class Player : MonoBehaviour
         fsmWeaponed.AddTransitionFromAny(WeaponStates.Idle, condition: AnyWeaponStateToIdle);
         fsmWeaponed.SetStartState(WeaponStates.Idle);
 
-        //fsmWeaponed.AddTriggerTransition(WeaponEvents.L1, new Transition<WeaponStates>(WeaponStates.Idle, WeaponStates.L1, condition: FromIdleAttackCondition));
-        //fsmWeaponed.AddTriggerTransition(WeaponEvents.R1, new Transition<WeaponStates>(WeaponStates.Idle, WeaponStates.R1, condition: FromIdleAttackCondition));
-        //fsmWeaponed.AddTriggerTransition(WeaponEvents.L1R1, new Transition<WeaponStates>(WeaponStates.L1, WeaponStates.L1R1, condition: FromL1AttackCondition));
         fsmCombat.AddState(CombatStates.Weaponed, fsmWeaponed);
 
         fsmCombat.SetStartState(CombatStates.Weaponed);
 
-        //fsmRoot.AddState(PlayerStates.Movement, fsmMovement);
-        //fsmRoot.AddState(PlayerStates.Combat, fsmCombat);
-        //fsmRoot.AddState(PlayerStates.Jump, new State<PlayerStates>(onEnter: OnEnterJumpState));
-
-        //var moveFsm = new StateMachine<MovementStates, MoveStates, Events>();
-        //var idleFsm = new StateMachine<MovementStates, IdleStates, Events>();
-        // IDLE
-        //idleFsm.AddState(IdleStates.BASE, new State<IdleStates, Events>(onEnter: OnEnterBaseIdle));
-        //idleFsm.SetStartState(IdleStates.BASE);
-
-        // MOVE
-        //moveFsm.AddState(MoveStates.WALK, new PlayerWalkState(blackboard, false, false));
-        //moveFsm.AddState(MoveStates.DASH, new PlayerDashState(blackboard, false, false));
-
-        // Transition
-        //moveFsm.AddTransition(new Transition<MoveStates>(MoveStates.WALK, MoveStates.DASH, condition: WalkToDashCondition));
-        //moveFsm.AddTransition(new Transition<MoveStates>(MoveStates.DASH, MoveStates.WALK, condition: DashToWalkCondition));
-
-        // IDLE ->MOVE
-        //fsmRoot.AddTransition(new Transition<PlayerStates>(PlayerStates.Move, PlayerStates.Idle, condition: MoveToIdleCondition));
-        // MOVE ->IDLE
-        //fsmRoot.AddTransition(new Transition<PlayerStates>(PlayerStates.Idle, PlayerStates.Move, condition: IdleToMoveCondition));
-        // Any -> Death
-        //fsmRoot.AddTriggerTransition(Events., transition);
-
-        //fsmRoot.SetStartState(PlayerStates.Idle);
-        //fsmRoot.Init()
         fsmMovement.Init();
         fsmCombat.Init();
 
@@ -209,24 +184,14 @@ public class Player : MonoBehaviour
 #endif
     }
 
-    private void OnEnterBaseIdle(State<IdleStates, Events> state)
-    {
-        PlayAnimation(PlayerAnimationLayer.Base, AnimationType.Idle, 1f, FadeMode.FromStart);
-    }
-
-    private void OnEnterJumpState(State<PlayerStates, string> state)
-    {
-        var animancerState = PlayAnimation(PlayerAnimationLayer.Action, AnimationType.Jump, 1f, FadeMode.FromStart, OnJumpEnd);
-        //animancerState.SetWeight(0.5f);
-    }
-
-    private void OnJumpEnd(AnimancerState animancerState)
-    {
-        animancerState.Layer.StartFade(0, 0);
-        SwitchState(PlayerStates.Idle);
-    }
 
     #region FsmCondition
+
+    private bool InSkyToGroundCondition(Transition<MovementStates> transition)
+    {
+        return fsmMovement.ActiveStateName == MovementStates.InSky && isGround;
+    }
+
     private bool GroundWalkToDashCondition(Transition<InGroundStates> groundStateTransition)
     {
         return blackboard.MoveSpeed > walkSpeed;
@@ -256,6 +221,7 @@ public class Player : MonoBehaviour
     {
         return fsmWeaponed.ActiveStateName == WeaponStates.L1;
     }
+
     #endregion
 
     public AnimancerState PlayAnimation(int layer, AnimationType animationType, float speed, FadeMode fadeMode=default, Action<AnimancerState> onEnd=null)
@@ -272,6 +238,14 @@ public class Player : MonoBehaviour
     {
         fsmRoot.RequestStateChange(playerState, true);
     }
+
+    private bool IsInGround()
+    {
+        LayerMask groundMask = 1 << LayerMask.NameToLayer("Default");
+        bool isGround = Physics.CheckSphere(transform.position, groundCheckRadius, groundMask, QueryTriggerInteraction.Ignore);
+        return isGround;
+    }
+
     #region Move
     public void Move(Vector2 dir)
     {
@@ -383,7 +357,7 @@ public class Player : MonoBehaviour
                     break;
                 case MovementStates.InSky:
                     transform.forward = Vector3.RotateTowards(transform.forward, blackboard.TargetForward, 2f * Time.deltaTime, 0.0f);
-                    Rigidbody.MovePosition(Rigidbody.position + blackboard.TargetForward * Time.deltaTime * 5f * Blackboard.MoveInput.magnitude);
+                    Rigidbody.MovePosition(Rigidbody.position + blackboard.TargetForward * Time.deltaTime * 2f * Blackboard.MoveInput.magnitude);
                     break;
             }
         }
@@ -399,7 +373,7 @@ public class Player : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, transform.position + transform.forward * 10);
 
-        if (Application.isPlaying)
+        if (Application.isPlaying && isReady)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, transform.position + targetForward * blackboard.MoveInput.magnitude);
@@ -458,6 +432,7 @@ public class Player : MonoBehaviour
             animator.SetIKPositionWeight(goal, 0);
         }
     }
+
     #endregion
 
     #region Accelerate
@@ -476,18 +451,6 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    #region Jump
-    public bool TryEnterJumpState()
-    {
-        if (fsmRoot.ActiveStateName != PlayerStates.Jump)
-        {
-            SwitchState(PlayerStates.Jump);
-            return true;
-        }
-        return false;
-    }
-    #endregion
-
     #region Weapon
     public void AddWeapon(Weapon weaponPrefab)
     {
@@ -504,6 +467,9 @@ public class Player : MonoBehaviour
             case CommandType.LeftAttack:
             case CommandType.RightAttack:
                 OnMouseClickEvent(commandType);
+                break;
+            case CommandType.Jump:
+                OnJump();
                 break;
         }
     }
@@ -529,6 +495,21 @@ public class Player : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    private void OnJump()
+    {
+        switch (fsmMovement.ActiveStateName)
+        {
+            case MovementStates.InGround: // Start Jump
+                RequestMovementStateChange(MovementStates.InSky);
+                break;
+        }
+    }
+
+    public void RequestMovementStateChange(MovementStates state)
+    {
+        fsmMovement.RequestStateChange(state);
     }
 }
 
@@ -595,7 +576,7 @@ public enum WeaponEvents
 public static class PlayerAnimationLayer
 {
     public static int Base = 0;
-    public static int Action = 1;
+    public static int LowerBody = 1;
     public static int HandAttack = 2;
 }
 
