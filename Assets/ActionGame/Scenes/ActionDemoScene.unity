@@ -2183,6 +2183,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Buildings_Stairs_1x1_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1596760301757214, guid: 94b87b276cda38d4bbe34cab622f981f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 4652332252834110, guid: 94b87b276cda38d4bbe34cab622f981f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 196.2
