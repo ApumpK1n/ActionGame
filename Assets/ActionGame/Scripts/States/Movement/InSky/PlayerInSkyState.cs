@@ -1,4 +1,5 @@
 using UnityHFSM;
+using UnityEngine;
 
 public class PlayerInSkyState : StateBase<InSkyStates>
 {
@@ -12,8 +13,14 @@ public class PlayerInSkyState : StateBase<InSkyStates>
 
     public override void Init() { }
 
-    public override void OnEnter() { }
-    public override void OnLogic() { }
+    public override void OnEnter()
+    {
+
+    }
+    public override void OnLogic()
+    {
+
+    }
     public override void OnExit() { }
 
     public override void OnExitRequest() { }

@@ -34,6 +34,11 @@ public class Player : MonoBehaviour
     public Transform Head;
     public Transform RightHand;
     public Transform LeftHand;
+    public Transform LeftFoot;
+    public Transform RightFoot;
+    public Transform IKFootRoot;
+    public Transform IKFootLeft;
+    public Transform IKFootRight;
 
     public PlayerStatesBlackboard Blackboard => blackboard;
 
@@ -41,8 +46,9 @@ public class Player : MonoBehaviour
     private StateMachine<PlayerStates, MovementStates, Events> fsmMovement;
     private StateMachine<PlayerStates, CombatStates, Events> fsmCombat;
     private StateMachine<CombatStates, WeaponStates, WeaponEvents> fsmWeaponed;
+    private StateMachine<MovementStates, InSkyStates, Events> fsmInSky;
     private Weapon currentWeapon;
-    private float groundCheckRadius = 0.1f;
+    private float groundCheckRadius = 0.5f;
     private bool isGround;
 
     public enum MoveMode
@@ -69,19 +75,19 @@ public class Player : MonoBehaviour
     [SerializeField] private AvatarMask handAttackAvatarMask;
     [SerializeField] private AvatarMask totalAvatarMask;
 
-    private float idleSpeed = 0f;
-    private float walkSpeed = 1f;
-    private float baseSpeed = 0f;
-
     private bool isReady = false;
     public bool ApplyAnimatorIK
     {
         get => animationComponent.Animancer.Layers[PlayerAnimationLayer.Base].ApplyAnimatorIK;
         set => animationComponent.Animancer.Layers[PlayerAnimationLayer.Base].ApplyAnimatorIK = value;
     }
+
+    private PlayerAttribute playerAttribute;
+
     #region Unity
     private void Awake()
     {
+        playerAttribute = new PlayerAttribute();
         animationComponent = GetComponent<AnimationComponent>();
         Rigidbody = GetComponent<Rigidbody>();
 
@@ -108,11 +114,21 @@ public class Player : MonoBehaviour
         isReady = true;
     }
 
+    private void FixedUpdate()
+    {
+        if (!isReady) return;
+        isGround = IsInGround();
+    }
+
     private void Update()
     {
         if (isReady)
         {
-            isGround = IsInGround();
+            if (!isGround && fsmMovement.ActiveStateName == MovementStates.InGround)
+            {
+                RequestMovementStateChange(MovementStates.InSky);
+                fsmInSky.RequestStateChange(InSkyStates.Down);
+            }
 
             fsmMovement.OnLogic();
             fsmCombat.OnLogic();
@@ -144,8 +160,12 @@ public class Player : MonoBehaviour
         fsmInGround.AddTwoWayTransition(new Transition<InGroundStates>(InGroundStates.Idle, InGroundStates.Dash, condition: GroundIdleToDashCondition));
 
         /* -----------------------------InSky-------------------------*/
-        var fsmInSky = new StateMachine<MovementStates, InSkyStates, Events>();
+        fsmInSky = new StateMachine<MovementStates, InSkyStates, Events>();
         fsmInSky.AddState(InSkyStates.Jump, new PlayerJumpState(blackboard, false, false));
+        fsmInSky.AddState(InSkyStates.Down, new PlayerDownState(blackboard, false, false));
+        fsmInSky.AddState(InSkyStates.Idle, new PlayerInSkyIdleState(blackboard, false, false));
+
+        fsmInSky.SetStartState(InSkyStates.Idle);
 
         fsmMovement.AddState(MovementStates.InGround, fsmInGround);
         fsmMovement.AddState(MovementStates.InSky, fsmInSky);
@@ -194,17 +214,17 @@ public class Player : MonoBehaviour
 
     private bool GroundWalkToDashCondition(Transition<InGroundStates> groundStateTransition)
     {
-        return blackboard.MoveSpeed > walkSpeed;
+        return blackboard.MoveSpeed > playerAttribute.WalkSpeed;
     }
 
     private bool GroundIdleToWalkCondition(Transition<InGroundStates> groundStateTransition)
     {
-        return blackboard.MoveSpeed > idleSpeed && blackboard.MoveSpeed <= walkSpeed;
+        return blackboard.MoveSpeed > playerAttribute.IdleSpeed && blackboard.MoveSpeed <= playerAttribute.WalkSpeed;
     }
 
     private bool GroundIdleToDashCondition(Transition<InGroundStates> groundStateTransition)
     {
-        return blackboard.MoveSpeed > idleSpeed && blackboard.MoveSpeed > walkSpeed;
+        return blackboard.MoveSpeed > playerAttribute.IdleSpeed && blackboard.MoveSpeed > playerAttribute.WalkSpeed;
     }
 
     private bool AnyWeaponStateToIdle(Transition<WeaponStates> transition)
@@ -242,9 +262,10 @@ public class Player : MonoBehaviour
 
     private bool IsInGround()
     {
-        LayerMask groundMask = 1 << LayerMask.NameToLayer("Default");
-        bool isGround = Physics.CheckSphere(transform.position, groundCheckRadius, groundMask, QueryTriggerInteraction.Ignore);
-        return isGround;
+        LayerMask groundMask = 1 << LayerMask.NameToLayer("Terrain") | 1 << LayerMask.NameToLayer("Occluder");
+        bool isLeftInGround = Physics.Raycast(IKFootLeft.transform.position, Vector3.down, out _, groundCheckRadius, groundMask, QueryTriggerInteraction.Ignore);
+        bool isRightInGround = Physics.Raycast(IKFootRight.transform.position, Vector3.down, out _, groundCheckRadius, groundMask, QueryTriggerInteraction.Ignore);
+        return isLeftInGround || isRightInGround;
     }
 
     #region Move
@@ -317,11 +338,11 @@ public class Player : MonoBehaviour
         blackboard.MoveInput = dir;
         if (dir.magnitude > 0)
         {
-            blackboard.BaseSpeed = walkSpeed;
+            blackboard.BaseSpeed = playerAttribute.WalkSpeed;
         }
         else
         {
-            blackboard.BaseSpeed = idleSpeed;
+            blackboard.BaseSpeed = playerAttribute.IdleSpeed;
         }
 
     }
@@ -374,6 +395,9 @@ public class Player : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, transform.position + targetForward * blackboard.MoveInput.magnitude);
+
+            Gizmos.DrawSphere(IKFootRoot.transform.position, groundCheckRadius);
+
         }
  
     }
@@ -438,11 +462,11 @@ public class Player : MonoBehaviour
         blackboard.IsAccelerate = isAccelerate;
         if (isAccelerate)
         {
-            blackboard.ExtralSpeed = walkSpeed;
+            blackboard.ExtralSpeed = playerAttribute.WalkSpeed;
         }
         else
         {
-            blackboard.ExtralSpeed -= walkSpeed;
+            blackboard.ExtralSpeed -= playerAttribute.WalkSpeed;
         }
     }
 
@@ -503,6 +527,7 @@ public class Player : MonoBehaviour
                 //transform.forward = Vector3.RotateTowards(transform.forward, blackboard.TargetForward, 2f * Time.deltaTime, 0.0f);
                 Rigidbody.AddForce(new Vector3(200* blackboard.TargetForward.x, 200, 200* blackboard.TargetForward.z), ForceMode.Force);
                 RequestMovementStateChange(MovementStates.InSky);
+                fsmInSky.RequestStateChange(InSkyStates.Jump);
                 break;
         }
     }
@@ -536,6 +561,7 @@ public enum InGroundStates
 
 public enum InSkyStates
 {
+    Idle,
     Jump,
     Down,
 }
@@ -592,4 +618,6 @@ public class PlayerStatesBlackboard
     public float ExtralSpeed = 0f;
     public float MoveSpeed => BaseSpeed + ExtralSpeed;
     public bool IsPlayingWeaponAnimation = false;
+    public float DownDistance = 0f;
+    public float DownInSkyTime = 0f; // 离地时间 每次跳跃重置
 }

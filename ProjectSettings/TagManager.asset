@@ -22,8 +22,8 @@ TagManager:
   - Occluder
   - Camera
   - MainCameraOnly
-  - 
-  - 
+  - Player
+  - Terrain
   - 
   - 
   - 

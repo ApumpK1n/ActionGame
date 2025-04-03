@@ -34,6 +34,7 @@ public enum AnimationType
     Jump = 3,
     BaseMove = 4,
     Idle = 5,
+    Down = 6,
     L1Attack = 100,
     R1Attack = 101,
     L1R1Attack = 102,
