@@ -2,6 +2,7 @@
 using Animancer;
 using UnityHFSM;
 using UnityEngine;
+using UnityEditor.Experimental.GraphView;
 
 internal class PlayerJumpState : PlayerInSkyState
 {
@@ -18,7 +19,7 @@ internal class PlayerJumpState : PlayerInSkyState
         animancerState = blackboard.Player.PlayAnimation(PlayerAnimationLayer.LowerBody, AnimationType.Jump, 1f);
         animancerState.Time = 0f;
         animancerState.SetWeight(1f);
-        animancerState.NormalizedEndTime = 1f;
+        animancerState.NormalizedEndTime = 0.7f;
         animancerState.Events.OnEnd = OnEnd;
     }
 

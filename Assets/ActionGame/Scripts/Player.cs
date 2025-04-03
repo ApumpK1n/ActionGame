@@ -234,10 +234,11 @@ public class Player : MonoBehaviour
         animationComponent.Stop(layer);
     }
 
-    private void SwitchState(PlayerStates playerState)
+    public void SetForward(Vector3 forward)
     {
-        fsmRoot.RequestStateChange(playerState, true);
+        transform.forward = forward;
     }
+
 
     private bool IsInGround()
     {
@@ -354,10 +355,6 @@ public class Player : MonoBehaviour
                     }
  
                     Rigidbody.MovePosition(Rigidbody.position + animationComponent.Animancer.Animator.deltaPosition);
-                    break;
-                case MovementStates.InSky:
-                    transform.forward = Vector3.RotateTowards(transform.forward, blackboard.TargetForward, 2f * Time.deltaTime, 0.0f);
-                    Rigidbody.MovePosition(Rigidbody.position + blackboard.TargetForward * Time.deltaTime * 2f * Blackboard.MoveInput.magnitude);
                     break;
             }
         }
@@ -502,6 +499,9 @@ public class Player : MonoBehaviour
         switch (fsmMovement.ActiveStateName)
         {
             case MovementStates.InGround: // Start Jump
+                SetForward(blackboard.TargetForward);
+                //transform.forward = Vector3.RotateTowards(transform.forward, blackboard.TargetForward, 2f * Time.deltaTime, 0.0f);
+                Rigidbody.AddForce(new Vector3(200* blackboard.TargetForward.x, 200, 200* blackboard.TargetForward.z), ForceMode.Force);
                 RequestMovementStateChange(MovementStates.InSky);
                 break;
         }
