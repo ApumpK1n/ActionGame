@@ -8,6 +8,6 @@ public class PlayerInSkyIdleState : PlayerInSkyState
 
     public override void OnEnter()
     {
-        blackboard.Player.StopAnimation(PlayerAnimationLayer.LowerBody);
+        
     }
 }

@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
     private StateMachine<CombatStates, WeaponStates, WeaponEvents> fsmWeaponed;
     private StateMachine<MovementStates, InSkyStates, Events> fsmInSky;
     private Weapon currentWeapon;
-    private float groundCheckRadius = 0.5f;
+    private float groundCheckRadius = 1f;
     private bool isGround;
 
     public enum MoveMode
