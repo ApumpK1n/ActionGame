@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using CrashKonijn.Goap.Runtime;
 using UnityEngine;
 
 public class Game : DestroyableSingleton<Game>
@@ -22,6 +23,11 @@ public class Game : DestroyableSingleton<Game>
 
     [SerializeField] private Animator debugPlayerCombatAnimator;
     [SerializeField] private Animator debugPlayerMovementAnimator;
+
+    #region Enemy
+    [SerializeField] private GoapBehaviour goapBehaviour;
+    [SerializeField] private List<Enemy> enemies;
+    #endregion
     private void Awake()
     {
         gameSystemStack.RegisterGameSystem(new LogicSystem());
@@ -29,7 +35,14 @@ public class Game : DestroyableSingleton<Game>
         gameSystemStack.RegisterGameSystem(new CommandInvoker());
 
         dirtySystem |= (int)SystemType.Logic | (int)SystemType.Animation | (int)SystemType.Command;
+
+        foreach (Enemy enemy in enemies)
+        {
+            enemy.Setup(goapBehaviour);
+        }
     }
+
+
     void Start()
     {
         SetupSystems(dirtySystem);
@@ -49,6 +62,11 @@ public class Game : DestroyableSingleton<Game>
     void Update()
     {
         gameSystemStack.Tick(Time.deltaTime * Time.timeScale);
+
+        foreach (Enemy enemy in enemies)
+        {
+            enemy.Tick(Time.deltaTime * Time.timeScale);
+        }
     }
 
     public void SetupSystems(int dirtyFlags)
