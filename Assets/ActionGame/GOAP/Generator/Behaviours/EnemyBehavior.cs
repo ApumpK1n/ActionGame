@@ -7,6 +7,8 @@ using CrashKonijn.Goap.ActionGame;
 using CrashKonijn.Goap.Core;
 using CrashKonijn.Agent.Core;
 
+// 在一定区域内巡逻 遇到玩家 会进行攻击
+
 public class EnemyBehavior : MonoBehaviour
 {
 

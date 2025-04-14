@@ -1254,9 +1254,9 @@ GameObject:
   - component: {fileID: 4055945373243128773}
   - component: {fileID: 6299780411141281431}
   - component: {fileID: 2854232699357538598}
+  - component: {fileID: 7956874437368944916}
   - component: {fileID: 936802197491465160}
   - component: {fileID: 5286265351930508662}
-  - component: {fileID: 7956874437368944916}
   - component: {fileID: 6381752496198704963}
   - component: {fileID: 5605298064431176372}
   m_Layer: 0
@@ -1321,6 +1321,23 @@ MonoBehaviour:
     <MaxLogSize>k__BackingField: 20
   <AgentTypeBehaviour>k__BackingField: {fileID: 0}
   <DistanceMultiplier>k__BackingField: 1
+--- !u!114 &7956874437368944916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4062798930731619647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cef53d855ccf0b46bcf004b27c4a52a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ActionProviderBase>k__BackingField: {fileID: 2854232699357538598}
+  isPaused: 0
+  <LoggerConfig>k__BackingField:
+    <DebugMode>k__BackingField: 1
+    <MaxLogSize>k__BackingField: 20
 --- !u!114 &936802197491465160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1345,23 +1362,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13eea4c82be12b444b77622d10596d1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7956874437368944916
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4062798930731619647}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cef53d855ccf0b46bcf004b27c4a52a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <ActionProviderBase>k__BackingField: {fileID: 2854232699357538598}
-  isPaused: 0
-  <LoggerConfig>k__BackingField:
-    <DebugMode>k__BackingField: 1
-    <MaxLogSize>k__BackingField: 20
 --- !u!54 &6381752496198704963
 Rigidbody:
   m_ObjectHideFlags: 0
