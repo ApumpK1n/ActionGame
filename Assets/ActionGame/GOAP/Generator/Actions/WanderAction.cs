@@ -3,6 +3,7 @@ using CrashKonijn.Goap.Runtime;
 using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
+using CrashKonijn.Agent.Runtime;
 
 namespace CrashKonijn.Goap.ActionGame
 {
@@ -22,6 +23,8 @@ namespace CrashKonijn.Goap.ActionGame
 
         public override IActionRunState Perform(IMonoAgent agent, Data data, IActionContext context)
         {
+            Debug.Log("Perform");
+            data.DataBehavior.Fatigue += context.DeltaTime *10f;
             if (data.Timer.IsRunning())
                 return data.Timer;
 
@@ -48,6 +51,9 @@ namespace CrashKonijn.Goap.ActionGame
         {
             public ITarget Target { get; set; }
             public IActionRunState Timer { get; set; }
+
+            [GetComponent]
+            public DataBehavior DataBehavior { get; set; }
         }
     }
 }

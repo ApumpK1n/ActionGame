@@ -19,7 +19,7 @@ namespace CrashKonijn.Goap.ActionGame
 
         public override SenseValue Sense(IActionReceiver agent, IComponentReference references)
         {
-            return references.GetCachedComponent<DataBehavior>().Fatigue;
+            return (int)references.GetCachedComponent<DataBehavior>().Fatigue;
         }
     }
 }
