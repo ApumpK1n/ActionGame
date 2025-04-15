@@ -1259,6 +1259,10 @@ GameObject:
   - component: {fileID: 5286265351930508662}
   - component: {fileID: 6381752496198704963}
   - component: {fileID: 5605298064431176372}
+  - component: {fileID: 3859714958184575821}
+  - component: {fileID: 3650025759388108155}
+  - component: {fileID: 6867633293132954791}
+  - component: {fileID: 719978448848011222}
   m_Layer: 0
   m_Name: ClazyRunnerEnemy
   m_TagString: Untagged
@@ -1412,6 +1416,61 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &3859714958184575821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4062798930731619647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad50f81b1d25c441943c37a89ba23f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Animator: {fileID: 6299780411141281431}
+  _ActionOnDisable: 0
+--- !u!114 &3650025759388108155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4062798930731619647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f44c2486b9f495640bd6e99fb6fd417e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animations:
+  - AnimationType: 5
+    Clip: {fileID: 7400000, guid: b9f1bbc832c544e40a9ab65baf558358, type: 3}
+  - AnimationType: 4
+    Clip: {fileID: 7400000, guid: 6e950ce0deb6c22419d4f264e8441f3b, type: 3}
+--- !u!114 &6867633293132954791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4062798930731619647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4542ae9c21e2a40419a2c21f4a369fb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &719978448848011222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4062798930731619647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 044e125723b3a3b4d9b389d848b5095f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4076111552279748854
 GameObject:
   m_ObjectHideFlags: 0

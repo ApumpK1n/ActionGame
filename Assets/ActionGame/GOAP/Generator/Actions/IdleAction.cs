@@ -25,6 +25,9 @@ namespace CrashKonijn.Goap.ActionGame
         // This method is optional and can be removed
         public override void Start(IMonoAgent agent, Data data)
         {
+            AnimationComponent animationComponent = agent.GetComponent<AnimationComponent>();
+
+            animationComponent.Play(EnemyAnimationLayer.Base, AnimationType.Idle);
         }
 
         // This method is called once before the action is performed
@@ -37,6 +40,7 @@ namespace CrashKonijn.Goap.ActionGame
         // This method is required
         public override IActionRunState Perform(IMonoAgent agent, Data data, IActionContext context)
         {
+            //agent.ActionState
             return ActionRunState.Completed;
         }
 

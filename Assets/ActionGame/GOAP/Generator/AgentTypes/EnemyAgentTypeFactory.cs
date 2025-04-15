@@ -1,9 +1,8 @@
 
 using CrashKonijn.Goap.Core;
 using CrashKonijn.Goap.Runtime;
-using CrashKonijn.Goap.ActionGame.Capabilities;
 
-namespace CrashKonijn.Goap.ActionGame.AgentTypes
+namespace CrashKonijn.Goap.ActionGame
 {
     public class EnemyAgentTypeFactory : AgentTypeFactoryBase
     {
@@ -12,8 +11,7 @@ namespace CrashKonijn.Goap.ActionGame.AgentTypes
             var factory = new AgentTypeBuilder(Define.ScriptEnemyAgent.ToString());
 
             factory.AddCapability<IdleCapability>();
-            //factory.AddCapability<PearCapability>();
-            //factory.AddCapability<EatCapability>();
+            factory.AddCapability<WanderCapability>();
 
             return factory.Build();
         }

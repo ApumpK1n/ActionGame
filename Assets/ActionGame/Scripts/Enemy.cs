@@ -8,12 +8,10 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     private EnemyBehavior behavior;
-    private AnimationComponent animationComponent;
 
     private void Awake()
     {
         behavior = GetComponent<EnemyBehavior>();
-        animationComponent = GetComponent<AnimationComponent>();
     }
 
     private void Start()
@@ -30,4 +28,10 @@ public class Enemy : MonoBehaviour
     {
         behavior.Tick(deltaTime);
     }
+}
+
+
+public static class EnemyAnimationLayer
+{
+    public static int Base = 0;
 }

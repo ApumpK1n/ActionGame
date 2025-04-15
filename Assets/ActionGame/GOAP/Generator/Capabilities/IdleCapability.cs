@@ -1,9 +1,9 @@
 
+
 using CrashKonijn.Goap.Core;
 using CrashKonijn.Goap.Runtime;
-using CrashKonijn.Goap.ActionGame.Sensors;
 
-namespace CrashKonijn.Goap.ActionGame.Capabilities
+namespace CrashKonijn.Goap.ActionGame
 {
     public class IdleCapability : CapabilityFactoryBase
     {
@@ -17,10 +17,13 @@ namespace CrashKonijn.Goap.ActionGame.Capabilities
 
             builder.AddAction<IdleAction>()
                 .AddEffect<IsIdle>(EffectType.Increase)
-                .SetTarget<IdleTarget>();
+                .AddCondition<Fatigue>(Comparison.GreaterThanOrEqual, 10)
+                .SetRequiresTarget(false)
+                .SetBaseCost(10);
 
-            builder.AddTargetSensor<IdleTargetSensor>()
-                .SetTarget<IdleTarget>();
+            // World Sensor
+            builder.AddWorldSensor<FatigueSensor>()
+                .SetKey<Fatigue>();
 
             return builder.Build();
         }
