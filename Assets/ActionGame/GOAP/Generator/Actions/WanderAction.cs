@@ -16,15 +16,18 @@ namespace CrashKonijn.Goap.ActionGame
 
         public override void Start(IMonoAgent agent, Data data)
         {
-            var wait = Random.Range(this.Properties.minTimer, this.Properties.maxTimer);
+            //var wait = Random.Range(this.Properties.minTimer, this.Properties.maxTimer);
 
-            data.Timer = ActionRunState.Wait(wait);
+            float distance = Vector3.Distance(data.Target.Position, agent.gameObject.transform.position);
+            float t = distance / 60;
+
+            Debug.Log("distance:" + distance);
+            data.Timer = new WanderActionRunState(t, false, data.DataBehavior);
+            data.AnimationComponent.Play(EnemyAnimationLayer.Base, AnimationType.BaseMove);
         }
 
         public override IActionRunState Perform(IMonoAgent agent, Data data, IActionContext context)
         {
-            Debug.Log("Perform");
-            data.DataBehavior.Fatigue += context.DeltaTime *10f;
             if (data.Timer.IsRunning())
                 return data.Timer;
 
@@ -53,7 +56,59 @@ namespace CrashKonijn.Goap.ActionGame
             public IActionRunState Timer { get; set; }
 
             [GetComponent]
-            public DataBehavior DataBehavior { get; set; }
+            public DataBehaviour DataBehavior { get; set; }
+
+            [GetComponent]
+            public AnimationComponent AnimationComponent { get; set; }
+        }
+
+        public class WanderActionRunState : ActionRunState
+        {
+            private readonly bool mayResolve;
+
+            private float time;
+            private DataBehaviour dataBehavior;
+
+            public WanderActionRunState(float time, bool mayResolve, DataBehaviour dataBehavior)
+            {
+                this.time = time;
+                this.mayResolve = mayResolve;
+
+                this.dataBehavior = dataBehavior;
+            }
+
+            public override void Update(IAgent agent, IActionContext context)
+            {
+                time -= context.DeltaTime;
+                dataBehavior.Fatigue += context.DeltaTime * 50f;
+
+                Debug.Log("Update");
+            }
+
+            public override bool ShouldStop(IAgent agent)
+            {
+                return false;
+            }
+
+            public override bool ShouldPerform(IAgent agent)
+            {
+                return time <= 0f;
+            }
+
+            public override bool IsCompleted(IAgent agent)
+            {
+                return false;
+            }
+
+            public override bool MayResolve(IAgent agent)
+            {
+                return mayResolve;
+            }
+
+            public override bool IsRunning()
+            {
+                return time > 0f;
+            }
         }
     }
 }

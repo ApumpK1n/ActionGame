@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.crashkonijn.goap": "https://github.com/crashkonijn/GOAP.git?path=/Package#3.0.29",
+    "com.crashkonijn.goap": "https://github.com/crashkonijn/GOAP.git?path=/Package#3.0.31",
     "com.inspiaaa.unityhfsm": "https://github.com/Inspiaaa/UnityHFSM.git#upm",
     "com.smkplus.custom-toolbar": "https://github.com/smkplus/CustomToolbar.git#master",
     "com.unity.cinemachine": "2.10.3",

@@ -18,6 +18,11 @@ namespace CrashKonijn.Goap.ActionGame
             builder.AddAction<IdleAction>()
                 .AddEffect<IsIdle>(EffectType.Increase)
                 .AddCondition<Fatigue>(Comparison.GreaterThanOrEqual, 10)
+                .SetProperties(new IdleAction.Props
+                {
+                    minTimer = 1f,
+                    maxTimer = 2f
+                })
                 .SetRequiresTarget(false)
                 .SetBaseCost(10);
 

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CrashKonijn.Goap.ActionGame
 {
-    public class DataBehavior : MonoBehaviour
+    public class DataBehaviour : MonoBehaviour
     {
         public float Fatigue;
     }

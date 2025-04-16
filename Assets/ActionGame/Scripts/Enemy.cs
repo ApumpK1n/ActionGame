@@ -3,15 +3,15 @@ using CrashKonijn.Goap.ActionGame;
 using CrashKonijn.Goap.Runtime;
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyBehavior))]
+[RequireComponent(typeof(EnemyBehaviour))]
 [RequireComponent(typeof(AnimationComponent))]
 public class Enemy : MonoBehaviour
 {
-    private EnemyBehavior behavior;
+    private EnemyBehaviour behavior;
 
     private void Awake()
     {
-        behavior = GetComponent<EnemyBehavior>();
+        behavior = GetComponent<EnemyBehaviour>();
     }
 
     private void Start()

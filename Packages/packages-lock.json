@@ -8,13 +8,13 @@
       "url": "https://packages.unity.com"
     },
     "com.crashkonijn.goap": {
-      "version": "https://github.com/crashkonijn/GOAP.git?path=/Package#3.0.29",
+      "version": "https://github.com/crashkonijn/GOAP.git?path=/Package#3.0.31",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.collections": "1.2.4"
       },
-      "hash": "5b40b90b462aff59eb0bcf7f4effc6d1347c0635"
+      "hash": "130a00fc1b8c63b95989e785fc8d54bbfda27279"
     },
     "com.inspiaaa.unityhfsm": {
       "version": "https://github.com/Inspiaaa/UnityHFSM.git#upm",
