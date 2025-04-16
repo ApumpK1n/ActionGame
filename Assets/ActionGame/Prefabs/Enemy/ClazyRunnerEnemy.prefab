@@ -1447,6 +1447,10 @@ MonoBehaviour:
     Clip: {fileID: 7400000, guid: b9f1bbc832c544e40a9ab65baf558358, type: 3}
   - AnimationType: 4
     Clip: {fileID: 7400000, guid: 6e950ce0deb6c22419d4f264e8441f3b, type: 3}
+  - AnimationType: 100
+    Clip: {fileID: 7400000, guid: c62dd38c11e60514cbfbd75556f131da, type: 3}
+  - AnimationType: 101
+    Clip: {fileID: 7400000, guid: c2976fa7ea9c6844ca1d7042aef0a731, type: 3}
 --- !u!114 &6867633293132954791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1471,6 +1475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044e125723b3a3b4d9b389d848b5095f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Fatigue: 0
 --- !u!1 &4076111552279748854
 GameObject:
   m_ObjectHideFlags: 0
