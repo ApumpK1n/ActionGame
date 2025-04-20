@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        behavior.RequestGoal<IdleGoal>();
+        behavior.RequestGoal<WanderGoal>();
     }
 
     public void Setup(GoapBehaviour goapBehaviour)

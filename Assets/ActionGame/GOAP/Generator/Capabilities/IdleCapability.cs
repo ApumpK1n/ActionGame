@@ -12,23 +12,23 @@ namespace CrashKonijn.Goap.ActionGame
             var builder = new CapabilityBuilder(typeof(IdleCapability).ToString());
 
             builder.AddGoal<IdleGoal>()
-                .AddCondition<IsIdle>(Comparison.GreaterThanOrEqual, 1)
-                .SetBaseCost(2);
+                .AddCondition<Fatigue>(Comparison.SmallerThanOrEqual, 0);
 
             builder.AddAction<IdleAction>()
-                .AddEffect<IsIdle>(EffectType.Increase)
                 .AddCondition<Fatigue>(Comparison.GreaterThanOrEqual, 10)
+                .AddEffect<Fatigue>(EffectType.Decrease)
                 .SetProperties(new IdleAction.Props
                 {
                     minTimer = 1f,
                     maxTimer = 2f
                 })
-                .SetRequiresTarget(false)
-                .SetBaseCost(10);
+                .SetRequiresTarget(false);
 
             // World Sensor
             builder.AddWorldSensor<FatigueSensor>()
                 .SetKey<Fatigue>();
+
+           // builder.AddMultiSensor<EnemyStateSensor>();
 
             return builder.Build();
         }

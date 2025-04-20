@@ -24,6 +24,8 @@ namespace CrashKonijn.Goap.ActionGame
             Debug.Log("distance:" + distance);
             data.Timer = new WanderActionRunState(t, false, data.DataBehavior);
             data.AnimationComponent.Play(EnemyAnimationLayer.Base, AnimationType.BaseMove);
+
+            data.DataBehavior.IsWander = true;
         }
 
         public override IActionRunState Perform(IMonoAgent agent, Data data, IActionContext context)
@@ -34,13 +36,15 @@ namespace CrashKonijn.Goap.ActionGame
             return ActionRunState.Completed;
         }
 
-        public override void Stop(IMonoAgent agent, Data data)
-        {
-        }
-
         public override void Complete(IMonoAgent agent, Data data)
         {
             Debug.Log("CompleteWanderAction");
+
+        }
+
+        public override void End(IMonoAgent agent, Data data)
+        {
+            data.DataBehavior.IsWander = false;
         }
 
         [Serializable]

@@ -18,9 +18,11 @@ namespace CrashKonijn.Goap.ActionGame
         {
             var wait = UnityEngine.Random.Range(this.Properties.minTimer, this.Properties.maxTimer);
 
-            data.Timer = new IdleActionRunState(wait, false, data.DataBehavior);
+            data.Timer = new IdleActionRunState(wait, false, data.DataBehaviour);
 
             data.AnimationComponent.Play(EnemyAnimationLayer.Base, AnimationType.Idle);
+
+            data.DataBehaviour.IsIdle = true;
         }
 
 
@@ -37,19 +39,15 @@ namespace CrashKonijn.Goap.ActionGame
         // This method is optional and can be removed
         public override void Complete(IMonoAgent agent, Data data)
         {
-            data.DataBehavior.Fatigue -= 10f;
-        }
-
-        // This method is called when the action is stopped
-        // This method is optional and can be removed
-        public override void Stop(IMonoAgent agent, Data data)
-        {
+            data.DataBehaviour.Fatigue -= 10f;
+            data.DataBehaviour.IsIdle = false;
         }
 
         // This method is called when the action is completed or stopped
         // This method is optional and can be removed
         public override void End(IMonoAgent agent, Data data)
         {
+            data.DataBehaviour.IsIdle = false;
         }
 
         // The action class itself must be stateless!
@@ -59,7 +57,8 @@ namespace CrashKonijn.Goap.ActionGame
             public ITarget Target { get; set; }
 
             [GetComponent]
-            public DataBehaviour DataBehavior { get; set; }
+            public DataBehaviour DataBehaviour { get; set; }
+
 
             public IActionRunState Timer { get; set; }
 

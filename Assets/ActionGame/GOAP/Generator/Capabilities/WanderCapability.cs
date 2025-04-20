@@ -11,14 +11,13 @@ namespace CrashKonijn.Goap.ActionGame
             var builder = new CapabilityBuilder(typeof(WanderCapability).ToString());
 
             builder.AddGoal<WanderGoal>()
-                .AddCondition<IsWander>(Comparison.GreaterThan, 0)
-                .SetBaseCost(1);
+                .AddCondition<Fatigue>(Comparison.GreaterThan, 0);
 
             builder.AddAction<WanderAction>()
-                .AddEffect<IsWander>(EffectType.Increase) // 是否在巡逻
+                //.AddEffect<IsWander>(EffectType.Increase) // 是否在巡逻
+                .AddCondition<Fatigue>(Comparison.SmallerThanOrEqual, 10)
                 .AddEffect<Fatigue>(EffectType.Increase)
                 .SetTarget<WanderTarget>()
-                .SetBaseCost(1)
                 .SetProperties(new WanderAction.Props
                 {
                     minTimer = 1f,
@@ -27,6 +26,8 @@ namespace CrashKonijn.Goap.ActionGame
 
             builder.AddTargetSensor<WanderTargetSensor>()
                 .SetTarget<WanderTarget>();
+
+            //builder.AddMultiSensor<EnemyStateSensor>();
 
             return builder.Build();
         }
