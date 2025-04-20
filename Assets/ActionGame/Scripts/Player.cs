@@ -51,6 +51,11 @@ public class Player : MonoBehaviour
     private float groundCheckRadius = 1f;
     private bool isGround;
 
+    /// <summary>
+    /// 移动转向速度
+    /// </summary>
+    [SerializeField] private float moveTurnSpeed = 0.5f;
+
     public enum MoveMode
     {
         Base = 0,
@@ -372,7 +377,8 @@ public class Player : MonoBehaviour
                 case MovementStates.InGround:
                     if (blackboard.TargetForward != Vector3.zero)
                     {
-                        transform.forward = blackboard.TargetForward;
+                        //transform.forward = blackboard.TargetForward;
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(blackboard.TargetForward), moveTurnSpeed);
                     }
  
                     Rigidbody.MovePosition(Rigidbody.position + animationComponent.Animancer.Animator.deltaPosition);
