@@ -11,7 +11,7 @@ namespace CrashKonijn.Goap.ActionGame
             var builder = new CapabilityBuilder(typeof(WanderCapability).ToString());
 
             builder.AddGoal<WanderGoal>()
-                .AddCondition<IsWander>(Comparison.GreaterThanOrEqual, 1); // 先设置一个永远达不成的目标 让其一直处于巡逻状态
+                .AddCondition<IsWander>(Comparison.GreaterThanOrEqual, 1); // 先设置一个永远达不成的目标 让其一直处于可巡逻状态
 
             builder.AddAction<WanderAction>()
                 //.AddEffect<IsWander>(EffectType.Increase) // 是否在巡逻

@@ -9,5 +9,9 @@ namespace CrashKonijn.Goap.ActionGame
         public bool IsIdle;
 
         public bool IsWander;
+
+        public Transform BelongArea;
+
+        public Transform AttackTarget;
     }
 }

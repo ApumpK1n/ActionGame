@@ -4,29 +4,33 @@ using CrashKonijn.Goap.Runtime;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyBehaviour))]
+[RequireComponent(typeof(DataBehaviour))]
 [RequireComponent(typeof(AnimationComponent))]
 public class Enemy : MonoBehaviour
 {
-    private EnemyBehaviour behavior;
+    private EnemyBehaviour behaviour;
+    private DataBehaviour dataBehaviour;
 
     private void Awake()
     {
-        behavior = GetComponent<EnemyBehaviour>();
+        behaviour = GetComponent<EnemyBehaviour>();
+        dataBehaviour = GetComponent<DataBehaviour>();
     }
 
     private void Start()
     {
-        behavior.RequestGoal<WanderGoal>();
+        behaviour.RequestGoal<WanderGoal>();
     }
 
-    public void Setup(GoapBehaviour goapBehaviour)
+    public void Setup(GoapBehaviour goapBehaviour, Transform belongArea)
     {
-        behavior.Setup(goapBehaviour);
+        behaviour.Setup(goapBehaviour);
+        dataBehaviour.BelongArea = belongArea;
     }
 
     public void Tick(float deltaTime)
     {
-        behavior.Tick(deltaTime);
+        behaviour.Tick(deltaTime);
     }
 }
 

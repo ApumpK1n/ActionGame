@@ -32,6 +32,10 @@ public class Game : DestroyableSingleton<Game>
     [SerializeField] private GoapBehaviour goapBehaviour;
     [SerializeField] private List<Enemy> enemies;
     #endregion
+
+    #region Scene
+    [SerializeField, Header("大世界区域")] private List<Transform> Areas;
+    #endregion
     private void Awake()
     {
         gameSystemStack.RegisterGameSystem(new LogicSystem());
@@ -42,7 +46,7 @@ public class Game : DestroyableSingleton<Game>
 
         foreach (Enemy enemy in enemies)
         {
-            enemy.Setup(goapBehaviour);
+            enemy.Setup(goapBehaviour, Areas[0]);
         }
     }
 
