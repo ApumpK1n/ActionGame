@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 等待扩展。不一定保留
+/// </summary>
+
 public class AnimationSystem : IGameSystem
 {
     public SystemType TypeEnum

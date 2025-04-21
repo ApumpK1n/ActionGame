@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// 大世界场景游戏逻辑控制 管理世界中所有元素 统一Tick
+/// </summary>
+
 public class LogicSystem : IGameSystem
 {
     public SystemType TypeEnum

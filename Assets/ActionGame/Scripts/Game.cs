@@ -5,6 +5,10 @@ using Cinemachine;
 using CrashKonijn.Goap.Runtime;
 using UnityEngine;
 
+/// <summary>
+/// 这个类目前有多种功能 1:游戏入口功能 2:场景管理 3:场景游戏逻辑 后续需要拆分 
+/// </summary>
+
 public class Game : DestroyableSingleton<Game>
 {
     GameSystemStack gameSystemStack = new GameSystemStack(3);

@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 游戏系统控制器控制类，负责Tick所有游戏中的系统
+/// </summary>
+
 public class GameSystemStack
 {
     private List<IGameSystem> stack;
