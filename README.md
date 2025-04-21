@@ -10,9 +10,10 @@ An action game made with the Unity engine
 
 人物移动： 暂时Locomotion + Animancer + Rigidbody + IK 分层状态机
 
-BOSS行为：GOAP
+敌人行为：GOAP
 
 # 武器
 搓招： 输入系统->当前状态->最终招式
+
 
 
