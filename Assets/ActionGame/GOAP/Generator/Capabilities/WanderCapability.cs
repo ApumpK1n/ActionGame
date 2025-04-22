@@ -4,6 +4,9 @@ using CrashKonijn.Goap.Runtime;
 
 namespace CrashKonijn.Goap.ActionGame
 {
+    /// <summary>
+    /// 巡逻能力 在区域范围内进行随机移动
+    /// </summary>
     public class WanderCapability : CapabilityFactoryBase
     {
         public override ICapabilityConfig Create()
@@ -27,6 +30,7 @@ namespace CrashKonijn.Goap.ActionGame
 
             builder.AddTargetSensor<WanderTargetSensor>()
                 .SetTarget<WanderTarget>();
+            builder.AddWorldSensor<IsWanderSensor>();
 
             //builder.AddMultiSensor<EnemyStateSensor>();
 

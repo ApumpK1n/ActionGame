@@ -1,4 +1,5 @@
 using CrashKonijn.Agent.Core;
+using CrashKonijn.Agent.Runtime;
 using CrashKonijn.Goap.Runtime;
 using UnityEngine;
 
@@ -25,6 +26,9 @@ namespace CrashKonijn.Goap.ActionGame
         // This method is optional and can be removed
         public override void Start(IMonoAgent agent, Data data)
         {
+            agent.transform.rotation = Quaternion.Lerp(agent.transform.rotation, Quaternion.LookRotation((data.Target.Position - agent.transform.position).normalized), data.DataComponent.EnemyConfig.MoveTurnSpeed);
+            data.AnimationComponent.Play(EnemyAnimationLayer.Base, AnimationType.BaseMove);
+
         }
 
         // This method is called once before the action is performed
@@ -37,6 +41,9 @@ namespace CrashKonijn.Goap.ActionGame
         // This method is required
         public override IActionRunState Perform(IMonoAgent agent, Data data, IActionContext context)
         {
+            float distance = Vector3.Distance(agent.transform.position, data.Target.Position);
+
+            if (!data.DataComponent.IsNearAttackTarget()) return ActionRunState.Continue;
             return ActionRunState.Completed;
         }
 
@@ -63,6 +70,10 @@ namespace CrashKonijn.Goap.ActionGame
         public class Data : IActionData
         {
             public ITarget Target { get; set; }
+            [GetComponent]
+            public AnimationComponent AnimationComponent { get; set; }
+            [GetComponent]
+            public DataBehaviour DataComponent { get; set; }
         }
     }
 }

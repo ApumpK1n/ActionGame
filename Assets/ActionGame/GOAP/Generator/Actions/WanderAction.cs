@@ -33,6 +33,7 @@ namespace CrashKonijn.Goap.ActionGame
             if (data.Timer.IsRunning())
                 return data.Timer;
 
+            data.DataBehavior.IsWander = false;
             return ActionRunState.Completed;
         }
 

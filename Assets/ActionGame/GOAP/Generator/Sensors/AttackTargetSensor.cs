@@ -19,13 +19,31 @@ namespace CrashKonijn.Goap.ActionGame
 
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget target)
         {
+
+
+            Vector3 targetPosition = GetPosition(agent, references);
+            if (target is PositionTarget positionTarget)
+            {
+                return positionTarget.SetPosition(targetPosition);
+            }
+
+            return new PositionTarget(targetPosition);
+        }
+
+        private Vector3 GetPosition(IActionReceiver agent, IComponentReference references)
+        {
             var dataComponent = references.GetCachedComponent<DataBehaviour>();
             if (dataComponent.AttackTarget != null)
             {
-                return new PositionTarget(dataComponent.AttackTarget.position);
+                return dataComponent.AttackTarget.position;
             }
 
-            return new PositionTarget(agent.Transform.position);
+            if (agent != null)
+            {
+                return agent.Transform.position;
+            }
+
+            return Vector3.zero;
         }
     }
 }

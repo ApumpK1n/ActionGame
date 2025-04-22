@@ -5,6 +5,9 @@ using CrashKonijn.Goap.Runtime;
 
 namespace CrashKonijn.Goap.ActionGame
 {
+    /// <summary>
+    ///  休息能力
+    /// </summary>
     public class IdleCapability : CapabilityFactoryBase
     {
         public override ICapabilityConfig Create()

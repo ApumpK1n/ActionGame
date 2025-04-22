@@ -1366,6 +1366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13eea4c82be12b444b77622d10596d1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: b600f43eb2f87644ab8d065bd4f7420b, type: 2}
 --- !u!54 &6381752496198704963
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1476,6 +1477,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Fatigue: 0
+  IsIdle: 0
+  IsWander: 0
+  BelongArea: {fileID: 0}
+  AttackTarget: {fileID: 0}
 --- !u!1 &4076111552279748854
 GameObject:
   m_ObjectHideFlags: 0

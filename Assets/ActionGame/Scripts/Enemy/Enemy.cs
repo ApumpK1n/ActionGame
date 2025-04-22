@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     private EnemyBehaviour behaviour;
     private DataBehaviour dataBehaviour;
 
+    [SerializeField] private EnemyConfig config;
     private void Awake()
     {
         behaviour = GetComponent<EnemyBehaviour>();
@@ -26,11 +27,22 @@ public class Enemy : MonoBehaviour
     {
         behaviour.Setup(goapBehaviour);
         dataBehaviour.BelongArea = belongArea;
+        dataBehaviour.EnemyConfig = config;
     }
 
     public void Tick(float deltaTime)
     {
         behaviour.Tick(deltaTime);
+
+        float distance = Vector3.Distance(transform.position, Game.Instance.Player.transform.position);
+        if (distance <= 5f)
+        {
+            dataBehaviour.AttackTarget = Game.Instance.Player.transform;
+        }
+        else
+        {
+            dataBehaviour.AttackTarget = null;
+        }
     }
 }
 
