@@ -19,7 +19,7 @@ namespace CrashKonijn.Goap.ActionGame
 
         public override SenseValue Sense(IActionReceiver agent, IComponentReference references)
         {
-            return references.GetCachedComponent<DataBehaviour>().IsWander;
+            return references.GetCachedComponent<DataBehaviour>().IsWander == true;
         }
     }
 }

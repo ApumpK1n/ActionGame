@@ -33,14 +33,13 @@ namespace CrashKonijn.Goap.ActionGame
             if (data.Timer.IsRunning())
                 return data.Timer;
 
-            data.DataBehavior.IsWander = false;
             return ActionRunState.Completed;
         }
 
         public override void Complete(IMonoAgent agent, Data data)
         {
             Debug.Log("CompleteWanderAction");
-
+            data.DataBehavior.IsWander = false;
         }
 
         public override void End(IMonoAgent agent, Data data)
