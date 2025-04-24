@@ -22,6 +22,7 @@ namespace CrashKonijn.Goap.ActionGame
         private bool shouldMove;
         private ITarget currentTarget;
 
+        public GoapActionProvider GoapActionProvider => provider;
         private void OnEnable()
         {
 

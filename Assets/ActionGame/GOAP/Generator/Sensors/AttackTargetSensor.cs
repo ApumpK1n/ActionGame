@@ -35,7 +35,7 @@ namespace CrashKonijn.Goap.ActionGame
             var dataComponent = references.GetCachedComponent<DataBehaviour>();
             if (dataComponent.AttackTarget != null)
             {
-                return dataComponent.AttackTarget.position;
+                return dataComponent.SampleAttackTargetPosition();
             }
 
             if (agent != null)

@@ -43,6 +43,7 @@ namespace CrashKonijn.Goap.ActionGame
         {
             float distance = Vector3.Distance(agent.transform.position, data.Target.Position);
 
+            Debug.Log("data.DataComponent.IsNearAttackTarget():" + data.DataComponent.IsNearAttackTarget());
             if (!data.DataComponent.IsNearAttackTarget()) return ActionRunState.Continue;
             return ActionRunState.Completed;
         }
@@ -51,6 +52,7 @@ namespace CrashKonijn.Goap.ActionGame
         // This method is optional and can be removed
         public override void Complete(IMonoAgent agent, Data data)
         {
+            
         }
 
         // This method is called when the action is stopped

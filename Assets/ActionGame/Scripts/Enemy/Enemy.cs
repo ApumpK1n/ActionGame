@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        behaviour.RequestGoal<WanderGoal>();
+        behaviour.GoapActionProvider.RequestGoal<WanderGoal, IdleGoal, AttackSucceedGoal>();
     }
 
     public void Setup(GoapBehaviour goapBehaviour, Transform belongArea)
@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour
         behaviour.Tick(deltaTime);
 
         float distance = Vector3.Distance(transform.position, Game.Instance.Player.transform.position);
-        if (distance <= 5f)
+        if (distance <= 50f)
         {
             dataBehaviour.AttackTarget = Game.Instance.Player.transform;
         }

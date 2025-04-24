@@ -29,6 +29,7 @@ namespace CrashKonijn.Goap.ActionGame
             builder.AddTargetSensor<AttackTargetSensor>().SetTarget<AttackTarget>();
             // builder.AddMultiSensor<EnemyStateSensor>();
             builder.AddWorldSensor<IsFindingAttackTargetSensor>().SetKey<IsFindingAttackTarget>();
+            builder.AddWorldSensor<IsNearTargetSensor>().SetKey<IsNearTarget>();
 
             return builder.Build();
         }

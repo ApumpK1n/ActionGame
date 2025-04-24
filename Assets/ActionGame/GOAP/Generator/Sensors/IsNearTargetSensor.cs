@@ -2,6 +2,7 @@
 using CrashKonijn.Agent.Core;
 using CrashKonijn.Goap.Core;
 using CrashKonijn.Goap.Runtime;
+using UnityEngine;
 
 namespace CrashKonijn.Goap.ActionGame
 {
@@ -19,7 +20,8 @@ namespace CrashKonijn.Goap.ActionGame
 
         public override SenseValue Sense(IActionReceiver agent, IComponentReference references)
         {
-            return references.GetCachedComponent<DataBehaviour>().IsNearAttackTarget() == true;
+            Debug.Log("references.GetCachedComponent<DataBehaviour>().IsNearAttackTarget()" + references.GetCachedComponent<DataBehaviour>().IsNearAttackTarget());
+            return references.GetCachedComponent<DataBehaviour>().IsNearAttackTarget();
         }
     }
 }
