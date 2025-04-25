@@ -39,6 +39,7 @@ public class AnimationComponent : MonoBehaviour
         {
             animancerState = animancer.Layers[layer].Play(clip, fadeDuration: 0.25f, mode:fadeMode);
         }
+        animancerState.NormalizedTime = 0f;
         animancerState.Speed = speed;
         animancerState.LayerIndex = layer;
         if (onEnd != null)

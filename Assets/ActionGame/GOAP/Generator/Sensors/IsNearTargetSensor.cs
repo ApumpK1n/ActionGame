@@ -8,6 +8,7 @@ namespace CrashKonijn.Goap.ActionGame
 {
     public class IsNearTargetSensor : LocalWorldSensorBase
     {
+
         public override void Created()
         {
 
@@ -15,13 +16,15 @@ namespace CrashKonijn.Goap.ActionGame
 
         public override void Update()
         {
-
+            //if (agent != null && references != null)
+            //{
+            //    Sense(agent, references);
+            //}
         }
 
         public override SenseValue Sense(IActionReceiver agent, IComponentReference references)
         {
-            Debug.Log("references.GetCachedComponent<DataBehaviour>().IsNearAttackTarget()" + references.GetCachedComponent<DataBehaviour>().IsNearAttackTarget());
-            return references.GetCachedComponent<DataBehaviour>().IsNearAttackTarget();
+            return references.GetCachedComponent<DataBehaviour>().IsNear();
         }
     }
 }

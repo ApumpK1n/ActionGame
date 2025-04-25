@@ -15,6 +15,7 @@ namespace CrashKonijn.Goap.ActionGame
             var builder = new CapabilityBuilder(typeof(IdleCapability).ToString());
 
             builder.AddGoal<IdleGoal>()
+                .SetBaseCost(10f)
                 .AddCondition<Fatigue>(Comparison.SmallerThanOrEqual, 0);
 
             builder.AddAction<IdleAction>()

@@ -14,6 +14,7 @@ namespace CrashKonijn.Goap.ActionGame
             var builder = new CapabilityBuilder(typeof(WanderCapability).ToString());
 
             builder.AddGoal<WanderGoal>()
+                .SetBaseCost(10f)
                 .AddCondition<IsWander>(Comparison.GreaterThanOrEqual, 1);
 
             builder.AddAction<WanderAction>()

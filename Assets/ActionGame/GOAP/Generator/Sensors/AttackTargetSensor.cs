@@ -15,13 +15,15 @@ namespace CrashKonijn.Goap.ActionGame
 
         public override void Update()
         {
+
         }
 
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget target)
         {
-
-
+            var dataComponent = references.GetCachedComponent<DataBehaviour>();
             Vector3 targetPosition = GetPosition(agent, references);
+
+            dataComponent.GoapAttackTargetPosition = targetPosition;
             if (target is PositionTarget positionTarget)
             {
                 return positionTarget.SetPosition(targetPosition);

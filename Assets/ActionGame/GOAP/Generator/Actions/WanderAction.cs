@@ -21,7 +21,6 @@ namespace CrashKonijn.Goap.ActionGame
             float distance = Vector3.Distance(data.Target.Position, agent.gameObject.transform.position);
             float t = distance / 60;
 
-            Debug.Log("distance:" + distance);
             data.Timer = new WanderActionRunState(t, false, data.DataBehavior);
             data.AnimationComponent.Play(EnemyAnimationLayer.Base, AnimationType.BaseMove);
 
@@ -85,8 +84,6 @@ namespace CrashKonijn.Goap.ActionGame
             {
                 time -= context.DeltaTime;
                 dataBehavior.Fatigue += context.DeltaTime * 50f;
-
-                Debug.Log("Update");
             }
 
             public override bool ShouldStop(IAgent agent)

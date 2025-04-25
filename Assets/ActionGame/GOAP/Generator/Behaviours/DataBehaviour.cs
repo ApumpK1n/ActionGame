@@ -1,3 +1,4 @@
+using CrashKonijn.Agent.Core;
 using UnityEngine;
 
 namespace CrashKonijn.Goap.ActionGame
@@ -16,17 +17,25 @@ namespace CrashKonijn.Goap.ActionGame
 
         public EnemyConfig EnemyConfig { get; set; }
 
-        public bool IsNear(Vector3 pos1, Vector3 pos2)
-        {
-            return Vector3.Distance(pos1, pos2) < 1f;
-        }
+        public Vector3 GoapAttackTargetPosition;
 
         public bool IsNearAttackTarget()
         {
             if (AttackTarget == null) return true;
 
-            float distance = Vector3.Distance(this.transform.position, AttackTarget.position);
-            return distance < 0.5f;
+            float distance = Vector2.Distance(new Vector2(this.transform.position.x, this.transform.position.z), new Vector2(AttackTarget.position.x, AttackTarget.position.z));
+            return distance < 2f;
+        }
+
+        public bool IsNear(Vector3 target)
+        {
+            float distance = Vector2.Distance(new Vector2(this.transform.position.x, this.transform.position.z), new Vector2(target.x, target.z));
+            return distance < 2f;
+        }
+
+        public bool IsNear()
+        {
+            return IsNear(GoapAttackTargetPosition);
         }
 
         public Vector3 SampleAttackTargetPosition()

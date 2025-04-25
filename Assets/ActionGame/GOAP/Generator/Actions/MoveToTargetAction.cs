@@ -2,6 +2,7 @@ using CrashKonijn.Agent.Core;
 using CrashKonijn.Agent.Runtime;
 using CrashKonijn.Goap.Runtime;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace CrashKonijn.Goap.ActionGame
 {
@@ -26,9 +27,12 @@ namespace CrashKonijn.Goap.ActionGame
         // This method is optional and can be removed
         public override void Start(IMonoAgent agent, Data data)
         {
-            agent.transform.rotation = Quaternion.Lerp(agent.transform.rotation, Quaternion.LookRotation((data.Target.Position - agent.transform.position).normalized), data.DataComponent.EnemyConfig.MoveTurnSpeed);
-            data.AnimationComponent.Play(EnemyAnimationLayer.Base, AnimationType.BaseMove);
+            Vector3 agent2Target = (data.Target.Position - agent.transform.position).normalized;
+            float angle = Vector3.Angle(agent.transform.forward, agent2Target);
+            Quaternion quaternion = Quaternion.AngleAxis(angle, Vector3.up);
 
+            agent.transform.rotation = Quaternion.Lerp(agent.transform.rotation, quaternion, data.DataComponent.EnemyConfig.MoveTurnSpeed);
+            data.AnimationComponent.Play(EnemyAnimationLayer.Base, AnimationType.BaseMove);
         }
 
         // This method is called once before the action is performed
@@ -41,10 +45,11 @@ namespace CrashKonijn.Goap.ActionGame
         // This method is required
         public override IActionRunState Perform(IMonoAgent agent, Data data, IActionContext context)
         {
+          
             float distance = Vector3.Distance(agent.transform.position, data.Target.Position);
 
-            Debug.Log("data.DataComponent.IsNearAttackTarget():" + data.DataComponent.IsNearAttackTarget());
-            if (!data.DataComponent.IsNearAttackTarget()) return ActionRunState.Continue;
+            Debug.Log("data.DataComponent.IsNear():" + data.DataComponent.IsNear(data.Target.Position));
+            if (!data.DataComponent.IsNear(data.Target.Position)) return ActionRunState.Continue;
             return ActionRunState.Completed;
         }
 

@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        behaviour.GoapActionProvider.RequestGoal<WanderGoal, IdleGoal, AttackSucceedGoal>();
+        behaviour.GoapActionProvider.RequestGoal<WanderGoal, IdleGoal, GuardGoal>();
     }
 
     public void Setup(GoapBehaviour goapBehaviour, Transform belongArea)

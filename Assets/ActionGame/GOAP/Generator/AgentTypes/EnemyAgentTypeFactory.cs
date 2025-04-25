@@ -12,7 +12,7 @@ namespace CrashKonijn.Goap.ActionGame
 
             factory.AddCapability<IdleCapability>();
             factory.AddCapability<WanderCapability>();
-            factory.AddCapability<MeleeAttackCapability>();
+            factory.AddCapability<GuardCapability>();
 
             return factory.Build();
         }

@@ -2,6 +2,7 @@
 using CrashKonijn.Agent.Core;
 using CrashKonijn.Goap.Core;
 using CrashKonijn.Goap.Runtime;
+using UnityEngine;
 
 namespace CrashKonijn.Goap.ActionGame
 {
@@ -19,6 +20,7 @@ namespace CrashKonijn.Goap.ActionGame
 
         public override SenseValue Sense(IActionReceiver agent, IComponentReference references)
         {
+            //Debug.Log($"IsFindingAttackTargetSensor{references.GetCachedComponent<DataBehaviour>().AttackTarget}");
             return references.GetCachedComponent<DataBehaviour>().AttackTarget != null;
         }
     }

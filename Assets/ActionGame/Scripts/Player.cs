@@ -92,6 +92,8 @@ public class Player : MonoBehaviour
     #region Unity
     private void Awake()
     {
+        isReady = false;
+
         playerAttribute = new PlayerAttribute();
         animationComponent = GetComponent<AnimationComponent>();
         Rigidbody = GetComponent<Rigidbody>();

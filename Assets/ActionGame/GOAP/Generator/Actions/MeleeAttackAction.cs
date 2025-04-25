@@ -1,6 +1,9 @@
 using CrashKonijn.Agent.Core;
+using CrashKonijn.Agent.Runtime;
 using CrashKonijn.Goap.Runtime;
 using UnityEngine;
+using Animancer;
+using static CrashKonijn.Goap.ActionGame.WanderAction;
 
 namespace CrashKonijn.Goap.ActionGame
 {
@@ -25,6 +28,8 @@ namespace CrashKonijn.Goap.ActionGame
         // This method is optional and can be removed
         public override void Start(IMonoAgent agent, Data data)
         {
+            AnimancerState state = data.AnimationComponent.Play(EnemyAnimationLayer.Base, AnimationType.L1Attack);
+            data.Timer = ActionRunState.Wait(state.Length);
         }
 
         // This method is called once before the action is performed
@@ -37,6 +42,9 @@ namespace CrashKonijn.Goap.ActionGame
         // This method is required
         public override IActionRunState Perform(IMonoAgent agent, Data data, IActionContext context)
         {
+            if (data.Timer.IsRunning())
+                return data.Timer;
+
             return ActionRunState.Completed;
         }
 
@@ -44,6 +52,7 @@ namespace CrashKonijn.Goap.ActionGame
         // This method is optional and can be removed
         public override void Complete(IMonoAgent agent, Data data)
         {
+            AnimancerState state = data.AnimationComponent.Play(EnemyAnimationLayer.Base, AnimationType.Idle);
         }
 
         // This method is called when the action is stopped
@@ -58,11 +67,16 @@ namespace CrashKonijn.Goap.ActionGame
         {
         }
 
+
         // The action class itself must be stateless!
         // All data should be stored in the data class
         public class Data : IActionData
         {
             public ITarget Target { get; set; }
+            [GetComponent]
+            public AnimationComponent AnimationComponent { get; set; }
+
+            public IActionRunState Timer { get; set; }
         }
     }
 }
