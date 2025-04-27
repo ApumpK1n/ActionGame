@@ -84,7 +84,6 @@ namespace CrashKonijn.Goap.ActionGame
 
         public void Setup(GoapBehaviour goapBehaviour)
         {
-            Debug.Log("Setup");
             this.goap = goapBehaviour;
             this.agent = this.GetComponent<AgentBehaviour>();
             this.provider = this.GetComponent<GoapActionProvider>();

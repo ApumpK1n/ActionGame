@@ -8,7 +8,6 @@ namespace CrashKonijn.Goap.ActionGame
 {
     public class WanderTargetSensor : LocalTargetSensorBase
     {
-        private static readonly Vector2 Bounds = new Vector2(15, 8);
 
         public override void Created()
         {
@@ -20,7 +19,7 @@ namespace CrashKonijn.Goap.ActionGame
 
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget target)
         {
-            var random = this.GetRandomPosition(agent);
+            var random = this.GetRandomPosition(references);
 
             // If we already have a target, update it with the new position
             if (target is PositionTarget positionTarget)
@@ -29,10 +28,14 @@ namespace CrashKonijn.Goap.ActionGame
             return new PositionTarget(random);
         }
 
-        private Vector3 GetRandomPosition(IActionReceiver agent)
+        private Vector3 GetRandomPosition(IComponentReference references)
         {
-            var random = Random.insideUnitCircle * 5f;
-            var position = agent.Transform.position + new Vector3(random.x, 0f, random.y);
+            Transform belongArea = references.GetCachedComponent<DataBehaviour>().BelongArea;
+
+            Vector2 random = Vector2.zero;
+            random.x = Random.Range(0f, 20f);
+            random.y = Random.Range(0f, 20f);
+            var position = belongArea.position + new Vector3(random.x, 1f, random.y);
 
             return position;
             //if (position.x > -Bounds.x && position.x < Bounds.x && position.z > -Bounds.y && position.z < Bounds.y)

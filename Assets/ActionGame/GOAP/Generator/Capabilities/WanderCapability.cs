@@ -18,7 +18,6 @@ namespace CrashKonijn.Goap.ActionGame
                 .AddCondition<IsWander>(Comparison.GreaterThanOrEqual, 1);
 
             builder.AddAction<WanderAction>()
-                //.AddEffect<IsWander>(EffectType.Increase) // 是否在巡逻
                 .AddCondition<Fatigue>(Comparison.SmallerThanOrEqual, 10)
                 .AddEffect<Fatigue>(EffectType.Increase)
                 .AddEffect<IsWander>(EffectType.Increase)

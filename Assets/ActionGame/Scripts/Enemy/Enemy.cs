@@ -44,6 +44,12 @@ public class Enemy : MonoBehaviour
             dataBehaviour.AttackTarget = null;
         }
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward * 10);
+    }
 }
 
 
