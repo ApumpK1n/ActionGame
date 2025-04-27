@@ -22,6 +22,12 @@ public class GameSystemStack
                 system.Setup();
     }
 
+    public void Start()
+    {
+        foreach (var system in stack)
+            system.Start();
+    }
+
     public void Tick(float deltaTime)
     {
         foreach (var system in stack)

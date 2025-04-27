@@ -26,6 +26,11 @@ public class AnimationSystem : IGameSystem
         //throw new System.NotImplementedException();
     }
 
+    public void Start()
+    {
+
+    }
+
     public void Tick(float deltaTime)
     {
         //throw new System.NotImplementedException();

@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     private DataBehaviour dataBehaviour;
 
     [SerializeField] private EnemyConfig config;
+    private WorldScene belongWorldScene;
     private void Awake()
     {
         behaviour = GetComponent<EnemyBehaviour>();
@@ -23,21 +24,22 @@ public class Enemy : MonoBehaviour
         behaviour.GoapActionProvider.RequestGoal<WanderGoal, IdleGoal, GuardGoal>();
     }
 
-    public void Setup(GoapBehaviour goapBehaviour, Transform belongArea)
+    public void Setup(GoapBehaviour goapBehaviour, Transform belongArea, WorldScene worldScene)
     {
         behaviour.Setup(goapBehaviour);
         dataBehaviour.BelongArea = belongArea;
         dataBehaviour.EnemyConfig = config;
+        this.belongWorldScene = worldScene;
     }
 
     public void Tick(float deltaTime)
     {
         behaviour.Tick(deltaTime);
 
-        float distance = Vector3.Distance(transform.position, Game.Instance.Player.transform.position);
+        float distance = Vector3.Distance(transform.position, belongWorldScene.Player.transform.position);
         if (distance <= 50f)
         {
-            dataBehaviour.AttackTarget = Game.Instance.Player.transform;
+            dataBehaviour.AttackTarget = belongWorldScene.Player.transform;
         }
         else
         {

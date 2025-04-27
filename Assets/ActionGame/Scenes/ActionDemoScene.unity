@@ -3953,7 +3953,7 @@ GameObject:
   - component: {fileID: 2124172080}
   - component: {fileID: 2124172081}
   m_Layer: 0
-  m_Name: Game
+  m_Name: World
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3983,13 +3983,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2124172079}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79a24764875fc124480a0dac7fcd6799, type: 3}
+  m_Script: {fileID: 11500000, guid: 330f396cdb379064fb4cbc1f81e35f10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Player: {fileID: 0}
   PlayerPrefab: {fileID: 3003405743029673, guid: 3c62710372c70b04d838471b3164ea88, type: 3}
   PlayerReborn: {fileID: 3121689}
   StickWeaponPrefab: {fileID: -6699697419266694064, guid: 380e44a83b473444aa47b8412d79a21b, type: 3}
-  Player: {fileID: 0}
   playerCamera: {fileID: 646344183}
   cinemachineBrain: {fileID: 646344186}
   playerFollowCamera: {fileID: 1682339523}
@@ -4004,10 +4004,10 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 2124172080}
   - {fileID: 2003931977}
   - {fileID: 1174709690}
   - {fileID: 185862706}
-  - {fileID: 2124172080}
   - {fileID: 3121689}
   - {fileID: 646344184}
   - {fileID: 817844556}

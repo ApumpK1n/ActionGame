@@ -4,7 +4,7 @@ using System;
 public enum SystemType
 {
     None = 0,
-    Logic = 1 << 0,
+    WorldLogic = 1 << 0,
     Animation = 1 << 1,
     Command = 1 << 2,
 

@@ -64,6 +64,11 @@ public class CommandInvoker : IGameSystem
         initiated = true;
     }
 
+    public void Start()
+    {
+
+    }
+
     public void Tick(float deltaTime)
     {
         if (!initiated) return;

@@ -7,6 +7,8 @@ public interface IGameSystem
 {
     void Setup();
 
+    void Start();
+
     void Tick(float deltaTime);
 
     void Dispose();

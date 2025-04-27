@@ -6,7 +6,7 @@ public class MoveCommand : ICommand
 
     public void Execute()
     {
-        Game.Instance.GetGameSystem<LogicSystem>().PlayerMove(MoveDir);
+        Game.Instance.GetGameSystem<WorldLogicSystem>().PlayerMove(MoveDir);
     }
 
     public void Undo()

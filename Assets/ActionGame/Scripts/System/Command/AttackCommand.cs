@@ -8,15 +8,15 @@ public class AttackCommand : ICommand
     {
         if (LeftClick && RightClick)
         {
-            Game.Instance.GetGameSystem<LogicSystem>().ExecuteCommand(CommandType.BothClick);
+            Game.Instance.GetGameSystem<WorldLogicSystem>().ExecuteCommand(CommandType.BothClick);
         }
         else if (LeftClick)
         {
-            Game.Instance.GetGameSystem<LogicSystem>().ExecuteCommand(CommandType.LeftAttack);
+            Game.Instance.GetGameSystem<WorldLogicSystem>().ExecuteCommand(CommandType.LeftAttack);
         }
         else if (RightClick)
         {
-            Game.Instance.GetGameSystem<LogicSystem>().ExecuteCommand(CommandType.RightAttack);
+            Game.Instance.GetGameSystem<WorldLogicSystem>().ExecuteCommand(CommandType.RightAttack);
         }
     }
 

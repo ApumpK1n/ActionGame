@@ -88,6 +88,7 @@ public class Player : MonoBehaviour
     }
 
     private PlayerAttribute playerAttribute;
+    private WorldScene belongWorldScene;
 
     #region Unity
     private void Awake()
@@ -150,6 +151,10 @@ public class Player : MonoBehaviour
     }
     #endregion
 
+    public void Setup(WorldScene worldScene)
+    {
+        belongWorldScene = worldScene;
+    }
     private void CreateHFSM()
     {
         fsmRoot = new StateMachine<PlayerStates, Events>();
@@ -363,7 +368,7 @@ public class Player : MonoBehaviour
     private Vector3 GetTargetForward(float angle)
     {
         Quaternion quaternion = Quaternion.AngleAxis(angle, Vector3.up);
-        Vector3 rotation = quaternion* Game.Instance.GetPlayerCamera().forward;
+        Vector3 rotation = quaternion* belongWorldScene.GetPlayerCamera().forward;
         return new Vector3(rotation.x, 0, rotation.z);
     }
 

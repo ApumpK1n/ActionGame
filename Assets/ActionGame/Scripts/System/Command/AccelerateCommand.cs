@@ -5,7 +5,7 @@ public class AccelerateCommand : ICommand
     public bool Value;
     public void Execute()
     {
-        Game.Instance.GetGameSystem<LogicSystem>().PlayerAccelerate(Value);
+        Game.Instance.GetGameSystem<WorldLogicSystem>().PlayerAccelerate(Value);
     }
 
     public void Undo()
