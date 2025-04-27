@@ -906,6 +906,7 @@ MonoBehaviour:
   IKFootRoot: {fileID: 967641547722800164}
   IKFootLeft: {fileID: 1643754913933281411}
   IKFootRight: {fileID: 2408795223764404480}
+  config: {fileID: 11400000, guid: f1b98aecac226724eb5612363032f08e, type: 2}
   DebugCombatAnimator: {fileID: 0}
   DebugMovementAnimator: {fileID: 0}
   targetForward: {x: 0, y: 0, z: 0}

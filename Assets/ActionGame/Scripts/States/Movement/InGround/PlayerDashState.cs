@@ -3,7 +3,6 @@ using UnityHFSM;
 
 internal class PlayerDashState : PlayerInGroundState
 {
-    float AccelerateSpeed = 2f;
 
     public PlayerDashState(PlayerStatesBlackboard blackboard, bool needsExitTime, bool isGhostState)
     : base(blackboard, needsExitTime, isGhostState) { }
@@ -11,7 +10,7 @@ internal class PlayerDashState : PlayerInGroundState
 
     public override void OnEnter()
     {
-        blackboard.Player.PlayAnimation(PlayerAnimationLayer.Base, AnimationType.BaseMove, AccelerateSpeed);
+        blackboard.Player.PlayAnimation(PlayerAnimationLayer.Base, AnimationType.BaseMove, blackboard.CharacterConfig.DashMoveSpeed);
     }
 
 }

@@ -27,7 +27,6 @@ using UnityHFSM.Visualization;
  */
 public class Player : MonoBehaviour
 {
-    private AnimationComponent animationComponent;
     public Rigidbody Rigidbody;
 
     public Transform Neck;
@@ -40,7 +39,12 @@ public class Player : MonoBehaviour
     public Transform IKFootLeft;
     public Transform IKFootRight;
 
+    // 配置
+    [SerializeField] CharacterConfig config;
+
     public PlayerStatesBlackboard Blackboard => blackboard;
+
+    private AnimationComponent animationComponent;
 
     private StateMachine<PlayerStates, Events> fsmRoot;
     private StateMachine<PlayerStates, MovementStates, Events> fsmMovement;
@@ -51,10 +55,6 @@ public class Player : MonoBehaviour
     private float groundCheckRadius = 1f;
     private bool isGround;
 
-    /// <summary>
-    /// 移动转向速度
-    /// </summary>
-    [SerializeField] private float moveTurnSpeed = 0.5f;
 
     public enum MoveMode
     {
@@ -105,6 +105,7 @@ public class Player : MonoBehaviour
 
         blackboard = new PlayerStatesBlackboard();
         blackboard.Player = this;
+        blackboard.CharacterConfig = config;
 
         animationComponent.Animancer.Layers[PlayerAnimationLayer.Base].SetMask(totalAvatarMask);
 
@@ -380,7 +381,7 @@ public class Player : MonoBehaviour
                     if (blackboard.TargetForward != Vector3.zero)
                     {
                         //transform.forward = blackboard.TargetForward;
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(blackboard.TargetForward), moveTurnSpeed);
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(blackboard.TargetForward), config.MoveTurnSpeed);
                     }
  
                     Rigidbody.MovePosition(Rigidbody.position + animationComponent.Animancer.Animator.deltaPosition);
@@ -617,6 +618,7 @@ public static class PlayerAnimationLayer
 public class PlayerStatesBlackboard
 {
     public Player Player { get; set; }
+    public CharacterConfig CharacterConfig { get; set; }
     public bool IsAccelerate { get; set; }
     public Vector2 MoveInput { get; set; }
     public Vector3 TargetForward { get; set; }
