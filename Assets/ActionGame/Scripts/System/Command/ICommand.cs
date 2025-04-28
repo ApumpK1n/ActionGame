@@ -14,4 +14,5 @@ public enum CommandType
     LeftAttack  = 4,
     RightAttack = 5,
     BothClick   = 6,
+    Skill       = 7,
 }

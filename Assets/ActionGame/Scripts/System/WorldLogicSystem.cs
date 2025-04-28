@@ -53,6 +53,7 @@ public class WorldLogicSystem : IGameSystem
 
     public void LoadWorld(WorldConfig config)
     {
+        Debug.Log("LoadWorld");
         foreach(var sceneConfig in config.SceneConfigs)
         {
             SceneManager.LoadScene(sceneConfig.Name, sceneConfig.LoadSceneMode);
@@ -92,5 +93,10 @@ public class WorldLogicSystem : IGameSystem
     public void ExecuteCommand(CommandType commandType)
     {
         worldScene.Player.ExecuteCommand(commandType);
+    }
+
+    public void ExecuteSkillCommand(int skillSlot)
+    {
+        worldScene.Player.PerformSkill(skillSlot);
     }
 }

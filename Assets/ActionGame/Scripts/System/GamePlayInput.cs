@@ -71,4 +71,15 @@ public class GamePlayInput : MonoBehaviour
             commandInvoker.AddCommand(command);
         }
     }
+
+    public void OnSkill1ClickEvent(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            SkillCommand command = new SkillCommand();
+            command.SkillSlot = 1;
+
+            commandInvoker.AddCommand(command);
+        }
+    }
 }

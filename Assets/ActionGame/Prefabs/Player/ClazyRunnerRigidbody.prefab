@@ -915,6 +915,8 @@ MonoBehaviour:
   lowerBodyAvatarMask: {fileID: 31900000, guid: fb8c4f3519850aa4fbe8cee7af831701, type: 2}
   handAttackAvatarMask: {fileID: 31900000, guid: 455879e330f0d1b4c90b3b739d861f92, type: 2}
   totalAvatarMask: {fileID: 31900000, guid: 20e75bcd2d54a784d9d3b4a4022add16, type: 2}
+  skillSlots:
+  - {fileID: 11400000, guid: 03329b31ec1477244970214633483ae2, type: 2}
 --- !u!54 &7102570957812199574
 Rigidbody:
   m_ObjectHideFlags: 0

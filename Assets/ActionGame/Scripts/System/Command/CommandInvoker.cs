@@ -28,7 +28,7 @@ public class CommandInvoker : IGameSystem
     }
 
     // Execute a command object directly and save to the undo stack
-    public void ExecuteCommand(ICommand command)
+    private void ExecuteCommand(ICommand command)
     {
         command.Execute();
         UndoStack.Push(command);

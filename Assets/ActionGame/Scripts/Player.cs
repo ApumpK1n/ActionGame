@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityHFSM;
 using System;
 using UnityHFSM.Visualization;
+using CombatSystem;
 
 /*
   HFSM
@@ -55,7 +56,6 @@ public class Player : MonoBehaviour
     private float groundCheckRadius = 1f;
     private bool isGround;
 
-
     public enum MoveMode
     {
         Base = 0,
@@ -90,6 +90,10 @@ public class Player : MonoBehaviour
     private PlayerAttribute playerAttribute;
     private WorldScene belongWorldScene;
 
+    private SkillAbility skillAbility;
+
+    [SerializeField, Header("技能槽")] private List<SkillConfig> skillSlots;
+
     #region Unity
     private void Awake()
     {
@@ -117,11 +121,6 @@ public class Player : MonoBehaviour
         animationComponent.Animancer.Layers[PlayerAnimationLayer.HandAttack].SetMask(handAttackAvatarMask);
     }
 
-    private void Start()
-    {
-        CreateHFSM();
-        isReady = true;
-    }
 
     private void FixedUpdate()
     {
@@ -154,6 +153,9 @@ public class Player : MonoBehaviour
     public void Setup(WorldScene worldScene)
     {
         belongWorldScene = worldScene;
+        CreateHFSM();
+        skillAbility = new SkillAbility();
+        isReady = true;
     }
     private void CreateHFSM()
     {
@@ -550,6 +552,13 @@ public class Player : MonoBehaviour
     {
         fsmMovement.RequestStateChange(state);
     }
+
+    #region Skill
+    public void PerformSkill(int skillSlot)
+    {
+
+    }
+    #endregion
 }
 
 
