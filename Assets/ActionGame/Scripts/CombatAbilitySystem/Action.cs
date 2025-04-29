@@ -4,7 +4,7 @@
 /// 行为
 /// </summary>
 ///
-namespace CombatSystem
+namespace CombatAbilitySystem
 {
     public abstract class Action
     {

@@ -1,8 +1,8 @@
 
-namespace CombatSystem
+namespace CombatAbilitySystem
 {
     /// <summary>
-    /// 释放技能能力
+    /// 技能的逻辑
     /// </summary>
     public class SkillAbility : Ability
     {

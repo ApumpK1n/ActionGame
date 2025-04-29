@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityHFSM;
 using System;
 using UnityHFSM.Visualization;
-using CombatSystem;
+using CombatAbilitySystem;
 
 /*
   HFSM

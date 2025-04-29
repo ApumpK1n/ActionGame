@@ -11,7 +11,7 @@
 疑问: 怎么处理数值？ 答：Modifyer 嗯，这里需要实现一些通用的Modify 如加减乘除 还需要开放自定义的Modifyer
  */
 
-namespace CombatSystem
+namespace CombatAbilitySystem
 {
     public abstract class Ability
     {
