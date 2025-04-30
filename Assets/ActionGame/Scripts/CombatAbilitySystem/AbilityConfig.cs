@@ -3,7 +3,7 @@
 using UnityEngine;
 
 [CreateAssetMenu]
-public class SkillConfig : ScriptableObject
+public class AbilityConfig : ScriptableObject
 {
     [Header("技能Id")] public int Id;
     [Header("描述")] public string Description;

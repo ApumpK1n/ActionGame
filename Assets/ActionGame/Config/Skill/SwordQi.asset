@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 1001
   Description: "\u5411\u524D\u6325\u51FA\u4E00\u9053\u5251\u6C14"
-  CountDown: 3
+  Cooldown: 1
   CastPoint: 0.2

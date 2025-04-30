@@ -90,9 +90,9 @@ public class Player : MonoBehaviour
     private PlayerAttribute playerAttribute;
     private WorldScene belongWorldScene;
 
-    private SkillAbility skillAbility;
+    private AbilityComponent skillAbility;
 
-    [SerializeField, Header("技能槽")] private List<SkillConfig> skillSlots;
+    [SerializeField, Header("技能槽")] private List<AbilityConfig> skillSlots;
 
     #region Unity
     private void Awake()
@@ -154,7 +154,6 @@ public class Player : MonoBehaviour
     {
         belongWorldScene = worldScene;
         CreateHFSM();
-        skillAbility = new SkillAbility();
         isReady = true;
     }
     private void CreateHFSM()
