@@ -26,7 +26,7 @@ using CombatAbilitySystem;
   - 其他全局状态（如受伤、死亡）
  
  */
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ICharacterView
 {
     public Rigidbody Rigidbody;
 
