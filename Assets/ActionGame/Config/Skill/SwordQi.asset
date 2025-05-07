@@ -16,3 +16,5 @@ MonoBehaviour:
   Description: "\u5411\u524D\u6325\u51FA\u4E00\u9053\u5251\u6C14"
   Cooldown: 1
   CastPoint: 0.2
+  Effects:
+  - {fileID: 11400000, guid: 4b40e47652d06d8439c3bb5e075da513, type: 2}

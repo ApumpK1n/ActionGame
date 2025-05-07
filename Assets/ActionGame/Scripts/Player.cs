@@ -90,7 +90,7 @@ public class Player : MonoBehaviour, ICharacterView
     private PlayerAttribute playerAttribute;
     private WorldScene belongWorldScene;
 
-    private AbilityComponent skillAbility;
+    private AbilitySystemComponent abilitySystemComponent;
 
     [SerializeField, Header("技能槽")] private List<AbilityConfig> skillSlots;
 
@@ -145,6 +145,7 @@ public class Player : MonoBehaviour, ICharacterView
             HfsmAnimatorGraph.PreviewStateMachineInAnimator(fsmMovement, DebugMovementAnimator);
             HfsmAnimatorGraph.PreviewStateMachineInAnimator(fsmCombat, DebugCombatAnimator);
 #endif
+            abilitySystemComponent.Tick(Time.deltaTime);
         }
 
     }
@@ -154,8 +155,17 @@ public class Player : MonoBehaviour, ICharacterView
     {
         belongWorldScene = worldScene;
         CreateHFSM();
+        CreateCombatAbilitySystem();
         isReady = true;
     }
+
+    private void CreateCombatAbilitySystem()
+    {
+        abilitySystemComponent = new AbilitySystemComponent();
+
+        GrandAbilities();
+    }
+
     private void CreateHFSM()
     {
         fsmRoot = new StateMachine<PlayerStates, Events>();
@@ -257,6 +267,7 @@ public class Player : MonoBehaviour, ICharacterView
     }
 
     #endregion
+
 
     public AnimancerState PlayAnimation(int layer, AnimationType animationType, float speed, FadeMode fadeMode=default, Action<AnimancerState> onEnd=null)
     {
@@ -552,10 +563,39 @@ public class Player : MonoBehaviour, ICharacterView
         fsmMovement.RequestStateChange(state);
     }
 
-    #region Skill
+    #region Ability
+    public void GrandAbilities()
+    {
+        foreach(AbilityConfig abilityConfig in skillSlots)
+        {
+            if (!abilitySystemComponent.IsGrantedAbility(abilityConfig.Id))
+            {
+                GrandAbility(abilityConfig);
+            }
+        }
+    }
+
+    private AbilityComponent GrandAbility(AbilityConfig abilityConfig)
+    {
+        AbilityComponent abilityComponent = null;
+        switch (abilityConfig)
+        {
+            case ProjectileAbilityConfig:
+                abilityComponent = abilitySystemComponent.GrantAbility<ProjectileAbilityComponent>(abilityConfig);
+                break;
+            default:
+                Debug.LogError($"GrandAbility Error Id:{abilityConfig.Id}, Type:{abilityConfig.GetType()}");
+                break;
+        }
+        return abilityComponent;
+
+    }
+
+
     public void PerformSkill(int skillSlot)
     {
-
+        AbilityConfig abilityConfig = skillSlots[skillSlot];
+        abilitySystemComponent.TryActivateAbility(abilityConfig.Id);
     }
     #endregion
 }
