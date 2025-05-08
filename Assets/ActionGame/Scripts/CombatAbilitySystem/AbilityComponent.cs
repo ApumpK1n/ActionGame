@@ -10,6 +10,7 @@ namespace CombatAbilitySystem
     public abstract class AbilityComponent : ITick
     {
         public AbilityConfig Config { get; private set; }
+        public AbilitySystemComponent Owner { get; private set; }
 
         public void Tick(float dt)
         {
@@ -65,10 +66,11 @@ namespace CombatAbilitySystem
 
         public abstract void CancelAbility();
 
-        public static T Create<T>(AbilityConfig config) where T: AbilityComponent, new()
+        public static T Create<T>(AbilityConfig config, AbilitySystemComponent owner) where T: AbilityComponent, new()
         {
             T ability = new T();
             ability.Config = config;
+            ability.Owner = owner;
             return ability;
         }
     }

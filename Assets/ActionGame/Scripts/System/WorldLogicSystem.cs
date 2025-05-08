@@ -56,6 +56,7 @@ public class WorldLogicSystem : IGameSystem
         Debug.Log("LoadWorld");
         foreach(var sceneConfig in config.SceneConfigs)
         {
+            Debug.Log("LoadScene");
             SceneManager.LoadScene(sceneConfig.Name, sceneConfig.LoadSceneMode);
         }
     }

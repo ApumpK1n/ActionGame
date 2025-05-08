@@ -74,10 +74,11 @@ public class GamePlayInput : MonoBehaviour
 
     public void OnSkill1ClickEvent(InputAction.CallbackContext context)
     {
+        Debug.Log("OnSkill1ClickEvent");
         if (context.started)
         {
             SkillCommand command = new SkillCommand();
-            command.SkillSlot = 1;
+            command.SkillSlot = 0;
 
             commandInvoker.AddCommand(command);
         }

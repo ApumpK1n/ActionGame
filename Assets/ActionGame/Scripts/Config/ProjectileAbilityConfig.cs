@@ -3,8 +3,8 @@
 using CombatAbilitySystem;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CombatAbilitySystem")]
+[CreateAssetMenu(menuName = "CombatAbilitySystem/ProjectileAbilityConfig")]
 public class ProjectileAbilityConfig : AbilityConfig
 {
-    [SerializeField] protected Projectile projectile;
+    public Projectile ProjectilePrefab;
 }

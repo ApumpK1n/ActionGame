@@ -22,6 +22,13 @@ public class GameSystemStack
                 system.Setup();
     }
 
+    public void Dispose()
+    {
+        foreach (var system in stack)
+            system.Dispose();
+        stack.Clear();
+    }
+
     public void Start()
     {
         foreach (var system in stack)

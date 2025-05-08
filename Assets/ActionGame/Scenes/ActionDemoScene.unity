@@ -1764,6 +1764,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 5a47376d-81ab-42b5-a2b4-c2ba7ab8c5f4
     m_ActionName: GamePlay/Accelerate[/Keyboard/shift]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 817844559}
+        m_TargetAssemblyTypeName: GamePlayInput, Assembly-CSharp
+        m_MethodName: OnSkill1ClickEvent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 8081d844-f977-41e1-9e2b-e4d528c3bc99
+    m_ActionName: GamePlay/Skill1[/Keyboard/1]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: GamePlay

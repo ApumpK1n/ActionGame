@@ -23,6 +23,12 @@ namespace CombatAbilitySystem
 
         public bool IsActive = false;
 
+        public GameObject MonoGameObject { get; private set; }
+
+        public AbilitySystemComponent(GameObject go)
+        {
+            this.MonoGameObject = go;
+        }
 
         public bool IsValid()
         {
@@ -49,7 +55,7 @@ namespace CombatAbilitySystem
         /// <returns></returns>
         public T GrantAbility<T>(AbilityConfig abilityConfig) where T : AbilityComponent, new()
         {
-            AbilityComponent ability = AbilityComponent.Create<T>(abilityConfig);
+            AbilityComponent ability = AbilityComponent.Create<T>(abilityConfig, this);
             grantedAbilities[abilityConfig.Id] = ability;
 
             return (T)ability;

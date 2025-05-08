@@ -35,6 +35,11 @@ public class Game : DestroyableSingleton<Game>
     {
         gameSystemStack.Tick(Time.deltaTime * Time.timeScale);
     }
+
+    private void OnDestroy()
+    {
+        
+    }
     #endregion
     private void SetupSystems()
     {

@@ -161,7 +161,7 @@ public class Player : MonoBehaviour, ICharacterView
 
     private void CreateCombatAbilitySystem()
     {
-        abilitySystemComponent = new AbilitySystemComponent();
+        abilitySystemComponent = new AbilitySystemComponent(this.gameObject);
 
         GrandAbilities();
     }
@@ -594,6 +594,7 @@ public class Player : MonoBehaviour, ICharacterView
 
     public void PerformSkill(int skillSlot)
     {
+        Debug.Log("PerformSkill:" + skillSlot);
         AbilityConfig abilityConfig = skillSlots[skillSlot];
         abilitySystemComponent.TryActivateAbility(abilityConfig.Id);
     }
