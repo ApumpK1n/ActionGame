@@ -12,23 +12,28 @@ namespace CombatAbilitySystem
         public AbilityConfig Config { get; private set; }
         public AbilitySystemComponent Owner { get; private set; }
 
+        private float castPointTimer = 0f;
+        public bool IsActive { get; private set; }
+
         public void Tick(float dt)
         {
-
+            if (IsActive)
+            {
+                castPointTimer += dt;
+            }
         }
 
         /// <summary>
         /// 尝试激活技能
         /// </summary>
-        public void TryActivate()
+        public IEnumerator TryActivate()
         {
             if (!CanActivateAbility())
             {
                 EndAbility();
-                return;
+                yield break;
             }
-
-            ActivateAbility();
+            yield return ActivateAbility();
         }
 
         public bool CanActivateAbility()
@@ -36,31 +41,39 @@ namespace CombatAbilitySystem
             return true;
         }
 
-        private void ActivateAbility()
+        private IEnumerator ActivateAbility()
         {
-            //TODO: 定时任务委托给能力执行体执行
-            //TODO: 抬手时间
-            PreActivate();
-            Activate();
-            ApplyEffects();
+            IsActive = true;
+            castPointTimer = 0f;
+            yield return CastPoint(); // 抬手
+            yield return PreActivate(); // 预激活
+            yield return Activate(); // 激活
             EndAbility();
+        }
+
+        // 抬手
+        private IEnumerator CastPoint()
+        {
+            if (Config.CastPoint <= 0) yield break;
+            if (castPointTimer <= Config.CastPoint) yield return null;
         }
 
         /// <summary>
         /// 应用效果
         /// </summary>
-        private void ApplyEffects()
+        public void ApplyEffects()
         {
 
         }
 
         public void EndAbility()
         {
+            IsActive = false;
             OnEndAbility();
         }
 
-        protected abstract void PreActivate();
-        protected abstract void Activate();
+        protected abstract IEnumerator PreActivate();
+        protected abstract IEnumerator Activate();
 
         protected abstract void OnEndAbility();
 

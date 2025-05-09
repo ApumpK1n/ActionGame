@@ -91,7 +91,7 @@ namespace CombatAbilitySystem
             if (!grantedAbilities.ContainsKey(abilityId)) return false;
 
             AbilityComponent abilityComponent = grantedAbilities[abilityId];
-            abilityComponent.TryActivate();
+            AdvancedCoroutineManager.Instance.StartCoroutineEx(abilityComponent.TryActivate());
             return true;
         }
     }

@@ -38,7 +38,8 @@ public class Game : DestroyableSingleton<Game>
 
     private void OnDestroy()
     {
-        
+        gameSystemStack.Dispose();
+        gameSystemStack = null;
     }
     #endregion
     private void SetupSystems()

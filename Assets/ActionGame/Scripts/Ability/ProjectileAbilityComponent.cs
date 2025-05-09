@@ -2,6 +2,7 @@
 
 using CombatAbilitySystem;
 using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// 发射弹体类的技能
@@ -13,16 +14,17 @@ public class ProjectileAbilityComponent : AbilityComponent
         
     }
 
-    protected override void PreActivate()
+    protected override IEnumerator PreActivate()
     {
-
+        yield return null;
     }
 
-    protected override void Activate()
+    protected override IEnumerator Activate()
     {
         ProjectileAbilityConfig config = (ProjectileAbilityConfig)Config;
         Projectile projectile = GameObject.Instantiate(config.ProjectilePrefab, this.Owner.MonoGameObject.transform.position, config.ProjectilePrefab.transform.rotation);
         projectile.AddForce(this.Owner.MonoGameObject.transform.forward);
+        yield return null;
     }
 
     protected override void OnEndAbility()
