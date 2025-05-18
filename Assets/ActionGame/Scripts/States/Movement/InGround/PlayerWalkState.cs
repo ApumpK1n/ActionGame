@@ -10,7 +10,15 @@ internal class PlayerWalkState : PlayerInGroundState
 
     public override void OnEnter()
     {
-        blackboard.Player.PlayAnimation(PlayerAnimationLayer.Base, AnimationType.BaseMove, blackboard.CharacterConfig.WalkMoveSpeed);
+        if (blackboard.Player != null)
+        {
+            blackboard.Player.PlayAnimation(PlayerAnimationLayer.Base, AnimationType.BaseMove, blackboard.CharacterConfig.WalkMoveSpeed);
+        }
+
+        if (blackboard.CharacterView != null)
+        {
+            blackboard.CharacterView.PlayAnimation(PlayerAnimationLayer.Base, AnimationType.BaseMove, blackboard.CharacterConfig.WalkMoveSpeed);
+        }
     }
     //public override void OnLogic() { }
     //public override void OnExit() { }

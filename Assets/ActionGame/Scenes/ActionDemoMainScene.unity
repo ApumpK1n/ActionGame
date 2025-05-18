@@ -3132,6 +3132,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerReborn: {fileID: 1704136840}
+  debugPlayerCombatAnimator: {fileID: 791601773}
+  debugPlayerMovementAnimator: {fileID: 32920441}
 --- !u!1 &1957862255
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,6 +8,14 @@ public class PlayerIdleState : PlayerInGroundState
 
     public override void OnEnter()
     {
-        blackboard.Player.PlayAnimation(PlayerAnimationLayer.Base, AnimationType.Idle, 1f);
+        if (blackboard.Player != null)
+        {
+            blackboard.Player.PlayAnimation(PlayerAnimationLayer.Base, AnimationType.Idle, 1f);
+        }
+
+        if (blackboard.CharacterView != null)
+        {
+            blackboard.CharacterView.PlayAnimation(PlayerAnimationLayer.Base, AnimationType.Idle, 1f);
+        }
     }
 }

@@ -588,5 +588,18 @@ public class CharacterView : MonoBehaviour, ICharacterView
         transform.localScale = Vector3.one;
     }
 
+    public void OnAddToSceneView(SceneViewLogic sceneViewLogic)
+    {
+        DebugCombatAnimator = sceneViewLogic.DebugPlayerCombatAnimator;
+        DebugMovementAnimator = sceneViewLogic.DebugPlayerMovementAnimator;
+    }
+
+    public void OnSetup()
+    {
+        CreateHFSM();
+        CreateCombatAbilitySystem();
+        isReady = true;
+    }
+
     #endregion
 }

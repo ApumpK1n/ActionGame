@@ -16,7 +16,14 @@ internal class PlayerJumpState : PlayerInSkyState
     public override void OnEnter()
     {
         blackboard.DownInSkyTime = 0f;
-        animancerState = blackboard.Player.PlayAnimation(PlayerAnimationLayer.LowerBody, AnimationType.Jump, 1f);
+        if (blackboard.Player != null)
+        {
+            animancerState = blackboard.Player.PlayAnimation(PlayerAnimationLayer.LowerBody, AnimationType.Jump, 1f);
+        }
+        if (blackboard.CharacterView != null)
+        {
+            animancerState = blackboard.CharacterView.PlayAnimation(PlayerAnimationLayer.LowerBody, AnimationType.Jump, 1f);
+        }
         animancerState.Time = 0f;
         animancerState.SetWeight(1f);
         animancerState.NormalizedEndTime = 0.7f;
@@ -27,6 +34,14 @@ internal class PlayerJumpState : PlayerInSkyState
     {
         animancerState.Events.OnEnd = null;
         animancerState.SetWeight(0f);
-        blackboard.Player.RequestMovementStateChange(MovementStates.InGround);
+        
+        if (blackboard.Player != null)
+        {
+            blackboard.Player.RequestMovementStateChange(MovementStates.InGround);
+        }
+        if (blackboard.CharacterView != null)
+        {
+            blackboard.CharacterView.RequestMovementStateChange(MovementStates.InGround);
+        }
     }
 }

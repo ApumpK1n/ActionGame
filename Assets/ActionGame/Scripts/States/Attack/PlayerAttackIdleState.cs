@@ -9,6 +9,13 @@ internal class PlayerAttackIdleState : PlayerAttackState
     public override void OnEnter()
     {
         blackboard.IsPlayingWeaponAnimation = true;
-        blackboard.Player.StopAnimation(PlayerAnimationLayer.HandAttack);
+        if (blackboard.Player != null)
+        {
+            blackboard.Player.StopAnimation(PlayerAnimationLayer.HandAttack);
+        }
+        if (blackboard.CharacterView != null)
+        {
+            blackboard.CharacterView.StopAnimation(PlayerAnimationLayer.HandAttack);
+        }
     }
 }

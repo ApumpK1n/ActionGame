@@ -167,6 +167,8 @@ public class GameDirector
             if (sceneViewLogic != null)
             {
                 sceneViewLogic.AddPlayerTo(player);
+
+                player.OnSetup();
             }
         }
     }

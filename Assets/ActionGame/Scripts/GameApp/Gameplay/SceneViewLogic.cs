@@ -14,16 +14,22 @@ public class SceneViewLogic : MonoBehaviour
     /// </summary>
     [SerializeField] private Transform PlayerReborn;
 
+    [SerializeField] private Animator debugPlayerCombatAnimator;
+    [SerializeField] private Animator debugPlayerMovementAnimator;
+
+    public Animator DebugPlayerCombatAnimator { get { return debugPlayerCombatAnimator; } }
+    public Animator DebugPlayerMovementAnimator { get { return debugPlayerMovementAnimator; } }
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     /// <summary>
@@ -33,5 +39,6 @@ public class SceneViewLogic : MonoBehaviour
     public void AddPlayerTo(ICharacterView characterView)
     {
         characterView.AddCharacterParent(PlayerReborn);
+        characterView.OnAddToSceneView(this);
     }
 }

@@ -11,7 +11,15 @@ internal class PlayerAttackR1State : PlayerAttackState
     public override void OnEnter()
     {
         blackboard.IsPlayingWeaponAnimation = true;
-        animancerState = blackboard.Player.PlayAnimation(PlayerAnimationLayer.HandAttack, AnimationType.R1Attack, 1f);
+        //animancerState = blackboard.Player.PlayAnimation(PlayerAnimationLayer.HandAttack, AnimationType.R1Attack, 1f);
+        if (blackboard.Player != null)
+        {
+            animancerState = blackboard.Player.PlayAnimation(PlayerAnimationLayer.HandAttack, AnimationType.R1Attack, 1f);
+        }
+        if (blackboard.CharacterView != null)
+        {
+            animancerState = blackboard.CharacterView.PlayAnimation(PlayerAnimationLayer.HandAttack, AnimationType.R1Attack, 1f);
+        }
         animancerState.SetWeight(1f);
         animancerState.Events.NormalizedEndTime = 0.6f;
         animancerState.Events.OnEnd = OnEnd;

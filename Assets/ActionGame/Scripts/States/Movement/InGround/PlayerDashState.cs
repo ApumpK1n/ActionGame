@@ -10,7 +10,14 @@ internal class PlayerDashState : PlayerInGroundState
 
     public override void OnEnter()
     {
-        blackboard.Player.PlayAnimation(PlayerAnimationLayer.Base, AnimationType.BaseMove, blackboard.CharacterConfig.DashMoveSpeed);
+        if (blackboard.Player != null)
+        {
+            blackboard.Player.PlayAnimation(PlayerAnimationLayer.Base, AnimationType.BaseMove, blackboard.CharacterConfig.DashMoveSpeed);
+        }
+        if (blackboard.CharacterView != null)
+        {
+            blackboard.CharacterView.PlayAnimation(PlayerAnimationLayer.Base, AnimationType.BaseMove, blackboard.CharacterConfig.DashMoveSpeed);
+        }
     }
 
 }
