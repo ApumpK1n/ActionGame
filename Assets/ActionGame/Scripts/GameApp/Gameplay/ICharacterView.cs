@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ICharacterView
 {
-    
+    void AddCharacterParent(Transform parent);
 }

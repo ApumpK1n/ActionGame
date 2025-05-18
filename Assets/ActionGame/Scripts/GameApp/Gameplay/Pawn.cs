@@ -13,9 +13,9 @@ public class Pawn : Actor
 
     public void PossessedBy(PlayerController playerController)
     {
-        if (m_PlayerController == null)
+        if (playerController == null)
         {
-            throw new ArgumentNullException(nameof(m_PlayerController));
+            throw new ArgumentNullException(nameof(playerController));
         }
 
         m_PlayerController = playerController;

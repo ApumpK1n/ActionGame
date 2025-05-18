@@ -1,32 +1,13 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using Animancer;
 using Animancer.Units;
-using UniRx;
+using CombatAbilitySystem;
 using UnityEngine;
 using UnityHFSM;
-using System;
 using UnityHFSM.Visualization;
-using CombatAbilitySystem;
 
-/*
-  HFSM
-- Root (根状态) 移动和战斗并行
-  - Movement (移动层)
-    - 地上移动 （子状态互斥）
-        - Idle (待机)
-        - Walk (走）
-        - Dash (跑)
-    - 空中移动 （子状态互斥）
-        - 跳
-        - 坠落
-  - Combat (战斗层)
-    - NormalAttack (普通攻击)
-    - SkillAttack (技能攻击)
-  - 其他全局状态（如受伤、死亡）
- 
- */
-public class Player : MonoBehaviour
+public class CharacterView : MonoBehaviour, ICharacterView
 {
     public Rigidbody Rigidbody;
 
@@ -109,7 +90,7 @@ public class Player : MonoBehaviour
         ApplyAnimatorIK = true;
 
         blackboard = new PlayerStatesBlackboard();
-        blackboard.Player = this;
+        blackboard.CharacterView = this;
         blackboard.CharacterConfig = config;
 
         animationComponent.Animancer.Layers[PlayerAnimationLayer.Base].SetMask(totalAvatarMask);
@@ -269,9 +250,9 @@ public class Player : MonoBehaviour
     #endregion
 
 
-    public AnimancerState PlayAnimation(int layer, AnimationType animationType, float speed, FadeMode fadeMode=default, Action<AnimancerState> onEnd=null)
+    public AnimancerState PlayAnimation(int layer, AnimationType animationType, float speed, FadeMode fadeMode = default, Action<AnimancerState> onEnd = null)
     {
-         return animationComponent.Play(layer, animationType, speed, fadeMode, onEnd);
+        return animationComponent.Play(layer, animationType, speed, fadeMode, onEnd);
     }
 
     public void StopAnimation(int layer)
@@ -400,12 +381,12 @@ public class Player : MonoBehaviour
                         //transform.forward = blackboard.TargetForward;
                         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(blackboard.TargetForward), config.MoveTurnSpeed);
                     }
- 
+
                     Rigidbody.MovePosition(Rigidbody.position + animationComponent.Animancer.Animator.deltaPosition);
                     break;
             }
         }
-        
+
 
         //Rigidbody.MoveRotation(Rigidbody.rotation * animationComponent.Animancer.Animator.deltaRotation);
     }
@@ -425,7 +406,7 @@ public class Player : MonoBehaviour
             Gizmos.DrawSphere(IKFootRoot.transform.position, groundCheckRadius);
 
         }
- 
+
     }
 
     #region IK
@@ -566,7 +547,7 @@ public class Player : MonoBehaviour
     #region Ability
     public void GrandAbilities()
     {
-        foreach(AbilityConfig abilityConfig in skillSlots)
+        foreach (AbilityConfig abilityConfig in skillSlots)
         {
             if (!abilitySystemComponent.IsGrantedAbility(abilityConfig.Id))
             {
@@ -598,92 +579,14 @@ public class Player : MonoBehaviour
         AbilityConfig abilityConfig = skillSlots[skillSlot];
         abilitySystemComponent.TryActivateAbility(abilityConfig.Id);
     }
+
+    public void AddCharacterParent(Transform parent)
+    {
+        transform.parent = parent;
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        transform.localScale = Vector3.one;
+    }
+
     #endregion
-}
-
-
-public enum PlayerStates
-{
-    Movement,
-    Combat,
-    Death,
-}
-
-public enum MovementStates
-{
-    InGround,
-    InSky,
-}
-
-public enum InGroundStates
-{
-    Idle,
-    Walk,
-    Dash,
-}
-
-public enum InSkyStates
-{
-    Idle,
-    Jump,
-    Down,
-}
-
-public enum CombatStates
-{
-    Unarmed,    //徒手
-    Weaponed,   //装备
-}
-
-public enum WeaponStates
-{
-    Idle,
-    L1,
-    R1,
-    L1R1,
-}
-
-
-public enum IdleStates
-{
-    BASE,
-}
-
-enum Events
-{
-    ON_DAMAGE,
-    ON_WIN,
-}
-
-public enum WeaponEvents
-{
-    L1,
-    R1,
-    L1R1,
-}
-
-public static class PlayerAnimationLayer
-{
-    public static int Base = 0;
-    public static int LowerBody = 1;
-    public static int HandAttack = 2;
-}
-
-public class PlayerStatesBlackboard
-{
-    public CharacterView CharacterView { get; set; }
-
-    public Player Player { get; set; }
-    public CharacterConfig CharacterConfig { get; set; }
-    public bool IsAccelerate { get; set; }
-    public Vector2 MoveInput { get; set; }
-    public Vector3 TargetForward { get; set; }
-    public bool IsLeftClick { get; set; }
-    public bool IsRightClick { get; set; }
-    public float BaseSpeed = 0f;
-    public float ExtralSpeed = 0f;
-    public float MoveSpeed => BaseSpeed + ExtralSpeed;
-    public bool IsPlayingWeaponAnimation = false;
-    public float DownDistance = 0f;
-    public float DownInSkyTime = 0f; // 离地时间 每次跳跃重置
 }

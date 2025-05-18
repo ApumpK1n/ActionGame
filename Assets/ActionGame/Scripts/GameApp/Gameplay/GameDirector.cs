@@ -139,7 +139,7 @@ public class GameDirector
     /// </summary>
     private void OnStartLevelLoaded(string levelName, bool success)
     {
-        if(string.IsNullOrEmpty(levelName) || m_StartSceneConfig.name != levelName)
+        if(string.IsNullOrEmpty(levelName) || m_StartSceneConfig.Name != levelName)
         {
             // 加载的不对，不处理
             return;
@@ -153,11 +153,22 @@ public class GameDirector
         // 加载成功之后的处理，这里主要是创角，然后加入场景中显示
 
         GameObject playerObject = GameObject.Instantiate(m_PlayerPrefab, Vector3.zero, Quaternion.identity);
-        Player player = playerObject.GetComponent<Player>();
+        CharacterView player = playerObject.GetComponent<CharacterView>();
         //player.Setup(this);
 
         Character character = m_PlayerController.SpawnCharacter();
         character.BindCharacterView(player);
+
+        // 获取表现层角色节点
+        GameObject levelNode = GameObject.Find("LevelNode");
+        if (levelNode != null)
+        {
+            SceneViewLogic sceneViewLogic = levelNode.GetComponent<SceneViewLogic>();
+            if (sceneViewLogic != null)
+            {
+                sceneViewLogic.AddPlayerTo(player);
+            }
+        }
     }
 
     // ********************************************************************************************************

@@ -92,7 +92,7 @@ public class World
     {
         PlayerController playerController = new PlayerController();
 
-        
+        m_CurrentLevel.AddActorToLevel(playerController);
 
         return playerController;
     }

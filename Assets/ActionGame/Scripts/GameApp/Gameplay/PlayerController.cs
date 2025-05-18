@@ -12,7 +12,8 @@ public class PlayerController : ControllerBase
     // 相机管理
 
     public PlayerController() : base()
-    { }
+    {
+    }
 
 
     public Character SpawnCharacter()
