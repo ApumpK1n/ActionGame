@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace CombatAbilitySystem
 {
-    public class AbilitySystemComponent : ITick
+    public class AbilitySystemComponent : ITick, ILateTick
     {
         private Dictionary<int, AbilityComponent> grantedAbilities = new Dictionary<int, AbilityComponent>();
 
@@ -37,14 +37,17 @@ namespace CombatAbilitySystem
 
         public void Tick(float deltaTime)
         {
-            TickAbilities(deltaTime);
+            foreach (AbilityComponent ability in grantedAbilities.Values)
+            {
+                ability.Tick(deltaTime);
+            }
         }
 
-        private void TickAbilities(float dt)
+        public void LateTick(float deltaTime)
         {
-            foreach(AbilityComponent ability in grantedAbilities.Values)
+            foreach (AbilityComponent ability in grantedAbilities.Values)
             {
-                ability.Tick(dt);
+                ability.LateTick(deltaTime);
             }
         }
 
@@ -92,6 +95,12 @@ namespace CombatAbilitySystem
 
             AbilityComponent abilityComponent = grantedAbilities[abilityId];
             AdvancedCoroutineManager.Instance.StartCoroutineEx(abilityComponent.TryActivate());
+            return true;
+        }
+
+        public bool TryApplyGameEffect(AbilityConfig abilityConfig)
+        {
+
             return true;
         }
     }

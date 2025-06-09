@@ -14,10 +14,6 @@ public class ProjectileAbilityComponent : AbilityComponent
         
     }
 
-    protected override IEnumerator PreActivate()
-    {
-        yield return null;
-    }
 
     protected override IEnumerator Activate()
     {

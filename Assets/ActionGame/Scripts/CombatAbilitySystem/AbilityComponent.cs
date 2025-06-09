@@ -7,7 +7,7 @@ namespace CombatAbilitySystem
     /// <summary>
     /// 单个技能的逻辑
     /// </summary>
-    public abstract class AbilityComponent : ITick
+    public abstract class AbilityComponent : ITick, ILateTick
     {
         public AbilityConfig Config { get; private set; }
         public AbilitySystemComponent Owner { get; private set; }
@@ -21,6 +21,11 @@ namespace CombatAbilitySystem
             {
                 castPointTimer += dt;
             }
+        }
+
+        public void LateTick(float dt)
+        {
+            
         }
 
         /// <summary>
@@ -46,7 +51,6 @@ namespace CombatAbilitySystem
             IsActive = true;
             castPointTimer = 0f;
             yield return CastPoint(); // 抬手
-            yield return PreActivate(); // 预激活
             yield return Activate(); // 激活
             EndAbility();
         }
@@ -72,7 +76,6 @@ namespace CombatAbilitySystem
             OnEndAbility();
         }
 
-        protected abstract IEnumerator PreActivate();
         protected abstract IEnumerator Activate();
 
         protected abstract void OnEndAbility();
