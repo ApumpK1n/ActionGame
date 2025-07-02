@@ -13,6 +13,8 @@ namespace CombatAbilitySystem
         public float TotalDuration;
         public float RemainingDuration;
 
+        public float Level { get; private set; }
+
         public EffectExecutor(EffectConfig config)
         {
             this.EffectConfig = config;

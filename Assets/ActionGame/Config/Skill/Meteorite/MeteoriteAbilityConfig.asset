@@ -16,7 +16,8 @@ MonoBehaviour:
   Description: "\u53EC\u5524\u4E00\u4E2A\u9668\u77F3\uFF0C\u9020\u6210\u8303\u56F4\u4F24\u5BB3"
   Cooldown: 10
   CastPoint: 1
-  Effects: []
+  Effects:
+  - {fileID: 11400000, guid: 13f61017dd18c124bb63bd61d89a9297, type: 2}
   AreaType: 0
   RadiusX: 0
   RadiusY: 0

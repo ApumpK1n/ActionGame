@@ -5,7 +5,7 @@ using UnityEngine;
 namespace CombatAbilitySystem
 {
 
-    [CreateAssetMenu(menuName = "CombatAbilitySystem/AreaDamageAbilityConfig")]
+    [CreateAssetMenu(menuName = "CombatAbilitySystem/Ability/AreaDamageAbilityConfig")]
     public class AreaDamageAbilityConfig : AbilityConfig
     {
         [Header("范围类型")]public AreaType AreaType;

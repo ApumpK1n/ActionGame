@@ -7,10 +7,16 @@ namespace CombatAbilitySystem
     /// <summary>
     /// 效果配置
     /// </summary>
+    [CreateAssetMenu(menuName = "CombatAbilitySystem/Effect/EffectConfig")]
     public class EffectConfig : ScriptableObject
     {
-        [Header("Id")] public int Id;
-        [Header("描述")] public string Description;
+        public DurationType DurationType;
+
+        // 间隔
+        public ModifierMagnitudeBaseConfig DurationModifier;
+        public float BaseDuration;
+
+        public EffectModifier[] Modifiers;
     }
 }
 
