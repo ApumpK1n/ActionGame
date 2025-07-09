@@ -161,7 +161,7 @@ public class Player : MonoBehaviour
 
     private void CreateCombatAbilitySystem()
     {
-        abilitySystemComponent = new AbilitySystemComponent(this.gameObject);
+        abilitySystemComponent = new AbilitySystemComponent(this.gameObject, 10);
 
         GrandAbilities();
     }

@@ -19,15 +19,21 @@ namespace CombatAbilitySystem
 {
     public class AbilitySystemComponent : ITick, ILateTick
     {
-        private Dictionary<int, AbilityComponent> grantedAbilities = new Dictionary<int, AbilityComponent>();
+        private Dictionary<int, AbilityComponent> grantedAbilities;
+        private AttributeSet attributeSet;
 
         public bool IsActive = false;
 
         public GameObject MonoGameObject { get; private set; }
 
-        public AbilitySystemComponent(GameObject go)
+        private List<EffectExecutor> effectExecutorDurationList;
+
+        public AbilitySystemComponent(GameObject go, int attributeCapacity)
         {
             this.MonoGameObject = go;
+            attributeSet = new AttributeSet(attributeCapacity);
+            grantedAbilities = new Dictionary<int, AbilityComponent>();
+            effectExecutorDurationList = new List<EffectExecutor>();
         }
 
         public bool IsValid()
@@ -41,6 +47,9 @@ namespace CombatAbilitySystem
             {
                 ability.Tick(deltaTime);
             }
+
+            TickDurationEffects(deltaTime);
+            TryRemoveDurationEffects();
         }
 
         public void LateTick(float deltaTime)
@@ -84,6 +93,11 @@ namespace CombatAbilitySystem
             return false;
         }
 
+        public void InitAttributes(List<AttributeConfig> attributeConfigs)
+        {
+
+        }
+
         /// <summary>
         /// 施法
         /// </summary>
@@ -98,10 +112,67 @@ namespace CombatAbilitySystem
             return true;
         }
 
-        public bool TryApplyGameEffect(AbilityConfig abilityConfig)
+        /// <summary>
+        /// 施加效果
+        /// </summary>
+        /// <param name="effectExecutor"></param>
+        /// <returns></returns>
+        public bool TryApplyGameEffect(EffectExecutor effectExecutor)
         {
+            if (effectExecutor == null) return false;
+
+            switch (effectExecutor.EffectConfig.DurationType)
+            {
+                case DurationType.HasDuration:
+                case DurationType.Infinite:
+                    ApplyDurationalGameplayEffect(effectExecutor);
+                    break;
+                case DurationType.Instant:
+                    ApplyInstantGameplayEffect(effectExecutor);
+                    return true;
+            }
 
             return true;
+        }
+
+        void ApplyInstantGameplayEffect(EffectExecutor effectExecutor)
+        {
+            for (var i = 0; i < effectExecutor.EffectConfig.Modifiers.Length; i++)
+            {
+                var modifier = effectExecutor.EffectConfig.Modifiers[i];
+                var magnitude = modifier.ModifierMagnitude.CalculateMagnitude(effectExecutor) * modifier.BaseValue;
+                this.attributeSet.SetAttributeBaseValueModify(modifier, magnitude);
+            }
+        }
+
+        void ApplyDurationalGameplayEffect(EffectExecutor effectExecutor)
+        {
+            effectExecutorDurationList.Add(effectExecutor);
+        }
+
+        void TickDurationEffects(float deltaTime)
+        {
+            for(int i=0; i<effectExecutorDurationList.Count; i++)
+            {
+                var effect = effectExecutorDurationList[i];
+                effect.Tick(deltaTime);
+                if (effect.CanPeriodTick)
+                {
+                    ApplyInstantGameplayEffect(effect);
+                }
+            }
+        }
+
+        void TryRemoveDurationEffects()
+        {
+            for (int i = 0; i < effectExecutorDurationList.Count; i++)
+            {
+                var effect = effectExecutorDurationList[i];
+                if (effect.IsEnd)
+                {
+                    effectExecutorDurationList.RemoveAt(i);
+                }
+            }
         }
     }
 }

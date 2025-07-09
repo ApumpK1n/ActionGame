@@ -12,11 +12,22 @@ namespace CombatAbilitySystem
     {
         public DurationType DurationType;
 
-        // 间隔
+        // 间隔变化
         public ModifierMagnitudeBaseConfig DurationModifier;
         public float BaseDuration;
 
         public EffectModifier[] Modifiers;
+
+        public EffectTickPeriod TickPeriod;
+    }
+
+    [Serializable]
+    public struct EffectTickPeriod
+    {
+        // Tick间隔
+        public float Period;
+        // 是否在创建时Tick
+        public bool ExecuteOnFirstTick;
     }
 }
 
