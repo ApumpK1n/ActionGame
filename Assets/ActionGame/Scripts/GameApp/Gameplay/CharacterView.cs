@@ -74,6 +74,7 @@ public class CharacterView : MonoBehaviour, ICharacterView
     private AbilitySystemComponent abilitySystemComponent;
 
     [SerializeField, Header("技能槽")] private List<AbilityConfig> skillSlots;
+    [SerializeField] private List<AttributeConfig> attributeConfigs;
 
     #region Unity
     private void Awake()
@@ -145,6 +146,7 @@ public class CharacterView : MonoBehaviour, ICharacterView
         abilitySystemComponent = new AbilitySystemComponent(this.gameObject, 10);
 
         GrandAbilities();
+        InitAttributes();
     }
 
     private void CreateHFSM()
@@ -554,6 +556,11 @@ public class CharacterView : MonoBehaviour, ICharacterView
                 GrandAbility(abilityConfig);
             }
         }
+    }
+
+    private void InitAttributes()
+    {
+        abilitySystemComponent.InitAttributes(attributeConfigs);
     }
 
     private AbilityComponent GrandAbility(AbilityConfig abilityConfig)

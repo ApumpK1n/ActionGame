@@ -95,6 +95,10 @@ namespace CombatAbilitySystem
 
         public void InitAttributes(List<AttributeConfig> attributeConfigs)
         {
+            foreach (AttributeConfig attributeConfig in attributeConfigs)
+            {
+                attributeSet.AddAttribute(attributeConfig);
+            }
 
         }
 

@@ -15,6 +15,16 @@ namespace CombatAbilitySystem
             attributeCache = new Dictionary<AttributeConfig, AttributeValue>(capacity);
         }
 
+        public void AddAttribute(AttributeConfig attribute)
+        {
+            if (attributeCache.ContainsKey(attribute))
+            {
+                return;
+            }
+            AttributeValue value = new AttributeValue();
+            attributeCache.Add(attribute, value);
+        }
+
         public bool GetAttributeValue(AttributeConfig attribute, out AttributeValue value)
         {
             // We use a cache to store the index of the attribute in the list, so we don't
