@@ -917,6 +917,10 @@ MonoBehaviour:
   totalAvatarMask: {fileID: 31900000, guid: 20e75bcd2d54a784d9d3b4a4022add16, type: 2}
   skillSlots:
   - {fileID: 11400000, guid: e0407342f6cf176439d04cecbfd1d8eb, type: 2}
+  - {fileID: 11400000, guid: c868919f533c2344fa4e900f8104b240, type: 2}
+  attributeConfigs:
+  - {fileID: 11400000, guid: e595e549e9fffd34cb2f4ed9527a7345, type: 2}
+  - {fileID: 11400000, guid: 37415267cb198ee48a23b6bec551d029, type: 2}
 --- !u!54 &7102570957812199574
 Rigidbody:
   m_ObjectHideFlags: 0

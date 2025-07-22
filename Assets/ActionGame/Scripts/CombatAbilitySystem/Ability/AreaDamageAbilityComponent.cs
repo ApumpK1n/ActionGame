@@ -19,7 +19,8 @@ namespace CombatAbilitySystem
         protected override IEnumerator Activate()
         {
             AreaDamageAbilityConfig config = (AreaDamageAbilityConfig)Config;
-
+            GameObject areaDamageObject = GameObject.Instantiate(config.Prefab);
+            areaDamageObject.transform.position = Owner.MonoGameObject.transform.position + Owner.MonoGameObject.transform.forward * 5;
             yield return null;
         }
 

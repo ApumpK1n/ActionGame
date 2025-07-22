@@ -10,13 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 28fc629fac533b740a7af1a556bf7421, type: 3}
-  m_Name: DamageConfig
+  m_Name: FireBuffConfig
   m_EditorClassIdentifier: 
-  DurationType: 0
-  DurationModifier: {fileID: 11400000, guid: 8d61c44c01028184cbc14d2b13a9b847, type: 2}
-  BaseDuration: 5
   Modifiers:
-  - Attribute: {fileID: 11400000, guid: 37415267cb198ee48a23b6bec551d029, type: 2}
+  - Attribute: {fileID: 11400000, guid: e595e549e9fffd34cb2f4ed9527a7345, type: 2}
     ModifierOperation: 0
-    BaseValue: -100
+    BaseValue: 1
     ModifierMagnitude: {fileID: 11400000, guid: 8d61c44c01028184cbc14d2b13a9b847, type: 2}
+  DurationType: 0
+  DurationModifier: {fileID: 0}
+  BaseDuration: 0
+  TickPeriod:
+    Period: 0
+    ExecuteOnFirstTick: 0

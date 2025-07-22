@@ -3,8 +3,8 @@ namespace CombatAbilitySystem
 {
     public enum DurationType
     {
-        Instant,
-        Infinite,
-        HasDuration,
+        Instant,        //即时
+        Infinite,       //无限
+        HasDuration,    //有间隔
     }
 }

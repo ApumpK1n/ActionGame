@@ -13,13 +13,11 @@ MonoBehaviour:
   m_Name: MeteoriteAbilityConfig
   m_EditorClassIdentifier: 
   Id: 2001
-  Description: "\u53EC\u5524\u4E00\u4E2A\u9668\u77F3\uFF0C\u9020\u6210\u8303\u56F4\u4F24\u5BB3"
+  Description: "\u53EC\u5524\u4E00\u4E2A\u9668\u77F3\uFF0C\u9020\u6210\u8303\u56F4\u4F24\u5BB3\uFF0C\u6DFB\u52A0\u706B\u72B6\u6001\uFF0C\u5E76\u5BF9\u547D\u4E2D\u76EE\u6807\u9020\u6210\u6301\u7EED\u6027\u4F24\u5BB3"
   Cooldown: 10
   CastPoint: 1
   Effects:
   - {fileID: 11400000, guid: 13f61017dd18c124bb63bd61d89a9297, type: 2}
-  AreaType: 0
-  RadiusX: 0
-  RadiusY: 0
-  Prefab: {fileID: 0}
-  BaseDamage: 0
+  - {fileID: 11400000, guid: 6494952771aaf20478993b4629aec638, type: 2}
+  - {fileID: 11400000, guid: 91932bfa08308f346ad071f993fcfc41, type: 2}
+  Prefab: {fileID: 6022013388690241943, guid: f9c553057c0ed3747bcf9538fe546809, type: 3}

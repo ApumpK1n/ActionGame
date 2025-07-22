@@ -589,6 +589,9 @@ public class Player : MonoBehaviour
             case ProjectileAbilityConfig:
                 abilityComponent = abilitySystemComponent.GrantAbility<ProjectileAbilityComponent>(abilityConfig);
                 break;
+            case AreaDamageAbilityConfig:
+                abilityComponent = abilitySystemComponent.GrantAbility<AreaDamageAbilityComponent>(abilityConfig);
+                break;
             default:
                 Debug.LogError($"GrandAbility Error Id:{abilityConfig.Id}, Type:{abilityConfig.GetType()}");
                 break;

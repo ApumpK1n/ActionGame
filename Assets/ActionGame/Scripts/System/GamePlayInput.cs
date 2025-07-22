@@ -77,10 +77,40 @@ public class GamePlayInput : MonoBehaviour
         Debug.Log("OnSkill1ClickEvent");
         if (context.started)
         {
-            SkillCommand command = new SkillCommand();
-            command.SkillSlot = 0;
-
-            commandInvoker.AddCommand(command);
+            SendSkillCommand(0);
         }
+    }
+
+    public void OnSkill2ClickEvent(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            SendSkillCommand(1);
+        }
+    }
+
+    public void OnSkill3ClickEvent(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            SendSkillCommand(2);
+        }
+    }
+
+    public void OnSkill4ClickEvent(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            SendSkillCommand(3);
+        }
+    }
+
+
+    private void SendSkillCommand(int skillSlot)
+    {
+        SkillCommand command = new SkillCommand();
+        command.SkillSlot = skillSlot;
+
+        commandInvoker.AddCommand(command);
     }
 }

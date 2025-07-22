@@ -1780,6 +1780,54 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 8081d844-f977-41e1-9e2b-e4d528c3bc99
     m_ActionName: GamePlay/Skill1[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 817844559}
+        m_TargetAssemblyTypeName: GamePlayInput, Assembly-CSharp
+        m_MethodName: OnSkill2ClickEvent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 9b2596db-2485-4d2c-9384-751b0dc837e6
+    m_ActionName: GamePlay/Skill2[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 817844559}
+        m_TargetAssemblyTypeName: GamePlayInput, Assembly-CSharp
+        m_MethodName: OnSkill3ClickEvent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 6619f54c-97fd-4b5b-b9f1-972684e0163b
+    m_ActionName: GamePlay/Skill3[/Keyboard/3]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 817844559}
+        m_TargetAssemblyTypeName: GamePlayInput, Assembly-CSharp
+        m_MethodName: OnSkill4ClickEvent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 6d253564-97a8-4103-add9-2c951f84be4c
+    m_ActionName: GamePlay/Skill4[/Keyboard/4]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: GamePlay

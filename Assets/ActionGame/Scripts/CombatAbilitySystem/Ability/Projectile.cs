@@ -32,7 +32,7 @@ namespace CombatAbilitySystem
                 timer += Time.deltaTime;
 
                 Vector3 deltaPosition = flyDirection * speed * Time.deltaTime;
-                Debug.Log("Fly" + deltaPosition);
+                //Debug.Log("Fly" + deltaPosition);
                 this.transform.position += deltaPosition;
                 yield return null;
             }
