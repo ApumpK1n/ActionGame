@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5573490750731029619}
   - component: {fileID: 8277868942939171612}
+  - component: {fileID: 4636530258309957843}
   m_Layer: 0
   m_Name: Meteorite
   m_TagString: Untagged
@@ -54,6 +55,18 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4636530258309957843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6022013388690241943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 421cb8fce07b46443bda11ba510cab23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2596252501381768050
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62,9 +75,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5573490750731029619}
     m_Modifications:
+    - target: {fileID: 77929615294282446, guid: 3dd50886582244645be87adb42aa8528, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3753100232422025040, guid: 3dd50886582244645be87adb42aa8528, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4994997792314849709, guid: 3dd50886582244645be87adb42aa8528, type: 3}
       propertyPath: m_Name
       value: Ground AOE explosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 6728428341817078352, guid: 3dd50886582244645be87adb42aa8528, type: 3}
+      propertyPath: looping
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6759794185557706511, guid: 3dd50886582244645be87adb42aa8528, type: 3}
       propertyPath: m_LocalPosition.x
@@ -104,6 +129,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6759794185557706511, guid: 3dd50886582244645be87adb42aa8528, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7442092992053446692, guid: 3dd50886582244645be87adb42aa8528, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8904114409888472623, guid: 3dd50886582244645be87adb42aa8528, type: 3}
+      propertyPath: looping
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

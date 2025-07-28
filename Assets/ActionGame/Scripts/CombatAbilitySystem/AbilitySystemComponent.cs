@@ -116,6 +116,22 @@ namespace CombatAbilitySystem
             return true;
         }
 
+        public void TryApplyGameEffect(AbilityComponent abilityComponent, float level)
+        {
+            if (abilityComponent == null) return;
+
+            foreach(var effectConfig in abilityComponent.Config.Effects)
+            {
+                // TODO：对象池
+                EffectExecutor effectExecutor = EffectExecutor.Create(this, abilityComponent, effectConfig, level);
+
+                TryApplyGameEffect(effectExecutor);
+            }
+
+           
+        }
+
+
         /// <summary>
         /// 施加效果
         /// </summary>
