@@ -3,6 +3,7 @@ using CombatAbilitySystem;
 using CrashKonijn.Goap.ActionGame;
 using CrashKonijn.Goap.Runtime;
 using UnityEngine;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(EnemyBehaviour))]
 [RequireComponent(typeof(DataBehaviour))]
@@ -13,6 +14,7 @@ public class Enemy : MonoBehaviour
     private DataBehaviour dataBehaviour;
 
     [SerializeField] private EnemyConfig config;
+    [SerializeField] private List<AttributeConfig> Attributes;
     private WorldScene belongWorldScene;
     private AbilitySystemComponent abilitySystemComponent;
 
@@ -22,6 +24,8 @@ public class Enemy : MonoBehaviour
         dataBehaviour = GetComponent<DataBehaviour>();
 
         abilitySystemComponent = new AbilitySystemComponent(this.gameObject, 10);
+
+        abilitySystemComponent.InitAttributes(Attributes);
     }
 
     private void Start()
