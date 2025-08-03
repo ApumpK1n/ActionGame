@@ -8,8 +8,13 @@ public class GameApp : DestroyableSingleton<GameApp>, IGameApp
     // 初始化需要的配置
 
     [SerializeField] private GameObject PlayerPrefab;   // Player
-    //[SerializeField] private WorldConfig m_WorldConfig;
     [SerializeField] private SceneConfig m_StartSceneConfig;
+
+    /// <summary>
+    /// 输入模块
+    /// </summary>
+    [SerializeField] private GamePlayerInput m_StartGamePlayerInput;
+    [SerializeField] private Camera m_MainCamera;
 
     private GameDirector m_Director;
 
@@ -38,11 +43,14 @@ public class GameApp : DestroyableSingleton<GameApp>, IGameApp
 
     public void Initialize()
     {
+        // 检查配置参数是否配置
+        CheckSerializeVairables();
+
         // director
         m_Director = new GameDirector();
         m_Director.SetStartSceneConfig(m_StartSceneConfig);
         m_Director.SetPlayerPrefab(PlayerPrefab);
-        m_Director.Initialize();
+        m_Director.Initialize(m_StartGamePlayerInput, m_MainCamera);
 
         // subsytem
         m_Subsystems = new SubsystemCollection<IGameAppSubsystem>();
@@ -121,4 +129,20 @@ public class GameApp : DestroyableSingleton<GameApp>, IGameApp
     }
 
     #endregion
+
+    /// <summary>
+    /// 检查一下要输入的参数是否配置
+    /// </summary>
+    private void CheckSerializeVairables()
+    {
+        if(m_StartGamePlayerInput == null)
+        {
+            throw new System.NullReferenceException(nameof(m_StartGamePlayerInput));
+        }
+
+        if(m_MainCamera == null)
+        {
+            throw new System.NullReferenceException(nameof(m_MainCamera));
+        }
+    }    
 }

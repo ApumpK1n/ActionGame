@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
+using UnityEngine;
 
 /// <summary>
 /// 玩家角色（逻辑上的）
@@ -24,6 +22,12 @@ public class Character : Pawn
         }
 
         m_CharacterView = characterView;
+        m_CharacterView.OnBind(this);
+    }
+
+    public PlayerController GetController()
+    {
+        return m_PlayerController;
     }
 
     protected override void OnInitialize()
@@ -34,5 +38,26 @@ public class Character : Pawn
     protected override void OnDeinitialize()
     {
         base.OnDeinitialize();
+    }
+
+    // public methods
+    public void Move(Vector2 direction)
+    {
+        m_CharacterView.Move(direction);
+    }
+
+    public void PlayerAccelerate(bool accelerate)
+    {
+        m_CharacterView.SetAccelerate(accelerate);
+    }
+
+    public void ExecuteCommand(CommandType commandType)
+    {
+        m_CharacterView.ExecuteCommand(commandType);
+    }
+
+    public void ExecuteSkillCommand(int skillSlot)
+    {
+        m_CharacterView.PerformSkill(skillSlot);
     }
 }

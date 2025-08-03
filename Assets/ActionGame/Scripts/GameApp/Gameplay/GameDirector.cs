@@ -31,7 +31,7 @@ public class GameDirector
     public GameDirector()
     { }
 
-    public void Initialize()
+    public void Initialize(GamePlayerInput playerInput, Camera camera)
     {
         // world
 
@@ -44,6 +44,12 @@ public class GameDirector
 
         // PlayerController
         m_PlayerController = m_World.SpawnPlayerController();
+        // input
+        m_PlayerController.InitializePlayerInput(playerInput);
+        // camera
+        m_PlayerController.SpawnPlayerCameraManager(camera);
+        // 实例化之后的初始化
+        m_PlayerController.Initialize();
 
         m_Initialized = true;
     }
@@ -116,6 +122,7 @@ public class GameDirector
             // 这样去支持懒加载，不知道是否有什么副作用
             subsystem = new TSubSystem();
             subsystem.Setup();
+            subsystem.SetGameDirector(this);
             m_Subsystems.RegisterSubsystem(subsystem);
         }
 

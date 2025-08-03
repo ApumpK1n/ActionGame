@@ -76,6 +76,9 @@ public class CharacterView : MonoBehaviour, ICharacterView
     [SerializeField, Header("技能槽")] private List<AbilityConfig> skillSlots;
     [SerializeField] private List<AttributeConfig> attributeConfigs;
 
+    //
+    private Character m_LogicCharacter;
+
     #region Unity
     private void Awake()
     {
@@ -132,6 +135,13 @@ public class CharacterView : MonoBehaviour, ICharacterView
 
     }
     #endregion
+
+    public void OnBind(Character logicCharacter)
+    {
+        if (logicCharacter == null) return;
+
+        m_LogicCharacter = logicCharacter;
+    }
 
     public void Setup(WorldScene worldScene)
     {
@@ -362,8 +372,14 @@ public class CharacterView : MonoBehaviour, ICharacterView
     /// <returns></returns>
     private Vector3 GetTargetForward(float angle)
     {
+        if(m_LogicCharacter == null)
+        {
+            return Vector3.forward;
+        }
+
         Quaternion quaternion = Quaternion.AngleAxis(angle, Vector3.up);
-        Vector3 rotation = quaternion* belongWorldScene.GetPlayerCamera().forward;
+        //Vector3 rotation = quaternion* belongWorldScene.GetPlayerCamera().forward;
+        Vector3 rotation = quaternion * m_LogicCharacter.GetController().GetViewForward();
         return new Vector3(rotation.x, 0, rotation.z);
     }
 

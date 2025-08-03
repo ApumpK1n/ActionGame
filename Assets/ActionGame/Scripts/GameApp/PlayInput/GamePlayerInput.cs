@@ -1,80 +1,108 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-// TODO: 指令需要改成结构体或者复用 目前堆上创建对象太频繁
-
 [RequireComponent(typeof(PlayerInput))]
-public class GamePlayInput : MonoBehaviour
+public class GamePlayerInput : MonoBehaviour
 {
-    PlayerInput playerInput;
-    CommandInvoker commandInvoker;
-    private void Start()
+    // 输入支持的事件
+    public UnityAction<ICommand> JumpAction;
+    public UnityAction<ICommand> MoveAction;
+    public UnityAction<ICommand> AccelerateAction;
+    public UnityAction<ICommand> AttackAction;
+    public UnityAction<ICommand> SkillCastAction;
+
+    private PlayerInput m_PlayerInput;
+
+    private bool m_CanAcceptInput;
+
+    // Start is called before the first frame update
+    void Start()
     {
-        //InputSystem.settings.SetInternalFeatureFlag("DISABLE_SHORTCUT_SUPPORT", true);
-        playerInput = GetComponent<PlayerInput>();
-        //commandInvoker = Game.Instance.GetGameSystem<CommandInvoker>();
+        m_PlayerInput = GetComponent<PlayerInput>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    public void InitializeGame()
+    {
+        m_CanAcceptInput = true;
+    }
+
+    public void SetCanAcceptInput(bool canAcceptInput)
+    {
+        m_CanAcceptInput = canAcceptInput;
     }
 
     public void OnJumpEvent(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (m_CanAcceptInput && context.started)
         {
-            commandInvoker.AddCommand(new JumpCommand());
+            JumpAction?.Invoke(new JumpCommand());
         }
 
     }
 
     public void OnMoveEvent(InputAction.CallbackContext context)
     {
-        Vector2 dir = context.ReadValue<Vector2>();
-        MoveCommand moveCommand = new MoveCommand();
-        moveCommand.MoveDir = dir;
-        commandInvoker.AddCommand(moveCommand);
+        if (m_CanAcceptInput)
+        {
+            Vector2 dir = context.ReadValue<Vector2>();
+            MoveCommand moveCommand = new MoveCommand();
+            moveCommand.MoveDir = dir;
+            MoveAction?.Invoke(moveCommand);
+        }
     }
 
     public void OnAccelerateEvent(InputAction.CallbackContext context)
     {
+        if (!m_CanAcceptInput)
+        {
+            return;
+        }
+
         if (context.started)
         {
             AccelerateCommand accelerateCommand = new AccelerateCommand();
             accelerateCommand.Value = true;
-            commandInvoker.AddCommand(accelerateCommand);
+            AccelerateAction?.Invoke(accelerateCommand);
         }
         else if (context.canceled)
         {
             AccelerateCommand accelerateCommand = new AccelerateCommand();
             accelerateCommand.Value = false;
-            commandInvoker.AddCommand(accelerateCommand);
+            AccelerateAction?.Invoke(accelerateCommand);
         }
     }
 
     public void OnLeftClickEvent(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (m_CanAcceptInput && context.started)
         {
             AttackCommand command = new AttackCommand();
             command.LeftClick = true;
             command.RightClick = false;
-            commandInvoker.AddCommand(command);
+            AttackAction?.Invoke(command);
         }
     }
 
     public void OnRightClickEvent(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (m_CanAcceptInput && context.started)
         {
             AttackCommand command = new AttackCommand();
             command.LeftClick = false;
             command.RightClick = true;
-            commandInvoker.AddCommand(command);
+            AttackAction?.Invoke(command);
         }
     }
 
     public void OnSkill1ClickEvent(InputAction.CallbackContext context)
     {
-        Debug.Log("OnSkill1ClickEvent");
         if (context.started)
         {
             SendSkillCommand(0);
@@ -105,12 +133,13 @@ public class GamePlayInput : MonoBehaviour
         }
     }
 
-
     private void SendSkillCommand(int skillSlot)
     {
-        SkillCommand command = new SkillCommand();
-        command.SkillSlot = skillSlot;
-
-        commandInvoker.AddCommand(command);
+        if (m_CanAcceptInput)
+        {
+            SkillCommand command = new SkillCommand();
+            command.SkillSlot = skillSlot;
+            SkillCastAction?.Invoke(command);
+        }
     }
 }
