@@ -11,22 +11,21 @@ public class PlayerCameraManager : Actor
     /// </summary>
     private PlayerController m_PCOwner;
 
-    private Camera m_Camera;
+    private CameraViewInfo m_CameraViewInfo;
 
-    public Camera MainCamera { get { return m_Camera; } }
+    public Camera MainCamera { get { return m_CameraViewInfo.MainCamera; } }
 
     /// <summary>
     /// 设置控制相机
     /// </summary>
     /// <exception cref="ArgumentNullException"></exception>
-    public PlayerCameraManager(Camera camera)
+    public PlayerCameraManager()
     {
-        if(camera == null)
-        {
-            throw new ArgumentNullException(nameof(camera));
-        }
+    }
 
-        m_Camera = camera;
+    public void SwitchToCamera(CameraViewInfo cameraView)
+    {
+        m_CameraViewInfo = cameraView;
     }
 
     public void InitializeFor(PlayerController pc)

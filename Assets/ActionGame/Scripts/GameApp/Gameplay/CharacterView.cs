@@ -68,6 +68,10 @@ public class CharacterView : MonoBehaviour, ICharacterView
         set => animationComponent.Animancer.Layers[PlayerAnimationLayer.Base].ApplyAnimatorIK = value;
     }
 
+    public Transform Transform => transform;
+
+    public Transform LookAtPoint => Neck;
+
     private PlayerAttribute playerAttribute;
     private WorldScene belongWorldScene;
 

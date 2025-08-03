@@ -14,7 +14,6 @@ public class GameApp : DestroyableSingleton<GameApp>, IGameApp
     /// 输入模块
     /// </summary>
     [SerializeField] private GamePlayerInput m_StartGamePlayerInput;
-    [SerializeField] private Camera m_MainCamera;
 
     private GameDirector m_Director;
 
@@ -50,7 +49,7 @@ public class GameApp : DestroyableSingleton<GameApp>, IGameApp
         m_Director = new GameDirector();
         m_Director.SetStartSceneConfig(m_StartSceneConfig);
         m_Director.SetPlayerPrefab(PlayerPrefab);
-        m_Director.Initialize(m_StartGamePlayerInput, m_MainCamera);
+        m_Director.Initialize(m_StartGamePlayerInput);
 
         // subsytem
         m_Subsystems = new SubsystemCollection<IGameAppSubsystem>();
@@ -138,11 +137,6 @@ public class GameApp : DestroyableSingleton<GameApp>, IGameApp
         if(m_StartGamePlayerInput == null)
         {
             throw new System.NullReferenceException(nameof(m_StartGamePlayerInput));
-        }
-
-        if(m_MainCamera == null)
-        {
-            throw new System.NullReferenceException(nameof(m_MainCamera));
         }
     }    
 }

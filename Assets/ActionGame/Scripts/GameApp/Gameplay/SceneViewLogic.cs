@@ -13,12 +13,15 @@ public class SceneViewLogic : MonoBehaviour
     /// 角色父节点
     /// </summary>
     [SerializeField] private Transform PlayerReborn;
+    [SerializeField] private CameraViewInfo CameraView;
 
     [SerializeField] private Animator debugPlayerCombatAnimator;
     [SerializeField] private Animator debugPlayerMovementAnimator;
 
     public Animator DebugPlayerCombatAnimator { get { return debugPlayerCombatAnimator; } }
     public Animator DebugPlayerMovementAnimator { get { return debugPlayerMovementAnimator; } }
+
+    public CameraViewInfo CameraViewInfo { get { return CameraView; } }
 
     // Start is called before the first frame update
     void Start()
@@ -40,5 +43,11 @@ public class SceneViewLogic : MonoBehaviour
     {
         characterView.AddCharacterParent(PlayerReborn);
         characterView.OnAddToSceneView(this);
+    }
+
+    public void LookAtCharacter(ICharacterView characterView)
+    {
+        CameraView.CameraFreeLook.Follow = characterView.Transform;
+        CameraView.CameraFreeLook.LookAt = characterView.LookAtPoint;
     }
 }

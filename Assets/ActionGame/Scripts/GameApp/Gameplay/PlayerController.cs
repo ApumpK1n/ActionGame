@@ -56,10 +56,15 @@ public class PlayerController : ControllerBase
         OnInitializePlayerInput();
     }
 
-    public void SpawnPlayerCameraManager(Camera camera)
+    public void SpawnPlayerCameraManager()
     {
-        m_PlayerCameraManager = new PlayerCameraManager(camera);
+        m_PlayerCameraManager = new PlayerCameraManager();
         m_PlayerCameraManager.InitializeFor(this);
+    }
+
+    public void SwitchToCamera(CameraViewInfo CameraView)
+    {
+        m_PlayerCameraManager.SwitchToCamera(CameraView);
     }
 
     public Vector3 GetViewForward()

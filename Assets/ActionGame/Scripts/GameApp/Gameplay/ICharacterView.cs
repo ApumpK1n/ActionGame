@@ -1,9 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public interface ICharacterView
 {
+    /// <summary>
+    /// 角色Transform
+    /// </summary>
+    Transform Transform { get; }
+
+    /// <summary>
+    /// 相机指向的点
+    /// </summary>
+    Transform LookAtPoint { get; }
+
     void OnBind(Character logicCharacter);
 
     void AddCharacterParent(Transform parent);

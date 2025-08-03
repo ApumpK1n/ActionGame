@@ -31,7 +31,7 @@ public class GameDirector
     public GameDirector()
     { }
 
-    public void Initialize(GamePlayerInput playerInput, Camera camera)
+    public void Initialize(GamePlayerInput playerInput)
     {
         // world
 
@@ -46,8 +46,7 @@ public class GameDirector
         m_PlayerController = m_World.SpawnPlayerController();
         // input
         m_PlayerController.InitializePlayerInput(playerInput);
-        // camera
-        m_PlayerController.SpawnPlayerCameraManager(camera);
+        m_PlayerController.SpawnPlayerCameraManager();
         // 实例化之后的初始化
         m_PlayerController.Initialize();
 
@@ -161,7 +160,6 @@ public class GameDirector
 
         GameObject playerObject = GameObject.Instantiate(m_PlayerPrefab, Vector3.zero, Quaternion.identity);
         CharacterView player = playerObject.GetComponent<CharacterView>();
-        //player.Setup(this);
 
         Character character = m_PlayerController.SpawnCharacter();
         character.BindCharacterView(player);
@@ -176,6 +174,9 @@ public class GameDirector
                 sceneViewLogic.AddPlayerTo(player);
 
                 player.OnSetup();
+
+                m_PlayerController.SwitchToCamera(sceneViewLogic.CameraViewInfo);
+                sceneViewLogic.LookAtCharacter(player);
             }
         }
     }

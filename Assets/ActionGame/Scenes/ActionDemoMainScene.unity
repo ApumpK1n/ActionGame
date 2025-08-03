@@ -3132,6 +3132,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerReborn: {fileID: 1704136840}
+  CameraView:
+    MainCamera: {fileID: 583645809}
+    CameraBrank: {fileID: 583645806}
+    CameraFreeLook: {fileID: 1859939641}
   debugPlayerCombatAnimator: {fileID: 791601773}
   debugPlayerMovementAnimator: {fileID: 32920441}
 --- !u!1 &1957862255
