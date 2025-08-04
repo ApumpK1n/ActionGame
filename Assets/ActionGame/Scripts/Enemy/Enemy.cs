@@ -14,18 +14,13 @@ public class Enemy : MonoBehaviour
     private DataBehaviour dataBehaviour;
 
     [SerializeField] private EnemyConfig config;
-    [SerializeField] private List<AttributeConfig> Attributes;
     private WorldScene belongWorldScene;
-    private AbilitySystemComponent abilitySystemComponent;
+
 
     private void Awake()
     {
         behaviour = GetComponent<EnemyBehaviour>();
         dataBehaviour = GetComponent<DataBehaviour>();
-
-        abilitySystemComponent = new AbilitySystemComponent(this.gameObject, 10);
-
-        abilitySystemComponent.InitAttributes(Attributes);
     }
 
     private void Start()
@@ -60,11 +55,6 @@ public class Enemy : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, transform.position + transform.forward * 10);
-    }
-
-    public void ApplyGameEffect(AbilityComponent abilityComponent)
-    {
-        abilitySystemComponent.TryApplyGameEffect(abilityComponent, 1);
     }
 }
 

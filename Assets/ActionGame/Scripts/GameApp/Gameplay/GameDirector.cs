@@ -25,6 +25,7 @@ public class GameDirector
 
     private SceneConfig m_StartSceneConfig;
     private GameObject m_PlayerPrefab;  // 玩家控制角色的预制体
+    private GameObject m_EnemyPrefab;
 
     private bool m_Initialized;
 
@@ -76,6 +77,16 @@ public class GameDirector
         }
 
         m_PlayerPrefab = playerPrefab;
+    }
+
+    public void SetEnemyPrefab(GameObject enemyPrefab)
+    {
+        if (enemyPrefab == null)
+        {
+            throw new ArgumentNullException(nameof(enemyPrefab));
+        }
+
+        m_EnemyPrefab = enemyPrefab;
     }
 
     public bool StartGame()
@@ -177,8 +188,15 @@ public class GameDirector
 
                 m_PlayerController.SwitchToCamera(sceneViewLogic.CameraViewInfo);
                 sceneViewLogic.LookAtCharacter(player);
+
+                // 敌人
+                GameObject enemyObject = GameObject.Instantiate(m_EnemyPrefab, Vector3.zero, Quaternion.identity);
+                EnemyView enemy = enemyObject.GetComponent<EnemyView>();
+                sceneViewLogic.AddEnemyTo(enemy);
             }
         }
+
+
     }
 
     // ********************************************************************************************************

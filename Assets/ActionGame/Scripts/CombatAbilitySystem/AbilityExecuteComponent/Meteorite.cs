@@ -11,17 +11,10 @@ namespace CombatAbilitySystem
         {
             if (other.gameObject.layer == Layers.EnemyNumber)
             {
-                other.gameObject.GetComponent<Enemy>().ApplyGameEffect(AbilityComponent);
+                //other.gameObject.GetComponent<Enemy>().ApplyGameEffect(AbilityComponent);
             }
         }
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.gameObject.layer == Layers.EnemyNumber)
-            {
-                collision.gameObject.GetComponent<Enemy>().ApplyGameEffect(AbilityComponent);
-            }
-        }
     }
 }
 

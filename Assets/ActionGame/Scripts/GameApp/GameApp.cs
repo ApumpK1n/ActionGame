@@ -8,6 +8,7 @@ public class GameApp : DestroyableSingleton<GameApp>, IGameApp
     // 初始化需要的配置
 
     [SerializeField] private GameObject PlayerPrefab;   // Player
+    [SerializeField] private GameObject EnemyPrefab;
     [SerializeField] private SceneConfig m_StartSceneConfig;
 
     /// <summary>
@@ -49,6 +50,7 @@ public class GameApp : DestroyableSingleton<GameApp>, IGameApp
         m_Director = new GameDirector();
         m_Director.SetStartSceneConfig(m_StartSceneConfig);
         m_Director.SetPlayerPrefab(PlayerPrefab);
+        m_Director.SetEnemyPrefab(EnemyPrefab);
         m_Director.Initialize(m_StartGamePlayerInput);
 
         // subsytem

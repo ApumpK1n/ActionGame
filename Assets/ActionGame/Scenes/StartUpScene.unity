@@ -148,7 +148,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 255991382}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &255991384
 Camera:
   m_ObjectHideFlags: 0
@@ -289,9 +289,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerPrefab: {fileID: 4104323566969289406, guid: 64ac182d10fe95c41a5601041d58ef22, type: 3}
+  EnemyPrefab: {fileID: 6876487151630017789, guid: c73fe7dd5dd538745aceb03e4b43b4f4, type: 3}
   m_StartSceneConfig: {fileID: 11400000, guid: 04f2143b999efb4498c92316c89391bb, type: 2}
   m_StartGamePlayerInput: {fileID: 1590331266}
-  m_MainCamera: {fileID: 255991384}
 --- !u!4 &589367826
 Transform:
   m_ObjectHideFlags: 0
@@ -871,7 +871,6 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
-  m_ScrollDeltaPerTick: 6
 --- !u!1 &1909612115
 GameObject:
   m_ObjectHideFlags: 0

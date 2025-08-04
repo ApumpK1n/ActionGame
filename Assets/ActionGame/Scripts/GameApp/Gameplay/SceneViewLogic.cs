@@ -18,6 +18,8 @@ public class SceneViewLogic : MonoBehaviour
     [SerializeField] private Animator debugPlayerCombatAnimator;
     [SerializeField] private Animator debugPlayerMovementAnimator;
 
+    [SerializeField] private Transform enemyBorn;
+
     public Animator DebugPlayerCombatAnimator { get { return debugPlayerCombatAnimator; } }
     public Animator DebugPlayerMovementAnimator { get { return debugPlayerMovementAnimator; } }
 
@@ -49,5 +51,10 @@ public class SceneViewLogic : MonoBehaviour
     {
         CameraView.CameraFreeLook.Follow = characterView.Transform;
         CameraView.CameraFreeLook.LookAt = characterView.LookAtPoint;
+    }
+    public void AddEnemyTo(ICharacterView characterView)
+    {
+        characterView.AddCharacterParent(enemyBorn);
+        characterView.OnAddToSceneView(this);
     }
 }
