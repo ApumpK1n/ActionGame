@@ -53,6 +53,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5608828492155955564}
     m_Modifications:
+    - target: {fileID: 936802197491465160, guid: e92268944da8cd94ca032b90836a8e5b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2854232699357538598, guid: e92268944da8cd94ca032b90836a8e5b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4055945373243128773, guid: e92268944da8cd94ca032b90836a8e5b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -96,6 +104,14 @@ PrefabInstance:
     - target: {fileID: 4062798930731619647, guid: e92268944da8cd94ca032b90836a8e5b, type: 3}
       propertyPath: m_Name
       value: ClazyRunnerEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5286265351930508662, guid: e92268944da8cd94ca032b90836a8e5b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7956874437368944916, guid: e92268944da8cd94ca032b90836a8e5b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
