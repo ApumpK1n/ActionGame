@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class EnemyView : MonoBehaviour, ICharacterView
 {
+    [SerializeField] private Transform healthBarPoint;
+
     public Transform Transform
     {
         get
@@ -24,6 +26,8 @@ public class EnemyView : MonoBehaviour, ICharacterView
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
         transform.localScale = Vector3.one;
+
+
     }
 
     public void ExecuteCommand(CommandType commandType)
