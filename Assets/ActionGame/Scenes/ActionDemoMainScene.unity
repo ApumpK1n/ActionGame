@@ -1111,6 +1111,7 @@ GameObject:
   - component: {fileID: 373240840}
   - component: {fileID: 373240839}
   - component: {fileID: 373240838}
+  - component: {fileID: 373240842}
   m_Layer: 5
   m_Name: WorldCanvas
   m_TagString: Untagged
@@ -1178,7 +1179,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: -354346037
+  m_SortingLayerID: 0
   m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!224 &373240841
@@ -1200,6 +1201,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &373240842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373240837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4f80dd99f9157342ac2a350a4cd57a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetCamera: {fileID: 289460825}
+  healthBarPrefab: {fileID: 1589019260768058980, guid: 526db484f3b9c514496e3314dd35aab1, type: 3}
 --- !u!1001 &438937607
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1436,7 +1451,7 @@ GameObject:
   - component: {fileID: 583645806}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: MainCamera
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

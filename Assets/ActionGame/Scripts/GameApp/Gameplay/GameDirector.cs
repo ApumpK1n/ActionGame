@@ -192,6 +192,7 @@ public class GameDirector
                 // 敌人
                 GameObject enemyObject = GameObject.Instantiate(m_EnemyPrefab, Vector3.zero, Quaternion.identity);
                 EnemyView enemy = enemyObject.GetComponent<EnemyView>();
+                enemy.SetCameraViewInfo(sceneViewLogic.CameraViewInfo);
                 sceneViewLogic.AddEnemyTo(enemy);
             }
         }

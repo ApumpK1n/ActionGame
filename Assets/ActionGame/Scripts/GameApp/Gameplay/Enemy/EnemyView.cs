@@ -1,14 +1,17 @@
+using System.Drawing;
 using UnityEngine;
 
 public class EnemyView : MonoBehaviour, ICharacterView
 {
     [SerializeField] private Transform healthBarPoint;
+    private CameraViewInfo cameraViewInfo;
 
+    private HealthBar healthBar;
     public Transform Transform
     {
         get
         {
-            throw new System.NotImplementedException();
+            return this.transform;
         }
     }
 
@@ -20,6 +23,12 @@ public class EnemyView : MonoBehaviour, ICharacterView
         }
     }
 
+    public void SetCameraViewInfo(CameraViewInfo cameraViewInfo)
+    {
+        this.cameraViewInfo = cameraViewInfo;
+    }
+
+
     public void AddCharacterParent(Transform parent)
     {
         transform.parent = parent;
@@ -27,7 +36,10 @@ public class EnemyView : MonoBehaviour, ICharacterView
         transform.localRotation = Quaternion.identity;
         transform.localScale = Vector3.one;
 
-
+        GetComponentInChildren<SpriteRoleStatusBar>().Init(this.transform, cameraViewInfo.MainCamera);
+        //Vector3 viewPoint = cameraViewInfo.MainCamera.WorldToViewportPoint(healthBarPoint.position);
+        //healthBar = WorldCanvasController.Instance.AddHealthBar();
+        //UpdateHealthBarPosition();
     }
 
     public void ExecuteCommand(CommandType commandType)
@@ -63,5 +75,18 @@ public class EnemyView : MonoBehaviour, ICharacterView
     public void SetAccelerate(bool accelerate)
     {
         throw new System.NotImplementedException();
+    }
+
+
+    private void UpdateHealthBarPosition()
+    {
+        Vector2 screenPosition = RectTransformUtility.WorldToScreenPoint(this.cameraViewInfo.MainCamera, healthBarPoint.position);
+        WorldCanvasController.Instance.UpdateHealthBarPosition(healthBar, screenPosition);
+
+    }
+
+    void Update()
+    {
+        //UpdateHealthBarPosition();
     }
 }
