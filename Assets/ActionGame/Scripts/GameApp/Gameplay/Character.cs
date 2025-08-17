@@ -11,6 +11,8 @@ public class Character : Pawn
     /// </summary>
     protected ICharacterView m_CharacterView;
 
+    protected PlayerController m_PlayerController;
+
     public Character() : base()
     { }
 
@@ -38,6 +40,13 @@ public class Character : Pawn
     protected override void OnDeinitialize()
     {
         base.OnDeinitialize();
+    }
+
+    protected override void OnPossessed()
+    {
+        base.OnPossessed();
+
+        m_PlayerController = m_Controller as PlayerController;
     }
 
     // public methods

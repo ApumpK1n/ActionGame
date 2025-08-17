@@ -3,7 +3,7 @@ using CombatAbilitySystem;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class EnemyController : Actor
+public class EnemyController : ControllerBase
 {
     [SerializeField] private List<AttributeConfig> Attributes;
     private AbilitySystemComponent abilitySystemComponent;

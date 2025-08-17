@@ -1,38 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
 
 public class Pawn : Actor
 {
-    protected PlayerController m_PlayerController;
+    /// <summary>
+    /// 针对Pawn的控制器
+    /// </summary>
+    protected ControllerBase m_Controller;
 
     public Pawn() : base()
     {
     }
 
-    public void PossessedBy(PlayerController playerController)
+    public ControllerBase GetController()
     {
-        if (playerController == null)
+        return m_Controller;
+    }
+
+    public void PossessedBy(ControllerBase controller)
+    {
+        if (controller == null)
         {
-            throw new ArgumentNullException(nameof(playerController));
+            throw new ArgumentNullException(nameof(controller));
         }
 
-        m_PlayerController = playerController;
-        m_PlayerController.Possess(this);
+        m_Controller = controller;
+        m_Controller.Possess(this);
+
+        OnPossessed();
     }
 
     public void UnPossessed()
     {
-        if (m_PlayerController != null)
+        if (m_Controller != null)
         {
-            m_PlayerController.UnPossess();
+            m_Controller.UnPossess();
         }
-        m_PlayerController = null;
+        m_Controller = null;
+
+        OnUnPossessed();
     }
 
     protected override void OnTick(float dt)
     {
         base.OnTick(dt);
     }
+
+    protected virtual void OnPossessed()
+    { }
+
+    protected virtual void OnUnPossessed()
+    { }
 }
