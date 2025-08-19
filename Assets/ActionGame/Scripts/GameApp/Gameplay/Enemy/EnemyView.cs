@@ -1,12 +1,19 @@
 using System.Drawing;
+using CombatAbilitySystem;
 using UnityEngine;
+using System.Collections.Generic;
 
-public class EnemyView : MonoBehaviour, ICharacterView
+public class EnemyView : MonoBehaviour, ICharacterView, IAbilityApplyComponent
 {
     [SerializeField] private Transform healthBarPoint;
+    [SerializeField] private List<AttributeConfig> attributeConfigs; 
     private CameraViewInfo cameraViewInfo;
 
     private HealthBar healthBar;
+    private AbilitySystemComponent AbilitySystem;
+
+    private float health = 100;
+
     public Transform Transform
     {
         get
@@ -40,6 +47,8 @@ public class EnemyView : MonoBehaviour, ICharacterView
         //Vector3 viewPoint = cameraViewInfo.MainCamera.WorldToViewportPoint(healthBarPoint.position);
         //healthBar = WorldCanvasController.Instance.AddHealthBar();
         //UpdateHealthBarPosition();
+
+        SetupAbilitySystem();
     }
 
     public void ExecuteCommand(CommandType commandType)
@@ -64,7 +73,7 @@ public class EnemyView : MonoBehaviour, ICharacterView
 
     public void OnSetup()
     {
-        throw new System.NotImplementedException();
+       
     }
 
     public void PerformSkill(int skillSlot)
@@ -88,5 +97,25 @@ public class EnemyView : MonoBehaviour, ICharacterView
     void Update()
     {
         //UpdateHealthBarPosition();
+    }
+
+    public void ApplyGameEffect(AbilityComponent abilityComponent)
+    {
+        AbilitySystem.TryApplyGameEffect(abilityComponent, 1.0f);
+    }
+
+    private void SetupAbilitySystem()
+    {
+        AbilitySystem = new AbilitySystemComponent(this.gameObject, 10);
+        AbilitySystem.InitAttributes(attributeConfigs);
+
+        foreach (var attribute in attributeConfigs)
+        {
+            if (attribute.Name == "Hp")
+            {
+                AbilitySystem.AttributeSet.SetBaseValue(attribute, 100f);
+            }
+
+        }
     }
 }

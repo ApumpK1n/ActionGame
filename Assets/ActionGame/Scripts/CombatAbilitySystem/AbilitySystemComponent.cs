@@ -34,6 +34,7 @@ namespace CombatAbilitySystem
         private AttributeSet attributeSet;
 
         public bool IsActive = false;
+        public AttributeSet AttributeSet => attributeSet;
 
         public GameObject MonoGameObject { get; private set; }
 

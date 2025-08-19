@@ -79,6 +79,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBarPoint: {fileID: 8369515163274152094}
+  attributeConfigs:
+  - {fileID: 11400000, guid: 37415267cb198ee48a23b6bec551d029, type: 2}
+  - {fileID: 11400000, guid: e595e549e9fffd34cb2f4ed9527a7345, type: 2}
 --- !u!1001 &3172549461075370418
 PrefabInstance:
   m_ObjectHideFlags: 0

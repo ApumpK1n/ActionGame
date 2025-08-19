@@ -42,6 +42,12 @@ namespace CombatAbilitySystem
             return false;
         }
 
+        public void SetBaseValue(AttributeConfig attribute, float value)
+        {
+            GetAttributeValue(attribute, out AttributeValue attributeValue);
+            attributeValue.BaseValue = value;
+        }
+
         public void SetAttributeBaseValueModify(EffectModifier modifier, float magnitude)
         {
             GetAttributeValue(modifier.Attribute, out var attributeValue);
