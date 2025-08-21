@@ -12,7 +12,9 @@ public class EnemyView : MonoBehaviour, ICharacterView, IAbilityApplyComponent
     private HealthBar healthBar;
     private AbilitySystemComponent AbilitySystem;
 
-    private float health = 100;
+    private float baseHealth = 100;
+
+    private SpriteRoleStatusBar spriteHealthBar;
 
     public Transform Transform
     {
@@ -43,7 +45,8 @@ public class EnemyView : MonoBehaviour, ICharacterView, IAbilityApplyComponent
         transform.localRotation = Quaternion.identity;
         transform.localScale = Vector3.one;
 
-        GetComponentInChildren<SpriteRoleStatusBar>().Init(this.transform, cameraViewInfo.MainCamera);
+        spriteHealthBar = GetComponentInChildren<SpriteRoleStatusBar>();
+        spriteHealthBar.Init(this.transform, cameraViewInfo.MainCamera);
         //Vector3 viewPoint = cameraViewInfo.MainCamera.WorldToViewportPoint(healthBarPoint.position);
         //healthBar = WorldCanvasController.Instance.AddHealthBar();
         //UpdateHealthBarPosition();
@@ -102,6 +105,7 @@ public class EnemyView : MonoBehaviour, ICharacterView, IAbilityApplyComponent
     public void ApplyGameEffect(AbilityComponent abilityComponent)
     {
         AbilitySystem.TryApplyGameEffect(abilityComponent, 1.0f);
+
     }
 
     private void SetupAbilitySystem()
@@ -113,7 +117,7 @@ public class EnemyView : MonoBehaviour, ICharacterView, IAbilityApplyComponent
         {
             if (attribute.Name == "Hp")
             {
-                AbilitySystem.AttributeSet.SetBaseValue(attribute, 100f);
+                AbilitySystem.AttributeSet.InitBaseValue(attribute, baseHealth);
             }
 
         }
