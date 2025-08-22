@@ -1,6 +1,9 @@
 
 namespace CombatAbilitySystem
 {
+    /// <summary>
+    /// 间隔类型
+    /// </summary>
     public enum DurationType
     {
         Instant,        //即时
