@@ -38,14 +38,16 @@ namespace CombatAbilitySystem
 
         public GameObject MonoGameObject { get; private set; }
 
-        private List<EffectExecutor> effectExecutorDurationList;
+        private List<EffectExecutorContainer> effectExecutorDurationList;
+        private Dictionary<AttributeConfig, bool> affectedAttributeDict;
 
         public AbilitySystemComponent(GameObject go, int attributeCapacity)
         {
             this.MonoGameObject = go;
             attributeSet = new AttributeSet(attributeCapacity);
             grantedAbilities = new Dictionary<int, AbilityComponent>();
-            effectExecutorDurationList = new List<EffectExecutor>();
+            effectExecutorDurationList = new List<EffectExecutorContainer>();
+            affectedAttributeDict = new Dictionary<AttributeConfig, bool>();
         }
 
         public bool IsValid()
@@ -60,7 +62,9 @@ namespace CombatAbilitySystem
                 ability.Tick(deltaTime);
             }
 
+            // 应用持续效果
             TickDurationEffects(deltaTime);
+            // 尝试移除持续效果
             TryRemoveDurationEffects();
         }
 
@@ -167,6 +171,10 @@ namespace CombatAbilitySystem
             return true;
         }
 
+        /// <summary>
+        /// 即时生效
+        /// </summary>
+        /// <param name="effectExecutor"></param>
         void ApplyInstantGameplayEffect(EffectExecutor effectExecutor)
         {
             for (var i = 0; i < effectExecutor.EffectConfig.Modifiers.Length; i++)
@@ -177,21 +185,71 @@ namespace CombatAbilitySystem
             }
         }
 
+
+        /// <summary>
+        /// 持续时间的效果
+        /// </summary>
+        /// <param name="effectExecutor"></param>
         void ApplyDurationalGameplayEffect(EffectExecutor effectExecutor)
         {
-            effectExecutorDurationList.Add(effectExecutor);
+            List<ModifierContainer> modifierContainers = new List<ModifierContainer>();
+            for (var i = 0; i < effectExecutor.EffectConfig.Modifiers.Length; i++)
+            {
+                var modifier = effectExecutor.EffectConfig.Modifiers[i];
+                var magnitude = modifier.ModifierMagnitude.CalculateMagnitude(effectExecutor) * modifier.BaseValue;
+                var attributeModifier = new AttributeModifier();
+                switch (modifier.ModifierOperation)
+                {
+                    case AttributeModifierOperation.Add:
+                        attributeModifier.Add = magnitude;
+                        break;
+                    case AttributeModifierOperation.Multiply:
+                        attributeModifier.Multiply = magnitude;
+                        break;
+                    case AttributeModifierOperation.Override:
+                        attributeModifier.Override = magnitude;
+                        break;
+                }
+                modifierContainers.Add(new ModifierContainer() { Attribute = modifier.Attribute, Modifier = attributeModifier });
+            }
+
+            effectExecutorDurationList.Add(new EffectExecutorContainer() { executor = effectExecutor, modifiers = modifierContainers.ToArray() });
         }
+
 
         void TickDurationEffects(float deltaTime)
         {
-            for(int i=0; i<effectExecutorDurationList.Count; i++)
+            // 每帧重置持续效果更改值
+            attributeSet.ResetAttributeModifiers();
+            affectedAttributeDict.Clear();
+
+            // Tick才合并Modify
+            for (int i=0; i<effectExecutorDurationList.Count; i++)
             {
-                var effect = effectExecutorDurationList[i];
-                effect.Tick(deltaTime);
-                if (effect.CanPeriodTick)
+                var effectContainer = effectExecutorDurationList[i];
+
+                var effectExecutor = effectContainer.executor;
+
+                if (effectExecutor.EffectConfig.DurationType == DurationType.Instant) continue;
+
+                effectExecutor.Tick(deltaTime);
+                if (effectExecutor.CanPeriodTick)
                 {
-                    ApplyInstantGameplayEffect(effect);
+                    var modifiers = effectContainer.modifiers;
+                    for (var m = 0; m < modifiers.Length; m++) // 先更新Modify
+                    {
+                        var modifier = modifiers[m];
+                        attributeSet.UpdateAttributeModify(modifier.Attribute, modifier.Modifier);
+
+                        affectedAttributeDict[modifier.Attribute] = true;
+                    }
                 }
+            }
+
+            // 计算被影响的属性当前值
+            foreach (var attribute in affectedAttributeDict.Keys)
+            {
+                attributeSet.CalculateCurrentAttributeValue(attribute); // 计算当前值
             }
         }
 
@@ -199,8 +257,8 @@ namespace CombatAbilitySystem
         {
             for (int i = 0; i < effectExecutorDurationList.Count; i++)
             {
-                var effect = effectExecutorDurationList[i];
-                if (effect.IsEnd)
+                var effectContainer = effectExecutorDurationList[i];
+                if (effectContainer.executor.IsEnd)
                 {
                     effectExecutorDurationList.RemoveAt(i);
                 }

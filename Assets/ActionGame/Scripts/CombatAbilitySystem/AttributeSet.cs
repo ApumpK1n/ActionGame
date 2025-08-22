@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace CombatAbilitySystem
 {
@@ -9,12 +10,10 @@ namespace CombatAbilitySystem
     public class AttributeSet
     {
         private Dictionary<AttributeConfig, AttributeValue> attributeCache;
-        private Dictionary<AttributeConfig, AttributeValue> preAttributeCache;
 
         public AttributeSet(int capacity)
         {
             attributeCache = new Dictionary<AttributeConfig, AttributeValue>(capacity);
-            preAttributeCache = new Dictionary<AttributeConfig, AttributeValue>(capacity);
         }
 
         public void AddAttribute(AttributeConfig attribute)
@@ -24,8 +23,8 @@ namespace CombatAbilitySystem
                 return;
             }
             AttributeValue value = new AttributeValue();
+            ResetAttributeModify(value.Modifier);
             attributeCache.Add(attribute, value);
-            preAttributeCache.Add(attribute, value);
         }
 
         public bool GetAttributeValue(AttributeConfig attribute, out AttributeValue value)
@@ -45,30 +44,10 @@ namespace CombatAbilitySystem
             return false;
         }
 
-        public bool GetPreAttributeValue(AttributeConfig attribute, out AttributeValue value)
-        {
-            // We use a cache to store the index of the attribute in the list, so we don't
-            // have to iterate through it every time
-            if (preAttributeCache.TryGetValue(attribute, out var attributeValue))
-            {
-                value = attributeValue;
-                return true;
-            }
-
-
-            // No matching attribute found
-            value = new AttributeValue();
-            preAttributeCache.Add(attribute, value);
-            return false;
-        }
-
         public void InitBaseValue(AttributeConfig attribute, float value)
         {
             GetAttributeValue(attribute, out AttributeValue attributeValue);
             attributeValue.BaseValue = value;
-
-            GetPreAttributeValue(attribute, out AttributeValue preAttributeValue);
-            preAttributeValue.BaseValue = value;
         }
 
         public void SetAttributeBaseValueModify(EffectModifier modifier, float magnitude)
@@ -86,9 +65,41 @@ namespace CombatAbilitySystem
                 case AttributeModifierOperation.Override:
                     attributeValue.BaseValue = magnitude;
                     break;
-                case AttributeModifierOperation.Divide:
-                    attributeValue.BaseValue /= magnitude;
-                    break;
+            }
+            attributeValue.CurrentValue = attributeValue.BaseValue;
+        }
+
+        public void UpdateAttributeModify(AttributeConfig attribute, AttributeModifier modifier)
+        {
+            GetAttributeValue(attribute, out var attributeValue);
+
+            attributeValue.Modifier = attributeValue.Modifier.Combine(modifier);
+        }
+
+        public void ResetAttributeModifiers()
+        {
+            foreach (var keyValue in attributeCache)
+            {
+                var attributeValue = keyValue.Value;
+                ResetAttributeModify(attributeValue.Modifier);
+            }
+        }
+
+        private void ResetAttributeModify(AttributeModifier attributeModifier)
+        {
+            attributeModifier.Add = 0f;
+            attributeModifier.Multiply = 0f;
+            attributeModifier.Override = float.NaN;
+        }
+
+        public void CalculateCurrentAttributeValue(AttributeConfig attributeConfig)
+        {
+            GetAttributeValue(attributeConfig, out var attributeValue);
+            attributeValue.CurrentValue = (attributeValue.BaseValue + attributeValue.Modifier.Add) * (attributeValue.Modifier.Multiply + 1);
+
+            if (attributeValue.Modifier.Override != float.NaN)
+            {
+                attributeValue.CurrentValue = attributeValue.Modifier.Override;
             }
         }
     }
@@ -97,9 +108,24 @@ namespace CombatAbilitySystem
     public struct AttributeValue
     {
         public AttributeConfig Attribute;
-        public float BaseValue;
-        public float CurrentValue;
-       // public AttributeModifier Modifier;
+        public float BaseValue;    // 永久值
+        public float CurrentValue; // 当前实际数值
+        public AttributeModifier Modifier;
     }
 
+    [Serializable]
+    public struct AttributeModifier
+    {
+        public float Add;
+        public float Multiply;
+        public float Override;
+
+        public AttributeModifier Combine(AttributeModifier other)
+        {
+            other.Add += Add;
+            other.Multiply += Multiply;
+            other.Override = Override;
+            return other;
+        }
+    }
 }

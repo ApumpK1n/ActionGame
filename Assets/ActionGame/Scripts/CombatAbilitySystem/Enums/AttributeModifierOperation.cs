@@ -6,7 +6,6 @@ namespace CombatAbilitySystem
     {
         Add,
         Multiply,
-        Divide,
         Override,
         Invalid,
     }
