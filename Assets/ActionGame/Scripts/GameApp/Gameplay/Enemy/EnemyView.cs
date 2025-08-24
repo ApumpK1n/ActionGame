@@ -15,6 +15,7 @@ public class EnemyView : MonoBehaviour, ICharacterView, IAbilityApplyComponent
     private float baseHealth = 100;
 
     private SpriteRoleStatusBar spriteHealthBar;
+    private AttributeConfig healthConfig;
 
     public Transform Transform
     {
@@ -29,6 +30,18 @@ public class EnemyView : MonoBehaviour, ICharacterView, IAbilityApplyComponent
         get
         {
             throw new System.NotImplementedException();
+        }
+    }
+
+    private void Awake()
+    {
+        foreach (var attribute in attributeConfigs)
+        {
+            if (attribute.Name == "Hp")
+            {
+                healthConfig = attribute;
+            }
+
         }
     }
 
@@ -99,7 +112,7 @@ public class EnemyView : MonoBehaviour, ICharacterView, IAbilityApplyComponent
 
     void Update()
     {
-        //UpdateHealthBarPosition();
+        UpdateHealthProgress();
     }
 
     public void ApplyGameEffect(AbilityComponent abilityComponent)
@@ -113,13 +126,12 @@ public class EnemyView : MonoBehaviour, ICharacterView, IAbilityApplyComponent
         AbilitySystem = new AbilitySystemComponent(this.gameObject, 10);
         AbilitySystem.InitAttributes(attributeConfigs);
 
-        foreach (var attribute in attributeConfigs)
-        {
-            if (attribute.Name == "Hp")
-            {
-                AbilitySystem.AttributeSet.InitBaseValue(attribute, baseHealth);
-            }
+        AbilitySystem.AttributeSet.InitBaseValue(healthConfig, baseHealth);
+    }
 
-        }
+    private void UpdateHealthProgress()
+    {
+        float currentValue = AbilitySystem.AttributeSet.GetCurrentValue(healthConfig);
+        spriteHealthBar.OnHealthChanged(currentValue / 100f);
     }
 }

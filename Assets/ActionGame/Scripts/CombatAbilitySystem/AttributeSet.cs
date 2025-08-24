@@ -66,7 +66,7 @@ namespace CombatAbilitySystem
                     attributeValue.BaseValue = magnitude;
                     break;
             }
-            attributeValue.CurrentValue = attributeValue.BaseValue;
+            attributeValue.CurrentValue = attributeValue.BaseValue; // 同步覆盖当前值
         }
 
         public void UpdateAttributeModify(AttributeConfig attribute, AttributeModifier modifier)
@@ -101,6 +101,12 @@ namespace CombatAbilitySystem
             {
                 attributeValue.CurrentValue = attributeValue.Modifier.Override;
             }
+        }
+
+        public float GetCurrentValue(AttributeConfig attributeConfig)
+        {
+            GetAttributeValue(attributeConfig, out var attributeValue);
+            return attributeValue.CurrentValue;
         }
     }
 
