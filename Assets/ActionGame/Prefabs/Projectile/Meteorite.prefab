@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5573490750731029619}
   - component: {fileID: 8277868942939171612}
-  - component: {fileID: 4636530258309957843}
+  - component: {fileID: 442395429178390337}
   m_Layer: 0
   m_Name: Meteorite
   m_TagString: Untagged
@@ -55,7 +55,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4636530258309957843
+--- !u!114 &442395429178390337
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -64,7 +64,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6022013388690241943}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 421cb8fce07b46443bda11ba510cab23, type: 3}
+  m_Script: {fileID: 11500000, guid: aae71f247e8af93409e29a4c261c9941, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &2596252501381768050

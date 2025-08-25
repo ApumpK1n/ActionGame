@@ -965,7 +965,12 @@ MonoBehaviour:
   lowerBodyAvatarMask: {fileID: 31900000, guid: 455879e330f0d1b4c90b3b739d861f92, type: 2}
   handAttackAvatarMask: {fileID: 31900000, guid: 455879e330f0d1b4c90b3b739d861f92, type: 2}
   totalAvatarMask: {fileID: 31900000, guid: 20e75bcd2d54a784d9d3b4a4022add16, type: 2}
-  skillSlots: []
+  skillSlots:
+  - {fileID: 11400000, guid: e0407342f6cf176439d04cecbfd1d8eb, type: 2}
+  - {fileID: 11400000, guid: c868919f533c2344fa4e900f8104b240, type: 2}
+  - {fileID: 11400000, guid: c868919f533c2344fa4e900f8104b240, type: 2}
+  - {fileID: 11400000, guid: c868919f533c2344fa4e900f8104b240, type: 2}
+  attributeConfigs: []
 --- !u!1 &4331405214245749292
 GameObject:
   m_ObjectHideFlags: 0

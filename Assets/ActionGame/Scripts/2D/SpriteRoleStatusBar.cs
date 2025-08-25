@@ -5,11 +5,10 @@ using UnityEngine.UI;
 public class SpriteRoleStatusBar : MonoBehaviour
 {
     [SerializeField] Transform healthBar;
+    [SerializeField] Vector3 posOffset = new Vector3(0, 2, 0);
 
     Camera mainCamera;
     Transform targetRole;
-
-    Vector3 posOffset = new Vector3(0, 2, 0);
     float followSpeed = 0.25f;
 
     //记录初始位置
@@ -54,7 +53,7 @@ public class SpriteRoleStatusBar : MonoBehaviour
     void UpdateBarPos()
     {
         //刷新朝向，始终朝向相机
-        transform.forward = mainCamera.transform.forward;
+        //transform.forward = mainCamera.transform.forward;
         //刷新位置
         transform.position = Vector3.Lerp(transform.position, targetRole.transform.position + posOffset, followSpeed);
     }
