@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class SpriteRoleStatusBar : MonoBehaviour
 {
     [SerializeField] Transform healthBar;
-    [SerializeField] Vector3 posOffset = new Vector3(0, 2, 0);
+    [SerializeField] Vector3 posOffset = new Vector3(0, 2.2f, 0);
 
     Camera mainCamera;
     Transform targetRole;

@@ -59,7 +59,7 @@ public class EnemyView : MonoBehaviour, ICharacterView, IAbilityApplyComponent
         transform.localScale = Vector3.one;
 
         spriteHealthBar = GetComponentInChildren<SpriteRoleStatusBar>();
-        spriteHealthBar.Init(this.transform, cameraViewInfo.MainCamera);
+        spriteHealthBar.Init(this.healthBarPoint, cameraViewInfo.MainCamera);
         //Vector3 viewPoint = cameraViewInfo.MainCamera.WorldToViewportPoint(healthBarPoint.position);
         //healthBar = WorldCanvasController.Instance.AddHealthBar();
         //UpdateHealthBarPosition();
