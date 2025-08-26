@@ -15,11 +15,11 @@ MonoBehaviour:
   Modifiers:
   - Attribute: {fileID: 11400000, guid: 37415267cb198ee48a23b6bec551d029, type: 2}
     ModifierOperation: 0
-    BaseValue: -100
+    BaseValue: -40
     ModifierMagnitude: {fileID: 11400000, guid: 8d61c44c01028184cbc14d2b13a9b847, type: 2}
   DurationType: 0
-  DurationModifier: {fileID: 0}
   BaseDuration: 0
+  DurationModifier: {fileID: 0}
   TickPeriod:
     Period: 0
     ExecuteOnFirstTick: 0

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-// https://www.cnblogs.com/z-c-s/p/15112914.html
+
 public class SpriteRoleStatusBar : MonoBehaviour
 {
     [SerializeField] Transform healthBar;
@@ -13,10 +13,12 @@ public class SpriteRoleStatusBar : MonoBehaviour
 
     //记录初始位置
     float healthBarInitPosX;
+    Vector3 healthInitScale;
 
     void Awake()
     {
         healthBarInitPosX = healthBar.localPosition.x;
+        healthInitScale = transform.localScale;
     }
 
     void Update()
@@ -43,10 +45,10 @@ public class SpriteRoleStatusBar : MonoBehaviour
 
 
         //修改位置和缩放，实现血条效果
-        healthBarPos.x = healthBarInitPosX * (1 - healthPercent);
-        healthBar.localPosition = healthBarPos;
+        //healthBarPos.x = healthBarInitPosX * (1 - healthPercent);
+        //healthBar.localPosition = healthBarPos;
 
-        healthBarScale.x = healthPercent;
+        healthBarScale = new Vector3(healthPercent * healthInitScale.x, healthInitScale.y, healthInitScale.z);
         healthBar.localScale = healthBarScale;
     }
 
@@ -55,7 +57,7 @@ public class SpriteRoleStatusBar : MonoBehaviour
         //刷新朝向，始终朝向相机
         //transform.forward = mainCamera.transform.forward;
         //刷新位置
-        transform.position = Vector3.Lerp(transform.position, targetRole.transform.position + posOffset, followSpeed);
+        //transform.position = Vector3.Lerp(transform.position, targetRole.transform.position + posOffset, followSpeed);
     }
 
 }

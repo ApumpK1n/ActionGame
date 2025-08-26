@@ -4,5 +4,6 @@ namespace CombatAbilitySystem
 {
     public class AreaDamageComponent : BaseAbilityExecuteComponent
     {
+
     }
 }

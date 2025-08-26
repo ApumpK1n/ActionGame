@@ -21,8 +21,9 @@ namespace CombatAbilitySystem
             AreaDamageAbilityConfig config = (AreaDamageAbilityConfig)Config;
             GameObject areaDamageObject = GameObject.Instantiate(config.Prefab);
             areaDamageObject.transform.position = Owner.MonoGameObject.transform.position + Owner.MonoGameObject.transform.forward * 5;
-            areaDamageObject.GetComponent<AreaDamageComponent>().Owner = Owner;
-            areaDamageObject.GetComponent<AreaDamageComponent>().AbilityComponent = this;
+            AreaDamageComponent areaDamageComponent = areaDamageObject.GetComponent<AreaDamageComponent>();
+            areaDamageComponent.Owner = Owner;
+            areaDamageComponent.AbilityComponent = this;
             yield return null;
         }
 

@@ -11,7 +11,8 @@ namespace CombatAbilitySystem
         {
             if (other.gameObject.layer == Layers.EnemyNumber)
             {
-                other.gameObject.GetComponent<EnemyView>().ApplyGameEffect(AbilityComponent);
+                EnemyView enemyView = other.gameObject.GetComponentInParent<EnemyView>();
+                enemyView.ApplyGameEffect(AbilityComponent);
             }
         }
 

@@ -31,9 +31,8 @@ namespace CombatAbilitySystem
         {
             // We use a cache to store the index of the attribute in the list, so we don't
             // have to iterate through it every time
-            if (attributeCache.TryGetValue(attribute, out var attributeValue))
+            if (attributeCache.TryGetValue(attribute, out value))
             {
-                value = attributeValue;
                 return true;
             }
 
@@ -48,6 +47,7 @@ namespace CombatAbilitySystem
         {
             GetAttributeValue(attribute, out AttributeValue attributeValue);
             attributeValue.BaseValue = value;
+            attributeValue.CurrentValue = value;
         }
 
         public void SetAttributeBaseValueModify(EffectModifier modifier, float magnitude)
@@ -111,16 +111,21 @@ namespace CombatAbilitySystem
     }
 
     [Serializable]
-    public struct AttributeValue
+    public class AttributeValue
     {
         public AttributeConfig Attribute;
         public float BaseValue;    // 永久值
         public float CurrentValue; // 当前实际数值
         public AttributeModifier Modifier;
+
+        public AttributeValue()
+        {
+            Modifier = new AttributeModifier();
+        }
     }
 
     [Serializable]
-    public struct AttributeModifier
+    public class AttributeModifier
     {
         public float Add;
         public float Multiply;
