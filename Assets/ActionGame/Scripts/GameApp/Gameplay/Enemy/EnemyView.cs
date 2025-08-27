@@ -2,11 +2,13 @@ using System.Drawing;
 using CombatAbilitySystem;
 using UnityEngine;
 using System.Collections.Generic;
+using DamageNumbersPro;
 
 public class EnemyView : MonoBehaviour, ICharacterView, IAbilityApplyComponent
 {
     [SerializeField] private Transform healthBarPoint;
-    [SerializeField] private List<AttributeConfig> attributeConfigs; 
+    [SerializeField] private List<AttributeConfig> attributeConfigs;
+    [SerializeField] DamageNumber damageNumberPrefab;
     private CameraViewInfo cameraViewInfo;
 
     private HealthBar healthBar;
@@ -110,11 +112,6 @@ public class EnemyView : MonoBehaviour, ICharacterView, IAbilityApplyComponent
 
     }
 
-    void Update()
-    {
-        UpdateHealthProgress();
-    }
-
     public void ApplyGameEffect(AbilityComponent abilityComponent)
     {
         AbilitySystem.TryApplyGameEffect(abilityComponent, 1.0f);
@@ -123,7 +120,8 @@ public class EnemyView : MonoBehaviour, ICharacterView, IAbilityApplyComponent
 
     private void SetupAbilitySystem()
     {
-        AbilitySystem = new AbilitySystemComponent(this.gameObject, 10);
+        AbilitySystem = new AbilitySystemComponent(this.gameObject, new EnemyAttributeSet(10));
+        AbilitySystem.AttributeChangeAction += HandleAttributeChangeAction;
         AbilitySystem.InitAttributes(attributeConfigs);
 
         AbilitySystem.AttributeSet.InitBaseValue(healthConfig, baseHealth);
@@ -133,5 +131,15 @@ public class EnemyView : MonoBehaviour, ICharacterView, IAbilityApplyComponent
     {
         float currentValue = AbilitySystem.AttributeSet.GetCurrentValue(healthConfig);
         spriteHealthBar.OnHealthChanged(currentValue / 100f);
+    }
+
+    private void HandleAttributeChangeAction(AttributeChangeInfo attributeChangeInfo)
+    {
+        if (attributeChangeInfo.Attribute == healthConfig)
+        {
+            UpdateHealthProgress();
+            DamageNumber newPopup = damageNumberPrefab.Spawn(this.healthBarPoint.position + new Vector3(0, 0.25f, -1), attributeChangeInfo.CurrentValue - attributeChangeInfo.PreValue);
+            newPopup.SetFollowedTarget(this.healthBarPoint);
+        }
     }
 }

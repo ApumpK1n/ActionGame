@@ -7,7 +7,7 @@ namespace CombatAbilitySystem
     /// <summary>
     /// 属性集 存储属性
     /// </summary>
-    public class AttributeSet
+    public abstract class AttributeSet
     {
         private Dictionary<AttributeConfig, AttributeValue> attributeCache;
 
@@ -66,7 +66,7 @@ namespace CombatAbilitySystem
                     attributeValue.BaseValue = magnitude;
                     break;
             }
-            attributeValue.CurrentValue = attributeValue.BaseValue; // 同步覆盖当前值
+            CalculateCurrentAttributeValue(modifier.Attribute);
         }
 
         public void UpdateAttributeModify(AttributeConfig attribute, AttributeModifier modifier)
@@ -100,13 +100,31 @@ namespace CombatAbilitySystem
             if (attributeValue.Modifier.Override != float.NaN)
             {
                 attributeValue.CurrentValue = attributeValue.Modifier.Override;
+
             }
+        }
+
+        protected virtual void OnCalculateCurrentAttributeValue(AttributeConfig attributeConfig)
+        {
+
         }
 
         public float GetCurrentValue(AttributeConfig attributeConfig)
         {
             GetAttributeValue(attributeConfig, out var attributeValue);
             return attributeValue.CurrentValue;
+        }
+
+        public void SetBaseValue(AttributeConfig attribute, float baseValue)
+        {
+            GetAttributeValue(attribute, out var attributeValue);
+            attributeValue.BaseValue = baseValue;
+        }
+
+        public void SetCurrentValue(AttributeConfig attribute, float currentValue)
+        {
+            GetAttributeValue(attribute, out var attributeValue);
+            attributeValue.CurrentValue = currentValue;
         }
     }
 
@@ -138,5 +156,12 @@ namespace CombatAbilitySystem
             other.Override = Override;
             return other;
         }
+    }
+
+    public struct AttributeChangeInfo
+    {
+        public AttributeConfig Attribute;
+        public float PreValue;
+        public float CurrentValue;
     }
 }

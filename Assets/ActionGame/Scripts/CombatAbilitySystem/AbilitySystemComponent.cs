@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ TODO: 技能执行体 基础done DOTA2里 技能的A帐和魔晶效果是跟着�
 TODO: 效果执行体 表现为具体在游戏中显示的GameObject 同一个技能可能存在多个效果执行体 取决于效果
 TODO: 播放动画 特效 音效
  */
-
+// https://dev.epicgames.com/documentation/zh-cn/unreal-engine/gameplay-ability-system-for-unreal-engine
 
 /// <summary>
 /// 通过执行行为去应用效果、修改数据来影响角色的属性或状态。
@@ -31,23 +32,27 @@ namespace CombatAbilitySystem
     public class AbilitySystemComponent : ITick, ILateTick
     {
         private Dictionary<int, AbilityComponent> grantedAbilities;
-        private AttributeSet attributeSet;
 
         public bool IsActive = false;
-        public AttributeSet AttributeSet => attributeSet;
-
+        public AttributeSet AttributeSet { get; private set; }
+        public event Action<AttributeChangeInfo> AttributeChangeAction;
         public GameObject MonoGameObject { get; private set; }
 
         private List<EffectExecutorContainer> effectExecutorDurationList;
         private Dictionary<AttributeConfig, bool> affectedAttributeDict;
 
-        public AbilitySystemComponent(GameObject go, int attributeCapacity)
+        public AbilitySystemComponent(GameObject go, AttributeSet attributeSet)
         {
             this.MonoGameObject = go;
-            attributeSet = new AttributeSet(attributeCapacity);
             grantedAbilities = new Dictionary<int, AbilityComponent>();
             effectExecutorDurationList = new List<EffectExecutorContainer>();
             affectedAttributeDict = new Dictionary<AttributeConfig, bool>();
+            AttributeSet = attributeSet;
+        }
+
+        ~AbilitySystemComponent()
+        {
+            AttributeChangeAction = null;
         }
 
         public bool IsValid()
@@ -113,7 +118,7 @@ namespace CombatAbilitySystem
         {
             foreach (AttributeConfig attributeConfig in attributeConfigs)
             {
-                attributeSet.AddAttribute(attributeConfig);
+                AttributeSet.AddAttribute(attributeConfig);
             }
 
         }
@@ -181,7 +186,11 @@ namespace CombatAbilitySystem
             {
                 var modifier = effectExecutor.EffectConfig.Modifiers[i];
                 var magnitude = modifier.ModifierMagnitude.CalculateMagnitude(effectExecutor) * modifier.BaseValue;
-                this.attributeSet.SetAttributeBaseValueModify(modifier, magnitude);
+                float preValue = this.AttributeSet.GetCurrentValue(modifier.Attribute);
+                this.AttributeSet.SetAttributeBaseValueModify(modifier, magnitude);
+
+                AttributeChangeAction?.Invoke(new AttributeChangeInfo() { Attribute = modifier.Attribute,
+                    PreValue = preValue, CurrentValue = this.AttributeSet.GetCurrentValue(modifier.Attribute) });
             }
         }
 
@@ -220,7 +229,7 @@ namespace CombatAbilitySystem
         void TickDurationEffects(float deltaTime)
         {
             // 每帧重置持续效果更改值
-            attributeSet.ResetAttributeModifiers();
+            AttributeSet.ResetAttributeModifiers();
             affectedAttributeDict.Clear();
 
             // Tick才合并Modify
@@ -239,7 +248,7 @@ namespace CombatAbilitySystem
                     for (var m = 0; m < modifiers.Length; m++) // 先更新Modify
                     {
                         var modifier = modifiers[m];
-                        attributeSet.UpdateAttributeModify(modifier.Attribute, modifier.Modifier);
+                        AttributeSet.UpdateAttributeModify(modifier.Attribute, modifier.Modifier);
 
                         affectedAttributeDict[modifier.Attribute] = true;
                     }
@@ -249,7 +258,14 @@ namespace CombatAbilitySystem
             // 计算被影响的属性当前值
             foreach (var attribute in affectedAttributeDict.Keys)
             {
-                attributeSet.CalculateCurrentAttributeValue(attribute); // 计算当前值
+                float preValue = this.AttributeSet.GetCurrentValue(attribute);
+                AttributeSet.CalculateCurrentAttributeValue(attribute); // 计算当前值
+
+                AttributeChangeAction?.Invoke(new AttributeChangeInfo()
+                {
+                    Attribute = attribute,
+                    PreValue = preValue, CurrentValue = this.AttributeSet.GetCurrentValue(attribute)
+                });
             }
         }
 
