@@ -8,6 +8,7 @@ public enum SystemType
     Animation = 1 << 1,
     Command = 1 << 2,
     WorldCanvas = 1 << 3,
+    GameInput = 1 << 4,
 
     //AllSmoothedRopes = PathSmoother | ExtrudedRope | LineRope | MeshRope,
     //AllRopes = PathSmoother | ExtrudedRope | ChainRope | LineRope | MeshRope | Particles | InstancedParticles,

@@ -14,6 +14,8 @@ public class GamePlayerInput : MonoBehaviour
 
     private PlayerInput m_PlayerInput;
 
+    public PlayerInput PlayerInput => m_PlayerInput;
+
     private bool m_CanAcceptInput;
 
     // Start is called before the first frame update

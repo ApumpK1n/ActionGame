@@ -22,6 +22,8 @@ public class GameApp : DestroyableSingleton<GameApp>, IGameApp
 
     private bool m_Initialized = false;
 
+    public GamePlayerInput GamePlayerInput => m_StartGamePlayerInput;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,6 +57,7 @@ public class GameApp : DestroyableSingleton<GameApp>, IGameApp
 
         // subsytem
         m_Subsystems = new SubsystemCollection<IGameAppSubsystem>();
+        m_Subsystems.RegisterSubsystem(new GameInputSystem());
         m_Subsystems.Initialize();
 
 

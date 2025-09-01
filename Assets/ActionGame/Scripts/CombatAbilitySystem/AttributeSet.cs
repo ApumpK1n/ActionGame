@@ -132,8 +132,8 @@ namespace CombatAbilitySystem
     public class AttributeValue
     {
         public AttributeConfig Attribute;
-        public float BaseValue;    // 永久值
-        public float CurrentValue; // 当前实际数值
+        public float BaseValue = 0;    // 永久值
+        public float CurrentValue = 0; // 当前实际数值
         public AttributeModifier Modifier;
 
         public AttributeValue()
