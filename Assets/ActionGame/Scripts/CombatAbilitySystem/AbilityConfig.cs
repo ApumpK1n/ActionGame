@@ -12,6 +12,17 @@ namespace CombatAbilitySystem
         [Header("冷却时间s")] public int Cooldown;
         [Header("施法前摇")] public float CastPoint;
         [Header("能力效果")] public List<EffectConfig> Effects;
+
+
+        public void AddEffect(EffectConfig config)
+        {
+            Effects.Add(config);
+        }
+
+        public void InsertEffect(int index, EffectConfig config)
+        {
+            Effects.Insert(index, config);
+        }
     }
 }
 
