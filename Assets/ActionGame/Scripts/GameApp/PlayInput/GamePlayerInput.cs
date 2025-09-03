@@ -136,6 +136,11 @@ public class GamePlayerInput : MonoBehaviour
         }
     }
 
+    public void OnSettingClickEvent(InputAction.CallbackContext context)
+    {
+        UISystem.Instance.SetUISettingVisible(true);
+    }
+
     private void SendSkillCommand(int skillSlot)
     {
         if (m_CanAcceptInput)
