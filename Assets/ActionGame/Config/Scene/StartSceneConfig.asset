@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: ActionDemoMainScene
   Description: 
-  LoadSceneMode: 1
+  LoadSceneMode: 0

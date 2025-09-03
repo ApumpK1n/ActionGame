@@ -27,6 +27,7 @@ public class GameApp : DestroyableSingleton<GameApp>, IGameApp
     // Start is called before the first frame update
     void Start()
     {
+        DontDestroyOnLoad(this);
         Initialize();
     }
 

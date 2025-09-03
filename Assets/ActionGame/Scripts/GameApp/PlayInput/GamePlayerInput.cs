@@ -21,6 +21,7 @@ public class GamePlayerInput : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        DontDestroyOnLoad(this);
         m_PlayerInput = GetComponent<PlayerInput>();
     }
 
