@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UISetting : MonoBehaviour
@@ -30,6 +31,16 @@ public class UISetting : MonoBehaviour
     void OnClose()
     {
         UISystem.Instance.SetUISettingVisible(false);
+    }
+
+    public void Open()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void Close()
+    {
+        gameObject.SetActive(false);
     }
 }
 

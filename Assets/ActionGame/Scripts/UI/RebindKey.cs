@@ -2,16 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class RebindKey : MonoBehaviour
 {
     [SerializeField] private Button btnChangeKey;
+    [SerializeField] private TextMeshProUGUI textKeyName;
     [SerializeField] private TextMeshProUGUI textKey;
     [SerializeField] private TextMeshProUGUI textTip;
 
     private RebindKeys rebindKey;
     private Mode mode = Mode.Normal;
+
+    public int BindingIndex = 0;
 
     public enum Mode
     {
@@ -33,7 +37,7 @@ public class RebindKey : MonoBehaviour
     public void SetData(RebindKeys rebindKey)
     {
         this.rebindKey = rebindKey;
-        textKey.name = rebindKey.ToString();
+        textKeyName.text =$"{rebindKey}:";
         mode = Mode.Normal;
         UpdateViewByMode();
     }
@@ -68,16 +72,75 @@ public class RebindKey : MonoBehaviour
         switch (rebindKey)
         {
             case RebindKeys.Up:
-            case RebindKeys.Down:
-            case RebindKeys.Left:
-            case RebindKeys.Right:
+                BindingIndex = 1;
                 keyName = gameInputSystem.GetBindingName(GameApp.Instance.GamePlayerInput.PlayerInput.actions, "Move", 1);
                 break;
+            case RebindKeys.Down:
+                BindingIndex = 2;
+                keyName = gameInputSystem.GetBindingName(GameApp.Instance.GamePlayerInput.PlayerInput.actions, "Move", 2);
+                break;
+            case RebindKeys.Left:
+                BindingIndex = 3;
+                keyName = gameInputSystem.GetBindingName(GameApp.Instance.GamePlayerInput.PlayerInput.actions, "Move", 3);
+                break;
+            case RebindKeys.Right:
+                BindingIndex = 4;
+                keyName = gameInputSystem.GetBindingName(GameApp.Instance.GamePlayerInput.PlayerInput.actions, "Move", 4);
+                break;
             default:
+                BindingIndex = 0;
                 keyName = gameInputSystem.GetBindingName(GameApp.Instance.GamePlayerInput.PlayerInput.actions, rebindKey.ToString(), 0);
                 break;
         }
 
-        textKey.name = keyName;
+        textKey.text = keyName;
+    }
+
+    private string GetActionNameByBindKey()
+    {
+        string name = "";
+        switch (rebindKey)
+        {
+            case RebindKeys.Up:
+            case RebindKeys.Down:
+            case RebindKeys.Left:
+            case RebindKeys.Right:
+                name = "Move";
+                break;
+            default:
+                name = rebindKey.ToString();
+                break;
+        }
+
+        return name;
+    }
+
+    private void TryBind()
+    {
+        string actionName = GetActionNameByBindKey();
+        InputAction inputAction = GameApp.Instance.GamePlayerInput.PlayerInput.actions[actionName];
+
+
+        GameApp.Instance.GetSubsystem<GameInputSystem>().StartRebind(GameApp.Instance.GamePlayerInput.PlayerInput.actions,
+            actionName, this.BindingIndex, true, new GameInputSystem.RebindActions()
+            { RebindCanceled = OnRebindCanceled, RebindCompleted = OnRebindCompleted, RebindStarted = OnRebindStarted });
+
+    }
+
+    private void OnRebindStarted(InputAction inputAction, int bindingIndex)
+    {
+        Debug.Log($"开始绑定{inputAction.name}, {bindingIndex}");
+        Debug.Log("请按键");
+    }
+
+    private void OnRebindCanceled()
+    {
+        Debug.Log("取消绑定");
+    }
+
+    private void OnRebindCompleted()
+    {
+        Debug.Log("绑定完成");
+        UpdateViewByMode();
     }
 }

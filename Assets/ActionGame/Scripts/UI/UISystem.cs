@@ -13,6 +13,13 @@ public class UISystem : DestroyableSingleton<UISystem>
 
     public void SetUISettingVisible(bool visible)
     {
-        uiSetting.gameObject.SetActive(visible);
+        if (visible)
+        {
+            uiSetting.Open();
+        }
+        else
+        {
+            uiSetting.Close();
+        }
     }
 }

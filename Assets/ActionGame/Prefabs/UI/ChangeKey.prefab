@@ -91,6 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btnChangeKey: {fileID: 5604766394696888257}
+  textKeyName: {fileID: 555713783300578100}
   textKey: {fileID: 7912885980912642457}
   textTip: {fileID: 5912123813332699752}
 --- !u!1 &5975537160628018851
