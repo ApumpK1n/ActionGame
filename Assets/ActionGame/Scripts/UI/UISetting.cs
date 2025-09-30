@@ -45,16 +45,3 @@ public class UISetting : MonoBehaviour
 }
 
 
-public enum RebindKeys
-{
-    Up,
-    Down,
-    Left,
-    Right,
-    Jump,
-    Skill1,
-    Skill2,
-    Skill3,
-    Skill4,
-    Bag,
-}

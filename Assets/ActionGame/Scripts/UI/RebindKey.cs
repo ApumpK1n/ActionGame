@@ -36,6 +36,7 @@ public class RebindKey : MonoBehaviour
 
     public void SetData(RebindKeys rebindKey)
     {
+        LoadBindKey();
         this.rebindKey = rebindKey;
         textKeyName.text =$"{rebindKey}:";
         mode = Mode.Normal;
@@ -44,13 +45,11 @@ public class RebindKey : MonoBehaviour
 
     private void OnEnterRebindKey()
     {
-        mode = Mode.Bind;
-        UpdateViewByMode();
+        TryBind();
     }
 
     private void UpdateViewByMode()
     {
-        
         switch (mode)
         {
             case Mode.Normal:
@@ -96,28 +95,10 @@ public class RebindKey : MonoBehaviour
         textKey.text = keyName;
     }
 
-    private string GetActionNameByBindKey()
-    {
-        string name = "";
-        switch (rebindKey)
-        {
-            case RebindKeys.Up:
-            case RebindKeys.Down:
-            case RebindKeys.Left:
-            case RebindKeys.Right:
-                name = "Move";
-                break;
-            default:
-                name = rebindKey.ToString();
-                break;
-        }
-
-        return name;
-    }
 
     private void TryBind()
     {
-        string actionName = GetActionNameByBindKey();
+        string actionName = GameInputKeys.GetActionNameByBindKey(rebindKey);
         InputAction inputAction = GameApp.Instance.GamePlayerInput.PlayerInput.actions[actionName];
 
 
@@ -131,16 +112,31 @@ public class RebindKey : MonoBehaviour
     {
         Debug.Log($"开始绑定{inputAction.name}, {bindingIndex}");
         Debug.Log("请按键");
+
+        mode = Mode.Bind;
+        UpdateViewByMode();
     }
 
     private void OnRebindCanceled()
     {
         Debug.Log("取消绑定");
+
+        mode = Mode.Normal;
+        UpdateViewByMode();
     }
 
     private void OnRebindCompleted()
     {
         Debug.Log("绑定完成");
+        mode = Mode.Normal;
         UpdateViewByMode();
+
+        LoadBindKey();
+    }
+
+    private void LoadBindKey()
+    {
+        string actionName = GameInputKeys.GetActionNameByBindKey(rebindKey);
+        GameApp.Instance.GetSubsystem<GameInputSystem>().LoadBindingOverride(GameApp.Instance.GamePlayerInput.PlayerInput.actions, actionName);
     }
 }

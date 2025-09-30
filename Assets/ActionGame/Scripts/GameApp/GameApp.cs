@@ -61,8 +61,14 @@ public class GameApp : DestroyableSingleton<GameApp>, IGameApp
         m_Subsystems.RegisterSubsystem(new GameInputSystem());
         m_Subsystems.Initialize();
 
+        AfterInitialize();
 
         m_Initialized = true;
+    }
+
+    private void AfterInitialize()
+    {
+        m_Director.AfterInitialize();
     }
 
     public TSubSystem GetSubsystem<TSubSystem>() where TSubSystem : IGameAppSubsystem, new()

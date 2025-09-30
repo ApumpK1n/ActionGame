@@ -56,6 +56,11 @@ public class PlayerController : ControllerBase
         OnInitializePlayerInput();
     }
 
+    public void LoadOverridePlayerInput()
+    {
+        GameInputKeys.LoadAllOverrideKeys();
+    }
+
     public void SpawnPlayerCameraManager()
     {
         m_PlayerCameraManager = new PlayerCameraManager();

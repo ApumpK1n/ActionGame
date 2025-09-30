@@ -604,6 +604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e218d9440228942439c6d98d92b48805, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_PlayerInput: {fileID: 1590331268}
 --- !u!114 &1590331268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -891,6 +892,7 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
+  m_ScrollDeltaPerTick: 6
 --- !u!1 &1909612115
 GameObject:
   m_ObjectHideFlags: 0

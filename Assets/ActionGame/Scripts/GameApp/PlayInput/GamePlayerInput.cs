@@ -12,24 +12,17 @@ public class GamePlayerInput : MonoBehaviour
     public UnityAction<ICommand> AttackAction;
     public UnityAction<ICommand> SkillCastAction;
 
-    private PlayerInput m_PlayerInput;
+    [SerializeField]  private PlayerInput m_PlayerInput;
 
     public PlayerInput PlayerInput => m_PlayerInput;
 
     private bool m_CanAcceptInput;
 
-    // Start is called before the first frame update
     void Start()
     {
         DontDestroyOnLoad(this);
-        m_PlayerInput = GetComponent<PlayerInput>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public void InitializeGame()
     {

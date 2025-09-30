@@ -54,6 +54,11 @@ public class GameDirector
         m_Initialized = true;
     }
 
+    public void AfterInitialize()
+    {
+        m_PlayerController.LoadOverridePlayerInput();
+    }
+
     public void DeInitialize()
     {
         m_Subsystems.Deinitialize();
