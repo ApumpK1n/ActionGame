@@ -97,7 +97,7 @@ namespace CombatAbilitySystem
             GetAttributeValue(attributeConfig, out var attributeValue);
             attributeValue.CurrentValue = (attributeValue.BaseValue + attributeValue.Modifier.Add) * (attributeValue.Modifier.Multiply + 1);
 
-            if (attributeValue.Modifier.Override != float.NaN)
+            if (!float.IsNaN(attributeValue.Modifier.Override))
             {
                 attributeValue.CurrentValue = attributeValue.Modifier.Override;
 
